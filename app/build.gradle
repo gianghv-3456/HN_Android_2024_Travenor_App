@@ -1,14 +1,15 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id "org.jlleitschuh.gradle.ktlint" version "11.5.1"
 }
 
 android {
-    namespace 'com.example.android_template'
+    namespace 'com.example.travenor'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.android_template"
+        applicationId "com.example.travenor"
         minSdk 24
         targetSdk 33
         versionCode 1
