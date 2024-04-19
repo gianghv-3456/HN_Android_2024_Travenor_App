@@ -9,5 +9,15 @@
     <string name="let_us_know_you">Để chúng tôi hiểu bạn hơn</string>
     <string name="next_btn">Tiếp</string>
     <string name="author">\@Hoàng Giang</string>
+
+    <string name="what_food_you_like">Món ăn ưa thích của bạn là?</string>
+    <string name="cave">Hang động</string>
+    <string name="beach">Bãi biển</string>
+    <string name="mountain">Lên núi</string>
+    <string name="what_you_want_to_go">Bạn thích đi đâu hơn?</string>
+    <string name="asian_food">Đồ châu á</string>
+    <string name="fast_food">Đồ ăn nhanh</string>
+    <string name="european_food">Đồ âu</string>
+    <string name="sea_food">Hải sản</string>
 </resources>
 
