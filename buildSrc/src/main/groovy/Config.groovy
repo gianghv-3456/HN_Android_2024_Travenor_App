@@ -9,6 +9,10 @@ class Versions {
     static final String junitVersion = "1.1.3"
     static final String ktlint = "11.5.1"
 
+    //UI
+    static final String flexBoxLayout = "3.0.0"
+    static final String viewPager2 = "1.0.0"
+
 }
 
 class ClassPath {
@@ -31,6 +35,9 @@ class Deps {
     static final String junit = "junit:junit:${Versions.jUnit}"
     static final String androidx_junit = "androidx.test.ext:junit:${Versions.junitVersion}"
 
+    //UI
+    static final String flexBoxlayout = "com.google.android.flexbox:flexbox:${Versions.flexBoxLayout}"
+    static final String viewPager2 = "androidx.viewpager2:viewpager2:${Versions.viewPager2}"
 }
 
 

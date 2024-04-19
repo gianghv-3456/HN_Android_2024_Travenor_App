@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/header_bg_iv_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_marginTop="@dimen/dp_minus32"
+        android:scaleType="centerCrop"
+        app:cardCornerRadius="@dimen/dp_32"
+        app:cardElevation="@dimen/dp_8"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/header_bg_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop"
+            android:src="@drawable/favorite_survey_bg" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_32"
+        android:layout_marginTop="@dimen/dp_16"
+        android:fontFamily="@font/baloobhaina2_bold"
+        android:gravity="center"
+        android:lineSpacingMultiplier="0.2"
+        android:text="@string/let_us_know_you"
+        android:textSize="@dimen/sp_36"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_bg_iv_container" />
+
+    <TextView
+        android:id="@+id/place_survey_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_32"
+        android:layout_marginTop="@dimen/dp_8"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/what_you_want_to_go"
+        android:textSize="@dimen/sp_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/place_survey_flexbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_32"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_3"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/dp_4"
+        app:alignContent="stretch"
+        app:alignItems="stretch"
+        app:flexWrap="wrap"
+        app:layout_constraintTop_toBottomOf="@+id/place_survey_title">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/mountain_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_8"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="@dimen/dp_16"
+            app:cardElevation="@dimen/dp_8">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:drawableStart="@drawable/ic_mountain"
+                android:focusable="false"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="@dimen/dp_8"
+                android:text="@string/mountain"
+                android:textSize="@dimen/sp_20" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/beach_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_8"
+            android:background="@color/selection_card_bg"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="@dimen/dp_16"
+            app:cardElevation="@dimen/dp_8">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:drawableStart="@drawable/ic_beach"
+                android:focusable="false"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="@dimen/dp_8"
+                android:text="@string/beach"
+                android:textSize="@dimen/sp_20" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cave_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_8"
+            android:background="@color/selection_card_bg"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="@dimen/dp_16"
+            app:cardElevation="@dimen/dp_8">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:drawableStart="@drawable/ic_cave"
+                android:focusable="false"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="@dimen/dp_8"
+                android:text="@string/cave"
+                android:textSize="@dimen/sp_20" />
+        </androidx.cardview.widget.CardView>
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+    <TextView
+        android:id="@+id/food_survey_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_32"
+        android:layout_marginTop="@dimen/dp_8"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/what_food_you_like"
+        android:textSize="@dimen/sp_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/place_survey_flexbox" />
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/food_survey_flexbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_32"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_32"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/dp_4"
+        app:alignContent="stretch"
+        app:alignItems="stretch"
+        app:flexWrap="wrap"
+        app:layout_constraintTop_toBottomOf="@+id/food_survey_title">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/asian_food_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_8"
+            android:background="@color/selection_card_bg"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="@dimen/dp_16"
+            app:cardElevation="@dimen/dp_8">
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:drawableStart="@drawable/ic_ic_pho"
+                android:focusable="false"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="@dimen/dp_8"
+                android:text="@string/asian_food"
+                android:textSize="@dimen/sp_20" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/fast_food_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_8"
+            android:background="@color/selection_card_bg"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="@dimen/dp_16"
+            app:cardElevation="@dimen/dp_8">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:drawableStart="@drawable/ic_ic_burger"
+                android:focusable="false"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="@dimen/dp_8"
+                android:text="@string/fast_food"
+                android:textSize="@dimen/sp_20" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/european_food_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_8"
+            android:background="@color/selection_card_bg"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="@dimen/dp_16"
+            app:cardElevation="@dimen/dp_8">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:drawableStart="@drawable/ic_ic_steak"
+                android:focusable="false"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="@dimen/dp_8"
+                android:text="@string/european_food"
+                android:textSize="@dimen/sp_20" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/sea_food_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_8"
+            android:background="@color/selection_card_bg"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="@dimen/dp_16"
+            app:cardElevation="@dimen/dp_8">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:drawableStart="@drawable/ic_seafood"
+                android:focusable="false"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="@dimen/dp_8"
+                android:text="@string/sea_food"
+                android:textSize="@dimen/sp_20" />
+        </androidx.cardview.widget.CardView>
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

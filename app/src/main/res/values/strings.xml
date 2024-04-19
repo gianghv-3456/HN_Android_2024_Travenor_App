@@ -9,4 +9,13 @@
     <string name="let_us_know_you">Let us know you</string>
     <string name="next_btn">Next</string>
     <string name="author">\@Hoàng Giang</string>
+    <string name="what_food_you_like">What food you like?</string>
+    <string name="cave">Cave</string>
+    <string name="beach">Beach</string>
+    <string name="mountain">Mountain</string>
+    <string name="what_you_want_to_go">What you want to go?</string>
+    <string name="asian_food">Asian food</string>
+    <string name="fast_food">Fast food</string>
+    <string name="european_food">European food</string>
+    <string name="sea_food">Sea food</string>
 </resources>

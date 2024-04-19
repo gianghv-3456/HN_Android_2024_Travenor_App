@@ -48,4 +48,6 @@ dependencies {
     testImplementation Deps.junit
     androidTestImplementation Deps.androidx_junit
     androidTestImplementation Deps.androidx_espresso_core
+    implementation Deps.flexBoxlayout
+    implementation Deps.viewPager2
 }
