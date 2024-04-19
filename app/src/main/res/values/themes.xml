@@ -3,6 +3,13 @@
     <style name="Base.Theme.Androidtemplate" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorSecondary">@color/action_color</item>
+        <item name="android:textColor">@color/text_dark_color</item>
+
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:statusBarColor">#00000000</item>
     </style>
 
     <style name="Theme.Androidtemplate" parent="Base.Theme.Androidtemplate" />

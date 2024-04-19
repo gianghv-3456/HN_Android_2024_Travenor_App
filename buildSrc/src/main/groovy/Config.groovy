@@ -1,0 +1,46 @@
+class Versions {
+    static final String coreKtx = "1.8.0"
+    static final String appCompat = "1.4.1"
+    static final String material = "1.5.0"
+    static final String constraintLayout = "2.1.4"
+    static final String espressoCore = "3.4.0"
+
+    static final String jUnit = "4.13.2"
+    static final String junitVersion = "1.1.3"
+    static final String ktlint = "11.5.1"
+
+}
+
+class ClassPath {
+    static final String ktLint = "org.jlleitschuh.gradle:ktlint-gradle:${Versions.ktlint}"
+}
+
+class Plugins {
+    static final String ktLint = "org.jlleitschuh.gradle.ktlint"
+
+}
+
+class Deps {
+    static final String core_ktx = "androidx.core:core-ktx:${Versions.coreKtx}"
+    static final String appcompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
+    static final String material = "com.google.android.material:material:${Versions.material}"
+    static final String constraint_layout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
+    static final String androidx_espresso_core = "androidx.test.espresso:espresso-core:${Versions.espressoCore}"
+
+    // Testing
+    static final String junit = "junit:junit:${Versions.jUnit}"
+    static final String androidx_junit = "androidx.test.ext:junit:${Versions.junitVersion}"
+
+}
+
+
+class AppConfigs {
+    static final String application_id = "com.example.travenor"
+    static final int compile_sdk_version = 33
+    static final int min_sdk_version = 24
+    static final int target_sdk_version = 33
+    static final int version_code = 1
+    static final String version_name = "1.0"
+    static final int version_code_release = 1
+    static final String version_name_release = "1.0"
+}
