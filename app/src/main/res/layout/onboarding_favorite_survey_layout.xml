@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/header_bg_iv_container"
+        android:id="@+id/card_header_background"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_0"
         android:layout_marginTop="@dimen/dp_minus32"
@@ -17,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/header_bg_iv"
+            android:id="@+id/image_header_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:importantForAccessibility="no"
@@ -26,7 +25,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/text_page_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_32"
@@ -34,26 +33,25 @@
         android:fontFamily="@font/baloobhaina2_bold"
         android:gravity="center"
         android:lineSpacingMultiplier="0.2"
-        android:text="@string/let_us_know_you"
+        android:text="@string/survey_title"
         android:textSize="@dimen/sp_36"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/header_bg_iv_container" />
+        app:layout_constraintTop_toBottomOf="@id/card_header_background" />
 
     <TextView
-        android:id="@+id/place_survey_title"
+        android:id="@+id/text_place_survey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_32"
         android:layout_marginTop="@dimen/dp_8"
         android:fontFamily="@font/roboto_medium"
-        android:text="@string/what_you_want_to_go"
+        android:text="@string/survey_place_title"
         android:textSize="@dimen/sp_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title" />
-
+        app:layout_constraintTop_toBottomOf="@id/text_page_title" />
 
     <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/place_survey_flexbox"
+        android:id="@+id/flexbox_place_survey"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_32"
@@ -64,10 +62,10 @@
         app:alignContent="stretch"
         app:alignItems="stretch"
         app:flexWrap="wrap"
-        app:layout_constraintTop_toBottomOf="@+id/place_survey_title">
+        app:layout_constraintTop_toBottomOf="@+id/text_place_survey">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/mountain_card"
+            android:id="@+id/card_moutain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_8"
@@ -91,7 +89,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/beach_card"
+            android:id="@+id/card_beach"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_8"
@@ -116,7 +114,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cave_card"
+            android:id="@+id/card_cave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_8"
@@ -139,23 +137,22 @@
                 android:text="@string/cave"
                 android:textSize="@dimen/sp_20" />
         </androidx.cardview.widget.CardView>
-
     </com.google.android.flexbox.FlexboxLayout>
 
     <TextView
-        android:id="@+id/food_survey_title"
+        android:id="@+id/text_food_survey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_32"
         android:layout_marginTop="@dimen/dp_8"
         android:fontFamily="@font/roboto_medium"
-        android:text="@string/what_food_you_like"
+        android:text="@string/survey_food_title"
         android:textSize="@dimen/sp_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/place_survey_flexbox" />
+        app:layout_constraintTop_toBottomOf="@id/flexbox_place_survey" />
 
     <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/food_survey_flexbox"
+        android:id="@+id/flexbox_food_survey"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_32"
@@ -166,10 +163,10 @@
         app:alignContent="stretch"
         app:alignItems="stretch"
         app:flexWrap="wrap"
-        app:layout_constraintTop_toBottomOf="@+id/food_survey_title">
+        app:layout_constraintTop_toBottomOf="@+id/text_food_survey">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/asian_food_card"
+            android:id="@+id/card_asian_food"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_8"
@@ -180,7 +177,6 @@
             app:cardElevation="@dimen/dp_8">
 
             <TextView
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
@@ -195,7 +191,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/fast_food_card"
+            android:id="@+id/card_fast_food"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_8"
@@ -220,7 +216,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/european_food_card"
+            android:id="@+id/card_european_food"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_8"
@@ -245,7 +241,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/sea_food_card"
+            android:id="@+id/card_sea_food"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_8"
@@ -268,7 +264,6 @@
                 android:text="@string/sea_food"
                 android:textSize="@dimen/sp_20" />
         </androidx.cardview.widget.CardView>
-
     </com.google.android.flexbox.FlexboxLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
