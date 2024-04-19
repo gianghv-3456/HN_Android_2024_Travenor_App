@@ -4,20 +4,27 @@
 
     <string name="onboarding_1_description">Đồng hành cùng những chuyến đi của bạn, chúng tôi thiết kế\ncác tour du lịch giáo dục đáng tin cậy và uy tín \nđến các điểm đến trên khắp thế giới.</string>
     <string name="onboarding_2_description">Để tận hưởng hết chuyến phiêu lưu của bạn,\nchỉ cần ra đi và đến nơi bạn thích, \nchúng tôi đang chờ đón bạn.</string>
-    <string name="skip_btn">Bỏ qua</string>
-    <string name="get_started_btn">Bắt đầu</string>
-    <string name="let_us_know_you">Để chúng tôi hiểu bạn hơn</string>
-    <string name="next_btn">Tiếp</string>
-    <string name="author">\@Hoàng Giang</string>
+    <string name="onboarding_skip_btn">Bỏ qua</string>
+    <string name="onboarding_get_started_btn">Bắt đầu</string>
+    <string name="survey_title">Để chúng tôi hiểu bạn hơn</string>
+    <string name="onboarding_next_btn">Tiếp</string>
+    <string name="splash_author">\@Hoàng Giang</string>
 
-    <string name="what_food_you_like">Món ăn ưa thích của bạn là?</string>
+    <string name="survey_food_title">Món ăn ưa thích của bạn là?</string>
     <string name="cave">Hang động</string>
     <string name="beach">Bãi biển</string>
     <string name="mountain">Lên núi</string>
-    <string name="what_you_want_to_go">Bạn thích đi đâu hơn?</string>
+    <string name="survey_place_title">Bạn thích đi đâu hơn?</string>
     <string name="asian_food">Đồ châu á</string>
     <string name="fast_food">Đồ ăn nhanh</string>
     <string name="european_food">Đồ âu</string>
     <string name="sea_food">Hải sản</string>
-</resources>
 
+    <string name="first_screen_title_html"><![CDATA[Cuộc đời này ngắn ngủi<br>thế giới thì <font color=\'#FF7029\'>rộng lớn</font>]]></string>
+    <string name="second_page_html_title"><![CDATA[Thế giới rộng lớn<br>hãy cứ <font color=\'#FF7029\'>khám phá</font>]]></string>
+    <string name="third_page_html_title"><![CDATA[Con người không chọn hành trình,<br>những hành trình <font color=\'#FF7029\'>chọn người khám phá</font>]]></string>
+    <string name="survey_page_html_title"><![CDATA[Để chúng tôi hiểu <font color=\'#FF7029\'>bạn</font>]]></string>
+    <string name="first_page_description">Hãy cứ khám phá,\nlên kế hoạch cho những chuyến đi tuyệt vời của bạn\nlà trách nhiệm của chúng tôi</string>
+    <string name="second_page_description">Sẵn sàng khám phá thế giới?\nchỉ cần bước đi, chúng tôi\nchờ bạn</string>
+    <string name="third_page_description">Sẵn sàng khám phá thế giới?\nchỉ cần bước đi, chúng tôi\nchờ bạn</string>
+</resources>

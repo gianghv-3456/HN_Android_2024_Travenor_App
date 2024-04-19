@@ -4,18 +4,25 @@
 
     <string name="onboarding_1_description">At  Friends tours and travel, we customize\nreliable and trutworthy educational tours to\ndestinations all over the world</string>
     <string name="onboarding_2_description">To get the best of your adventure you just\nneed to leave and go where you like, we are\nwaiting for you</string>
-    <string name="skip_btn">Skip</string>
-    <string name="get_started_btn">Get Started</string>
-    <string name="let_us_know_you">Let us know you</string>
-    <string name="next_btn">Next</string>
-    <string name="author">\@Hoàng Giang</string>
-    <string name="what_food_you_like">What food you like?</string>
+    <string name="onboarding_skip_btn">Skip</string>
+    <string name="onboarding_get_started_btn">Get Started</string>
+    <string name="survey_title">Let us know you</string>
+    <string name="onboarding_next_btn">Next</string>
+    <string name="splash_author">\@Hoàng Giang</string>
+    <string name="survey_food_title">What food you like?</string>
     <string name="cave">Cave</string>
     <string name="beach">Beach</string>
     <string name="mountain">Mountain</string>
-    <string name="what_you_want_to_go">What you want to go?</string>
+    <string name="survey_place_title">What you want to go?</string>
     <string name="asian_food">Asian food</string>
     <string name="fast_food">Fast food</string>
     <string name="european_food">European food</string>
     <string name="sea_food">Sea food</string>
+    <string name="first_screen_title_html"><![CDATA[Life is short and the<br>world is <font color=\'#FF7029\'>wide</font>]]></string>
+    <string name="second_page_html_title"><![CDATA[It\'s a big world out<br>there go <font color=\'#FF7029\'>explore</font>]]></string>
+    <string name="third_page_html_title"><![CDATA[People don\'t take trips,<br>trips take <font color=\'#FF7029\'>people</font>]]></string>
+    <string name="survey_page_html_title"><![CDATA[Let us know <font color=\'#FF7029\'>you</font>]]></string>
+    <string name="first_page_description">At  Friends tours and travel, we customize\nreliable and trutworthy educational tours to\ndestinations all over the world</string>
+    <string name="second_page_description">To get the best of your adventure you just\nneed to leave and go where you like, we are\nwaiting for you</string>
+    <string name="third_page_description">To get the best of your adventure you just\n need to leave and go where you like, we are\n waiting for you</string>
 </resources>
