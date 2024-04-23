@@ -27,4 +27,6 @@
     <string name="first_page_description">Hãy cứ khám phá,\nlên kế hoạch cho những chuyến đi tuyệt vời của bạn\nlà trách nhiệm của chúng tôi</string>
     <string name="second_page_description">Sẵn sàng khám phá thế giới?\nchỉ cần bước đi, chúng tôi\nchờ bạn</string>
     <string name="third_page_description">Sẵn sàng khám phá thế giới?\nchỉ cần bước đi, chúng tôi\nchờ bạn</string>
+    <string name="msg_save_survey_fail">Có lỗi khi lưu trữ thông tin</string>
+
 </resources>

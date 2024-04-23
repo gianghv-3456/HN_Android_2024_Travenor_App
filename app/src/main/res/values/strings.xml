@@ -25,4 +25,6 @@
     <string name="first_page_description">At  Friends tours and travel, we customize\nreliable and trutworthy educational tours to\ndestinations all over the world</string>
     <string name="second_page_description">To get the best of your adventure you just\nneed to leave and go where you like, we are\nwaiting for you</string>
     <string name="third_page_description">To get the best of your adventure you just\n need to leave and go where you like, we are\n waiting for you</string>
+    <string name="msg_save_survey_fail">Save user survey fail</string>
+
 </resources>
