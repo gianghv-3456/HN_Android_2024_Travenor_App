@@ -13,6 +13,8 @@ class Versions {
     static final String flexBoxLayout = "3.0.0"
     static final String viewPager2 = "1.0.0"
 
+    static final String gson = "2.8.8"
+
 }
 
 class ClassPath {
@@ -38,6 +40,8 @@ class Deps {
     //UI
     static final String flexBoxlayout = "com.google.android.flexbox:flexbox:${Versions.flexBoxLayout}"
     static final String viewPager2 = "androidx.viewpager2:viewpager2:${Versions.viewPager2}"
+
+    static final String gson = "com.google.code.gson:gson:${Versions.gson}"
 }
 
 

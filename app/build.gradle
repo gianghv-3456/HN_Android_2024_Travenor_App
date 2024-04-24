@@ -37,6 +37,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
 }
 
 dependencies {
@@ -50,4 +51,5 @@ dependencies {
     androidTestImplementation Deps.androidx_espresso_core
     implementation Deps.flexBoxlayout
     implementation Deps.viewPager2
+    implementation Deps.gson
 }
