@@ -29,4 +29,23 @@
     <string name="third_page_description">Sẵn sàng khám phá thế giới?\nchỉ cần bước đi, chúng tôi\nchờ bạn</string>
     <string name="msg_save_survey_fail">Có lỗi khi lưu trữ thông tin</string>
 
+    <string name="menu_home_title">Trang chủ</string>
+    <string name="menu_favorite_title">Yêu thích</string>
+    <string name="menu_setting_title">Cài đặt</string>
+    <string name="menu_search_title">Tìm kiếm</string>
+    <string name="menu_nearby_title">Gần đây</string>
+
+    <string name="greeting_default_text">Chào buổi sáng!</string>
+    <string name="greeting_morning_text">Chào buổi sáng!</string>
+    <string name="greeting_afternoon_text">Chào buổi chiều!</string>
+    <string name="greeting_evening_text">Chào buổi tối!</string>
+    <string name="home_screen_header_text">Khám phá\nThế giới tươi đẹp!</string>
+    <string name="explore_view_all">Xem thêm</string>
+    <string name="explore_attraction_title">Điểm đến dành cho bạn</string>
+    <string name="explore_restaurant">Thử nhà hàng mới</string>
+    <string name="explore_hotel_title">Khách sạn cho bạn</string>
+    <string name="card_place_title">Vịnh Hạ Long</string>
+    <string name="card_place_rating">4.7</string>
+    <string name="card_place_address">Tp. Hạ Long, Quảng Ninh</string>
+
 </resources>
