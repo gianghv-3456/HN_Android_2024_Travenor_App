@@ -7,7 +7,7 @@ import android.os.Looper
 import android.view.View
 import com.example.travenor.data.sharedpreference.SharedPreferencesManager
 import com.example.travenor.databinding.ActivitySplashBinding
-import com.example.travenor.screen.main.MainActivity
+import com.example.travenor.screen.MainActivity
 import com.example.travenor.screen.onboarding.OnboardingActivity
 import com.example.travenor.utils.base.BaseActivity
 

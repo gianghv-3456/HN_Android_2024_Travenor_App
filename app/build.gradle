@@ -38,6 +38,9 @@ android {
         viewBinding = true
     }
 
+    // Load local.properties file
+    Properties properties = new Properties()
+    properties.load(new FileInputStream(rootProject.file("local.properties")))
 }
 
 dependencies {
@@ -52,4 +55,5 @@ dependencies {
     implementation Deps.flexBoxlayout
     implementation Deps.viewPager2
     implementation Deps.gson
+    implementation Deps.glide
 }
