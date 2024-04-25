@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.Androidtemplate" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
@@ -12,5 +12,22 @@
         <item name="android:statusBarColor">#00000000</item>
     </style>
 
+    <style name="Theme.Androidtemplate.TextAppearance.Body" parent="TextAppearance.AppCompat.Body1">
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="color">@color/black</item>
+        <item name="android:textSize">@dimen/sp_13</item>
+    </style>
+
+    <style name="Theme.Androidtemplate.TextAppearance.Medium" parent="Theme.Androidtemplate.TextAppearance.Body">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="color">@color/black</item>
+        <item name="android:textSize">@dimen/sp_18</item>
+    </style>
+
+    <style name="Theme.Androidtemplate.TextAppearance.BoldBody" parent="Theme.Androidtemplate.TextAppearance.Body">
+        <item name="fontFamily">@font/roboto_bold</item>
+    </style>
+
     <style name="Theme.Androidtemplate" parent="Base.Theme.Androidtemplate" />
+
 </resources>

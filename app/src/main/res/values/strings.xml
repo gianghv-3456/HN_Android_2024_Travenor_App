@@ -27,4 +27,23 @@
     <string name="third_page_description">To get the best of your adventure you just\n need to leave and go where you like, we are\n waiting for you</string>
     <string name="msg_save_survey_fail">Save user survey fail</string>
 
+    <string name="menu_home_title">Home</string>
+    <string name="menu_favorite_title">Favorite</string>
+    <string name="menu_setting_title">Setting</string>
+    <string name="menu_search_title">Search</string>
+    <string name="menu_nearby_title">Nearby</string>
+
+    <string name="greeting_default_text">Good morning!</string>
+    <string name="greeting_morning_text">Good morning!</string>
+    <string name="greeting_afternoon_text">Good afternoon!</string>
+    <string name="greeting_evening_text">Good evening!</string>
+    <string name="home_screen_header_text">Explore the\nBeautiful world!</string>
+    <string name="explore_view_all">View all</string>
+    <string name="explore_attraction_title">Destination for you</string>
+    <string name="explore_restaurant">How a restaurant?</string>
+    <string name="explore_hotel_title">Need a hotel?</string>
+    <string name="card_place_title">Vịnh Hạ Long</string>
+    <string name="card_place_rating">4.7</string>
+    <string name="card_place_address">Tp. Hạ Long, Quảng Ninh</string>
+
 </resources>
