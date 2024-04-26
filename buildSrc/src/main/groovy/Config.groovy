@@ -15,6 +15,8 @@ class Versions {
 
     static final String gson = "2.8.8"
 
+    //Glide
+    static final String glide = "4.16.0"
 }
 
 class ClassPath {
@@ -23,7 +25,6 @@ class ClassPath {
 
 class Plugins {
     static final String ktLint = "org.jlleitschuh.gradle.ktlint"
-
 }
 
 class Deps {
@@ -42,8 +43,10 @@ class Deps {
     static final String viewPager2 = "androidx.viewpager2:viewpager2:${Versions.viewPager2}"
 
     static final String gson = "com.google.code.gson:gson:${Versions.gson}"
-}
 
+    //Glide
+    static final String glide = "com.github.bumptech.glide:glide:${Versions.glide}"
+}
 
 class AppConfigs {
     static final String application_id = "com.example.travenor"
