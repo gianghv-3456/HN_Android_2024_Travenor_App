@@ -91,7 +91,7 @@ class NetWorker(
         // Handle @Query param annotation
         url = handleQueryAnnotation(params, url, args)
 
-        Log.d(LOG_TAG, "finish endpoint Url METHOD: $url")
+        Log.d(LOG_TAG, "Finish endpoint Url METHOD: $url")
         val apiUrl = URL(url)
 
         // Return a Call
@@ -118,7 +118,7 @@ class NetWorker(
                             callback.onResponse(responseBody, Response(data))
                         } else {
                             // Throw ApiException for non-OK HTTP response codes
-                            throw NetworkException("HTTP error: $responseCode")
+                            callback.onFailure(NetworkException("HTTP error: $responseCode when try get: $apiUrl"))
                         }
                     } catch (e: IOException) {
                         // Catch any other exceptions and invoke onFailure callback
