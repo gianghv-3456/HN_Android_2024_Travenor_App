@@ -11,34 +11,32 @@
         android:id="@+id/container_fragment"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_0"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/container_bottom_navigation"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/container_bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:itemIconTint="@color/bottom_nav_active_tab_color"
-        app:itemTextColor="@color/bottom_nav_active_tab_color"
-        app:menu="@menu/bottom_navigation_menu"
-        app:labelVisibilityMode="labeled"
         android:background="@color/white"
         android:elevation="@dimen/dp_4"
         app:itemActiveIndicatorStyle="@color/white"
-        app:itemIconSize="@dimen/dp_36"
-        >
+        app:itemIconSize="@dimen/dp_26"
+        app:itemIconTint="@color/bottom_nav_active_tab_color"
+        app:itemTextColor="@color/bottom_nav_active_tab_color"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_menu">
 
         <ImageButton
             android:id="@+id/button_search_menu"
             android:layout_width="@dimen/dp_48"
             android:layout_height="@dimen/dp_48"
             android:layout_gravity="center"
-            android:src="@drawable/ic_menu_search"
             android:background="@drawable/bottom_nav_center_bg"
-            android:importantForAccessibility="no" />
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_menu_search" />
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 

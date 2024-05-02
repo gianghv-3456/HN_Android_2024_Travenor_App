@@ -14,5 +14,10 @@ data class Place(
     @SerializedName("num_reviews") val ratingAmount: Int,
     @SerializedName("photo_count") val photoAmount: Int,
     @SerializedName("see_all_photos") val seeAllPhotosUrl: String,
-    @SerializedName("place_category") val locationType: String
+    @SerializedName("place_category") val locationType: String,
+
+    /**
+     * favorite flag, 0 = false, 1 = true
+     */
+    @Transient var isFavorite: Int = 0
 )

@@ -10,6 +10,8 @@ interface PlaceSource {
         fun searchExploreRestaurant(keyword: String, listener: ResultListener<List<Place>>)
         fun searchExploreHotel(keyword: String, listener: ResultListener<List<Place>>)
 
+        fun getPlaceDetail(placeId: String, listener: ResultListener<Place>)
+
         fun getPlacePhoto(placeId: String, listener: ResultListener<List<PlacePhoto>>)
     }
 }

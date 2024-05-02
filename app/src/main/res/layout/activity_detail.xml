@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screen.detail.DetailActivity">
+
+    <!-- User constrain to put header image in 60% of parent height   -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <ImageView
+            android:id="@+id/image_place_header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:scaleType="centerCrop"
+            android:src="@drawable/sample_vinh_ha_long"
+            app:layout_constraintHeight_percent="0.6"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/layout_app_bar"
+        android:layout_width="match_parent"
+        android:background="@color/transparent"
+        android:layout_height="?attr/actionBarSize">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/button_back"
+                android:layout_width="@dimen/dp_44"
+                android:layout_height="@dimen/dp_44"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/button_mark_favorite_bg"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:id="@+id/text_title"
+                android:fontFamily="@font/roboto_bold"
+                android:textSize="@dimen/sp_22"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/button_back"
+                android:layout_toStartOf="@id/button_mark_favorite"
+                android:layout_marginTop="@dimen/dp_8"
+                android:text="@string/detail_title"
+                android:gravity="center"
+                android:lines="1"
+                />
+
+            <ImageButton
+                android:id="@+id/button_mark_favorite"
+                android:layout_width="@dimen/dp_44"
+                android:layout_height="@dimen/dp_44"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/button_mark_favorite_bg"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_mark_favorite" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/container_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_top_corner_only"
+        android:paddingBottom="@dimen/dp_40"
+        app:behavior_hideable="false"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:layout_marginBottom="@dimen/dp_minus60"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_32"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:paddingBottom="@dimen/dp_40"
+            >
+
+            <TextView
+                android:id="@+id/text_place_name"
+                android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/card_place_title"
+                android:textSize="@dimen/sp_22"
+                android:layout_alignParentTop="true"
+                />
+
+            <TextView
+                android:id="@+id/text_place_address"
+                android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_place_name"
+                android:text="@string/card_place_address"
+                android:layout_marginEnd="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_toStartOf="@id/text_place_rating"
+                android:textSize="@dimen/sp_16"
+                />
+
+            <TextView
+                android:id="@+id/text_place_rating"
+                android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/card_place_rating"
+                android:layout_alignBaseline="@id/text_place_address"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/dp_16"
+                android:drawableStart="@drawable/ic_star"
+                android:drawablePadding="@dimen/dp_8"
+                />
+
+            <TextView
+                android:id="@+id/text_place_desc_label"
+                android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
+                android:textSize="@dimen/sp_22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_about_destination"
+                android:layout_below="@id/text_place_address"
+                android:layout_marginTop="@dimen/dp_16"
+                />
+
+            <TextView
+                android:id="@+id/text_place_desc"
+                android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_place_desc_label"
+                tools:text="@string/default_place_desc"
+                android:layout_marginTop="@dimen/dp_8"
+                android:textSize="@dimen/sp_16"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_more_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/text_place_desc"
+                android:maxWidth="@dimen/dp_300"
+                android:layout_margin="@dimen/dp_32"
+                android:elevation="@dimen/dp_4"
+                android:background="@drawable/big_primary_btn_bg"
+                android:fontFamily="@font/baloobhaina2_bold"
+                android:text="@string/detail_button_more_detail"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_20"
+                />
+
+            <View
+                android:id="@+id/view_bottom_spacing"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_0"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@id/button_more_detail"
+                android:layout_marginBottom="@dimen/dp_40"
+                />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

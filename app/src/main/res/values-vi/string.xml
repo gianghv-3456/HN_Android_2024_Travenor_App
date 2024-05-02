@@ -47,5 +47,9 @@
     <string name="card_place_title">Vịnh Hạ Long</string>
     <string name="card_place_rating">4.7</string>
     <string name="card_place_address">Tp. Hạ Long, Quảng Ninh</string>
+    <string name="detail_title">Chi tiết</string>
+    <string name="detail_about_destination">Giới thiệu</string>
+    <string name="detail_button_more_detail">Xem thêm</string>
+    <string name="detail_get_detail_fail_toast">Không thể lấy thông tin chi tiết</string>
 
 </resources>
