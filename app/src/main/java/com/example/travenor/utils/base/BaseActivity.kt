@@ -10,10 +10,15 @@ abstract class BaseActivity : AppCompatActivity() {
         setContentView(getLayoutRoot())
         enableUIDrawOnSystemBar()
         initView()
+        initData()
     }
 
     abstract fun getLayoutRoot(): View
     abstract fun initView()
+
+    open fun initData() {
+        /* no-op if not needed */
+    }
 
     /**
      * Help layout can draw over system status bar

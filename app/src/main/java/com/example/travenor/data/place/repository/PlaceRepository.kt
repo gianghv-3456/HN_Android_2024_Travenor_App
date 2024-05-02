@@ -23,6 +23,11 @@ class PlaceRepository private constructor(
         remote.searchExploreHotel(keyword, listener)
     }
 
+    override fun getPlaceDetail(placeId: String, listener: ResultListener<Place>) {
+        // TODO Implement Local Data
+        remote.getPlaceDetail(placeId, listener)
+    }
+
     override fun getPlacePhoto(placeId: String, listener: ResultListener<List<PlacePhoto>>) {
         remote.getPlacePhoto(placeId, listener)
     }

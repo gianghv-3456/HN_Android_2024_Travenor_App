@@ -45,5 +45,10 @@
     <string name="card_place_title">Vịnh Hạ Long</string>
     <string name="card_place_rating">4.7</string>
     <string name="card_place_address">Tp. Hạ Long, Quảng Ninh</string>
+    <string name="detail_title">Detail</string>
+    <string name="default_place_desc">Vịnh Hạ Long có diện tích 1.553 km vuông bao gồm 1.900 hòn đảo đá vôi lớn nhỏ với hình thù sinh VNĐ. Vịnh đã nhiều lần được UNESCO vinh danh là kỳ quan thiên nhiên thế giới và là điểm du lịch không thể bỏ qua.</string>
+    <string name="detail_about_destination">About Destination</string>
+    <string name="detail_button_more_detail">More Detail</string>
+    <string name="detail_get_detail_fail_toast">Cannot get Place detail</string>
 
 </resources>

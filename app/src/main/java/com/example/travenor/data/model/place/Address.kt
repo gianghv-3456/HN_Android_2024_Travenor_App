@@ -8,5 +8,5 @@ data class Address(
     @SerializedName("state") val state: String,
     @SerializedName("country") val country: String,
     @SerializedName("postalcode") val postalCode: String,
-    @SerializedName("postalcode") val addressString: String
+    @SerializedName("address_string") val addressString: String
 )

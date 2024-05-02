@@ -14,7 +14,7 @@ import com.example.travenor.data.sharedpreference.SharedPreferencesManager
 import com.example.travenor.data.user.repository.UserRepository
 import com.example.travenor.data.user.repository.local.UserInterestLocalSource
 import com.example.travenor.databinding.ActivityOnboardingBinding
-import com.example.travenor.screen.main.MainActivity
+import com.example.travenor.screen.MainActivity
 import com.example.travenor.screen.onboarding.adapter.OnboardingAdapter
 import com.example.travenor.screen.onboarding.adapter.OnboardingAdapter.Companion.FIRST_PAGE_INDEX
 import com.example.travenor.screen.onboarding.adapter.OnboardingAdapter.Companion.SECOND_PAGE_INDEX

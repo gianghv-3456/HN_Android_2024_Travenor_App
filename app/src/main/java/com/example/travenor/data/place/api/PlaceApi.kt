@@ -6,6 +6,7 @@ import com.example.travenor.core.network.Call
 import com.example.travenor.core.network.annotation.GET
 import com.example.travenor.core.network.annotation.Path
 import com.example.travenor.core.network.annotation.Query
+import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.place.PlacePhotoResponse
 import com.example.travenor.data.place.PlaceSearchResponse
 
@@ -26,4 +27,12 @@ interface PlaceApi {
         @Query("limit") limit: Int = 1,
         @Query("language") language: String = "vi"
     ): Call<PlacePhotoResponse>
+
+    @GET("/location/{locationId}/details")
+    fun getPlaceDetail(
+        @Path("locationId") locationId: String,
+        @Query("key") apiKey: String,
+        @Query("language") language: String = "vi",
+        @Query("currency") currency: String = "VND"
+    ): Call<Place>
 }

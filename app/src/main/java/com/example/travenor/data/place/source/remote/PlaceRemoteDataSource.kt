@@ -1,4 +1,4 @@
-package com.example.travenor.data.place.source
+package com.example.travenor.data.place.source.remote
 
 import android.os.Build
 import android.util.Log
@@ -17,6 +17,7 @@ import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.place.PlacePhotoResponse
 import com.example.travenor.data.place.PlaceSearchResponse
 import com.example.travenor.data.place.api.PlaceApi
+import com.example.travenor.data.place.source.PlaceSource
 
 class PlaceRemoteDataSource private constructor(
     private val placeApi: PlaceApi
@@ -103,6 +104,23 @@ class PlaceRemoteDataSource private constructor(
                 }
             }
         )
+    }
+
+    override fun getPlaceDetail(placeId: String, listener: ResultListener<Place>) {
+        placeApi.getPlaceDetail(apiKey = TRIP_ADVISOR_API_KEY, locationId = placeId)
+            .enqueue(
+                Place::class.java,
+                object : Callback<Place> {
+                    override fun onResponse(rawResponse: String, response: Response<Place>) {
+                        listener.onSuccess(response.data)
+                    }
+
+                    override fun onFailure(t: Throwable) {
+                        t.printStackTrace()
+                        listener.onError(NetworkException("Fail: ${t.message}"))
+                    }
+                }
+            )
     }
 
     override fun getPlacePhoto(placeId: String, listener: ResultListener<List<PlacePhoto>>) {

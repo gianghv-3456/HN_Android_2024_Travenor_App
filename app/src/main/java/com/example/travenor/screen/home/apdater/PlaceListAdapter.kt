@@ -12,6 +12,7 @@ import com.example.travenor.utils.ext.notNull
 class PlaceListAdapter : RecyclerView.Adapter<PlaceListAdapter.ViewHolder>() {
     private var placeList: MutableList<Place> = mutableListOf()
     private var thumbnailPhotoMap = mutableMapOf<String, PlacePhoto>()
+    private var listener: OnPlaceClickListener? = null
 
     fun setData(placeList: List<Place>) {
         placeList.notNull {
@@ -19,6 +20,10 @@ class PlaceListAdapter : RecyclerView.Adapter<PlaceListAdapter.ViewHolder>() {
             this.placeList.addAll(it)
             notifyDataSetChanged()
         }
+    }
+
+    fun setOnPlaceClickListener(listener: OnPlaceClickListener) {
+        this.listener = listener
     }
 
     fun updateThumbnail(locationId: String, photo: PlacePhoto) {
@@ -52,5 +57,11 @@ class PlaceListAdapter : RecyclerView.Adapter<PlaceListAdapter.ViewHolder>() {
         val url =
             if (thumbnailPhotoMap.containsKey(id)) thumbnailPhotoMap[id]?.imageList?.original?.url else ""
         holder.binding.imageThumbnailPlace.loadImageCenterCrop(url.toString())
+
+        holder.itemView.setOnClickListener { _ -> listener?.onPlaceClick(place.locationId) }
+    }
+
+    interface OnPlaceClickListener {
+        fun onPlaceClick(locationId: String)
     }
 }

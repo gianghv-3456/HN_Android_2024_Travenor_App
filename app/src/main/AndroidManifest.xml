@@ -18,7 +18,10 @@
         tools:ignore="LockedOrientationActivity"
         tools:targetApi="31">
         <activity
-            android:name=".screen.main.MainActivity"
+            android:name=".screen.detail.DetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screen.MainActivity"
             android:exported="false" />
         <activity
             android:name=".screen.onboarding.OnboardingActivity"
