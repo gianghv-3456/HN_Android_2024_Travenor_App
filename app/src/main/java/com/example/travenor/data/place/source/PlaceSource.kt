@@ -14,4 +14,42 @@ interface PlaceSource {
 
         fun getPlacePhoto(placeId: String, listener: ResultListener<List<PlacePhoto>>)
     }
+
+    interface Local {
+        fun getPlaceDetail(locationId: String): Place?
+
+        fun getPlacePhoto(locationId: String): List<PlacePhoto>?
+
+        fun savePlaceDetail(place: Place)
+
+        fun savePlacePhoto(placePhotos: List<PlacePhoto>)
+
+        fun savePlaceAddress(place: Place)
+    }
+
+    interface ExplorePlaceLocal {
+        /**
+         * Get local explore attraction
+         * @return List<Pair<String, Long>> where first is place and second is creation timestamp
+         */
+        fun getExploreAttractionLocal(limit: Int = 5): List<Pair<Place, Long>>
+
+        /**
+         * Get local explore restaurant
+         * @return List<Pair<String, Long>> where first is place and second is creation timestamp
+         */
+        fun getExploreRestaurantLocal(limit: Int = 5): List<Pair<Place, Long>>
+
+        /**
+         * Get local explore hotel
+         * @return List<Pair<String, Long>> where first is place and second is creation timestamp
+         */
+        fun getExploreHotelLocal(limit: Int = 5): List<Pair<Place, Long>>
+
+        fun saveExploreAttractionLocal(idList: List<String>)
+
+        fun saveExploreRestaurantLocal(idList: List<String>)
+
+        fun saveExploreHotelLocal(idList: List<String>)
+    }
 }

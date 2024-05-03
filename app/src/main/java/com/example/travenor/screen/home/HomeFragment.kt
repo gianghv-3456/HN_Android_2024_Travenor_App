@@ -11,7 +11,9 @@ import com.example.travenor.R
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
-import com.example.travenor.data.place.repository.PlaceRepository
+import com.example.travenor.data.place.repository.PlaceRepositoryImpl
+import com.example.travenor.data.place.source.local.PlaceExploreLocalSource
+import com.example.travenor.data.place.source.local.PlaceLocalDataSource
 import com.example.travenor.data.place.source.remote.PlaceRemoteDataSource
 import com.example.travenor.data.sharedpreference.SharedPreferencesManager
 import com.example.travenor.data.user.repository.UserRepository
@@ -40,11 +42,20 @@ class HomeFragment :
     override fun initData() {
         val sharedPresenterManager = SharedPreferencesManager.getInstance(context)
 
-        val placeRepository = PlaceRepository.getInstance(PlaceRemoteDataSource.getInstance())
+        val remoteDataSource = PlaceRemoteDataSource.getInstance()
+        val localDataSource = PlaceLocalDataSource.getInstance(requireContext())
+        val localExploreDataSource = PlaceExploreLocalSource.getInstance(requireContext())
+
+        val placeRepositoryImpl =
+            PlaceRepositoryImpl.getInstance(
+                remoteDataSource,
+                localDataSource,
+                localExploreDataSource
+            )
         val userRepository =
             UserRepository.getInstance(UserInterestLocalSource.getInstance(sharedPresenterManager))
 
-        mExplorePlacePresenter = ExplorePlacePresenter(placeRepository, userRepository)
+        mExplorePlacePresenter = ExplorePlacePresenter(placeRepositoryImpl, userRepository)
         mExplorePlacePresenter.setView(this)
 
         // Get user interested place type, we'll get Place when it done
