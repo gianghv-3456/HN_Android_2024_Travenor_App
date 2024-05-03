@@ -11,7 +11,7 @@ import com.example.travenor.data.user.repository.UserRepository
 import java.util.Random
 
 class ExplorePlacePresenter internal constructor(
-    private val placeRepository: PlaceRepository,
+    private val placeRepositoryImpl: PlaceRepository,
     private val userRepository: UserRepository
 ) : ExplorePlaceContract.Presenter {
     private var mView: ExplorePlaceContract.View? = null
@@ -29,8 +29,9 @@ class ExplorePlacePresenter internal constructor(
         }
 
         // Search explore for attraction with keyword
-        placeRepository.searchExploreAttraction(
+        placeRepositoryImpl.searchExplorePlace(
             searchKeyword,
+            PlaceCategory.ATTRACTION,
             object : ResultListener<List<Place>> {
                 override fun onSuccess(data: List<Place>?) {
                     if (data.isNullOrEmpty()) {
@@ -70,8 +71,9 @@ class ExplorePlacePresenter internal constructor(
             searchKeyword = randomFoodKeyword()
         }
 
-        placeRepository.searchExploreRestaurant(
+        placeRepositoryImpl.searchExplorePlace(
             searchKeyword,
+            PlaceCategory.RESTAURANT,
             object : ResultListener<List<Place>> {
 
                 override fun onSuccess(data: List<Place>?) {
@@ -100,8 +102,9 @@ class ExplorePlacePresenter internal constructor(
 
     override fun getExploreHotel() {
         // TODO get random hotel around user's location & remove hardcode string
-        placeRepository.searchExploreHotel(
+        placeRepositoryImpl.searchExplorePlace(
             "hotel",
+            PlaceCategory.HOTEL,
             object : ResultListener<List<Place>> {
                 override fun onSuccess(data: List<Place>?) {
                     if (data.isNullOrEmpty()) {
@@ -129,7 +132,7 @@ class ExplorePlacePresenter internal constructor(
 
     private fun getThumbnail(placeIdList: MutableList<String>, category: PlaceCategory) {
         placeIdList.forEach {
-            placeRepository.getPlacePhoto(
+            placeRepositoryImpl.getPlacePhoto(
                 it,
                 object : ResultListener<List<PlacePhoto>> {
                     override fun onSuccess(data: List<PlacePhoto>?) {

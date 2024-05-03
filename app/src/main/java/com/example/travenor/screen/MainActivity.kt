@@ -5,6 +5,7 @@ import com.example.travenor.R
 import com.example.travenor.databinding.ActivityMainBinding
 import com.example.travenor.screen.home.HomeFragment
 import com.example.travenor.utils.base.BaseActivity
+import com.example.travenor.utils.network.NetworkUtils
 
 class MainActivity : BaseActivity() {
     private lateinit var mBinding: ActivityMainBinding
@@ -16,6 +17,8 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initView() {
+        NetworkUtils.enableHttpResponseCache(cacheDir)
+
         mBinding.buttonSearchMenu.setOnClickListener {
             mBinding.containerBottomNavigation.selectedItemId = R.id.menu_bottom_search
         }

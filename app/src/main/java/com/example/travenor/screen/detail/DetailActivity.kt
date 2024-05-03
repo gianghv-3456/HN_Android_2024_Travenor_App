@@ -10,7 +10,9 @@ import androidx.core.view.ViewCompat
 import com.example.travenor.R
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
-import com.example.travenor.data.place.repository.PlaceRepository
+import com.example.travenor.data.place.repository.PlaceRepositoryImpl
+import com.example.travenor.data.place.source.local.PlaceExploreLocalSource
+import com.example.travenor.data.place.source.local.PlaceLocalDataSource
 import com.example.travenor.data.place.source.remote.PlaceRemoteDataSource
 import com.example.travenor.databinding.ActivityDetailBinding
 import com.example.travenor.utils.base.BaseActivity
@@ -34,8 +36,18 @@ class DetailActivity : BaseActivity(), DetailContract.View {
 
         mPlaceId = intent.getStringExtra(KEY_INTENT_PLACE_ID).toString()
 
-        mPresenter =
-            DetailPresenter(PlaceRepository.getInstance(PlaceRemoteDataSource.getInstance()))
+        val remoteDataSource = PlaceRemoteDataSource.getInstance()
+        val localDataSource = PlaceLocalDataSource.getInstance(baseContext)
+        val localExploreDataSource = PlaceExploreLocalSource.getInstance(baseContext)
+
+        val placeRepositoryImpl =
+            PlaceRepositoryImpl.getInstance(
+                remoteDataSource,
+                localDataSource,
+                localExploreDataSource
+            )
+
+        mPresenter = DetailPresenter(placeRepositoryImpl)
         mPresenter?.setView(this)
 
         mBinding.buttonBack.setOnClickListener { _ -> finish() }
@@ -47,8 +59,10 @@ class DetailActivity : BaseActivity(), DetailContract.View {
 
     private fun initBottomSheet() {
         val bottomBehavior = BottomSheetBehavior.from(mBinding.containerBottomSheet)
-        bottomBehavior.peekHeight = ((Resources.getSystem().displayMetrics.heightPixels) * FIFTY_PERCENT).toInt()
-        bottomBehavior.maxHeight = ((Resources.getSystem().displayMetrics.heightPixels) * EIGHTY_PERCENT).toInt()
+        bottomBehavior.peekHeight =
+            ((Resources.getSystem().displayMetrics.heightPixels) * FIFTY_PERCENT).toInt()
+        bottomBehavior.maxHeight =
+            ((Resources.getSystem().displayMetrics.heightPixels) * EIGHTY_PERCENT).toInt()
         bottomBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
@@ -88,7 +102,7 @@ class DetailActivity : BaseActivity(), DetailContract.View {
 
     override fun onGetPhotoSuccess(photos: PlacePhoto) {
         runOnUiThread {
-            mBinding.imagePlaceHeader.loadImageCenterCrop(photos.imageList.original.url)
+            mBinding.imagePlaceHeader.loadImageCenterCrop(photos.imageList.original?.url.toString())
         }
     }
 

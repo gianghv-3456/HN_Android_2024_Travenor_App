@@ -101,18 +101,17 @@ class NetWorker(
                     try {
                         Log.d(LOG_TAG, "Network request")
 
-                        val connection = apiUrl.openConnection() as HttpURLConnection
-                        connection.requestMethod = GET_METHOD
-                        connection.connectTimeout = mConnectTimeout
-                        connection.readTimeout = mReadTimeout
+                        val connection = (apiUrl.openConnection() as HttpURLConnection).apply {
+                            useCaches = true // Enable or ensure usage of the cache
+                            connectTimeout = mConnectTimeout // Optional: 15 seconds timeout
+                            readTimeout = mReadTimeout // Optional
+                        }
 
                         val responseCode = connection.responseCode
                         if (responseCode == HttpURLConnection.HTTP_OK) {
                             val inputStream = connection.inputStream
                             val responseBody =
                                 inputStream.bufferedReader().use(BufferedReader::readText)
-
-                            Log.d(LOG_TAG, "Raw: $responseBody")
 
                             val data = Gson().fromJson(responseBody, parseType) as T
                             callback.onResponse(responseBody, Response(data))
