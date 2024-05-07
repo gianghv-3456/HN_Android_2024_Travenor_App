@@ -22,13 +22,21 @@ import com.example.travenor.data.place.source.PlaceSource
 class PlaceRemoteDataSource private constructor(
     private val placeApi: PlaceApi
 ) : PlaceSource.Remote {
-    override fun searchExploreAttraction(keyword: String, listener: ResultListener<List<Place>>) {
+    override fun searchExploreAttraction(
+        keyword: String,
+        lat: Double,
+        long: Double,
+        listener: ResultListener<List<Place>>
+    ) {
         val category = PlaceCategory.ATTRACTION.name.lowercase()
+
+        val latLongString = "$lat,$long"
 
         placeApi.searchPlaceTripadvisor(
             TRIP_ADVISOR_API_KEY,
             keyword,
-            category
+            category,
+            latLong = latLongString
         ).enqueue(
             PlaceSearchResponse::class.java,
             object : Callback<PlaceSearchResponse> {

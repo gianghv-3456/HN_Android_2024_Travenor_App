@@ -29,6 +29,10 @@ class UserRepository private constructor(
         local.getUserInterestedPlace(listener)
     }
 
+    override fun getUserLastLocation(): Pair<Double, Double> {
+        return local.getUserLastLocation()
+    }
+
     override fun getUserInterestedFood(listener: ResultListener<List<Food>>) {
         local.getUserInterestedFood(listener)
     }

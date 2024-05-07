@@ -7,7 +7,13 @@ import com.example.travenor.data.model.place.Place
 
 interface PlaceRepository {
 
-    fun searchExplorePlace(keyword: String, category: PlaceCategory, listener: ResultListener<List<Place>>)
+    fun searchExplorePlace(
+        keyword: String,
+        category: PlaceCategory,
+        lat: Double,
+        long: Double,
+        listener: ResultListener<List<Place>>
+    )
 
     fun getPlaceDetail(placeId: String, listener: ResultListener<Place>)
 

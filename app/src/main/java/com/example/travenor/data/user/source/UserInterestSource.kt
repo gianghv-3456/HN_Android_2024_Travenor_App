@@ -12,6 +12,8 @@ interface UserInterestSource {
 
         fun getUserInterestedPlace(listener: ResultListener<List<Place>>)
 
+        fun getUserLastLocation(): Pair<Double, Double>
+
         fun getUserInterestedFood(listener: ResultListener<List<Food>>)
 
         fun saveUserInterestedPlace(placeList: List<Place>, listener: ResultListener<Any>)

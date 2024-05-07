@@ -1,15 +1,26 @@
 package com.example.travenor.screen
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.travenor.R
+import com.example.travenor.data.sharedpreference.SharedPreferencesManager
 import com.example.travenor.databinding.ActivityMainBinding
 import com.example.travenor.screen.home.HomeFragment
 import com.example.travenor.utils.base.BaseActivity
 import com.example.travenor.utils.network.NetworkUtils
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 class MainActivity : BaseActivity() {
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mHomeFragment: HomeFragment
+    private var fusedLocationClient: FusedLocationProviderClient? = null
 
     override fun getLayoutRoot(): View {
         mBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -19,11 +30,11 @@ class MainActivity : BaseActivity() {
     override fun initView() {
         NetworkUtils.enableHttpResponseCache(cacheDir)
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         mBinding.buttonSearchMenu.setOnClickListener {
             mBinding.containerBottomNavigation.selectedItemId = R.id.menu_bottom_search
         }
-
-        openHomeFragment()
 
         mBinding.containerBottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
@@ -31,6 +42,54 @@ class MainActivity : BaseActivity() {
                 else -> removeHomeFragment()
             }
             return@setOnItemSelectedListener true
+        }
+
+        // Check for location permission
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Request permission
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_LOCATION_PERMISSION
+            )
+        } else {
+            // Permission already granted, start location updates
+            requestLastLocation()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, start location updates
+                requestLastLocation()
+            } else {
+                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+
+                // open HomeFragment anyway
+                openHomeFragment()
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun requestLastLocation() {
+        fusedLocationClient?.lastLocation?.addOnSuccessListener {
+            if (it != null) {
+                saveLastLocation(it.latitude, it.longitude)
+                openHomeFragment()
+                Log.d(TAG, "Location: ${it.latitude}, ${it.longitude}")
+            } else {
+                Log.d(TAG, "Location: null")
+                openHomeFragment()
+            }
         }
     }
 
@@ -42,5 +101,14 @@ class MainActivity : BaseActivity() {
 
     private fun removeHomeFragment() {
         supportFragmentManager.beginTransaction().remove(mHomeFragment).commit()
+    }
+
+    private fun saveLastLocation(lat: Double, long: Double) {
+        SharedPreferencesManager.getInstance(this).saveLocation(lat, long)
+    }
+
+    companion object {
+        private const val REQUEST_LOCATION_PERMISSION = 111
+        private const val TAG = "MainActivity"
     }
 }
