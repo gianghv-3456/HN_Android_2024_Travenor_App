@@ -37,6 +37,10 @@ class UserInterestLocalSource private constructor(
         }
     }
 
+    override fun getUserLastLocation(): Pair<Double, Double> {
+        return mSharedPreferencesManager.getLocation()
+    }
+
     override fun getUserInterestedFood(listener: ResultListener<List<Food>>) {
         try {
             val result = mSharedPreferencesManager.getUserFoodInterest()

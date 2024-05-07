@@ -1,5 +1,7 @@
 package com.example.travenor.screen.home
 
+import com.example.travenor.constant.DEFAULT_LAT
+import com.example.travenor.constant.DEFAULT_LONG
 import com.example.travenor.constant.Food
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.core.ResultListener
@@ -8,6 +10,7 @@ import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.place.repository.PlaceRepository
 import com.example.travenor.data.user.UserInterestData
 import com.example.travenor.data.user.repository.UserRepository
+import com.example.travenor.utils.location.LocationUtils
 import java.util.Random
 
 class ExplorePlacePresenter internal constructor(
@@ -28,10 +31,22 @@ class ExplorePlacePresenter internal constructor(
             searchKeyword = randomPlaceKeyword()
         }
 
+        // Get user's last location
+        val lastLocation = userRepository.getUserLastLocation()
+
+        val lastLat = if (lastLocation.first != 0.0) lastLocation.first else DEFAULT_LAT
+        val lastLng = if (lastLocation.second != 0.0) lastLocation.second else DEFAULT_LONG
+
+        val randomLocation = LocationUtils.generateRandomLocation(lastLat, lastLng)
+        val randomLat = randomLocation.first
+        val randomLng = randomLocation.second
+
         // Search explore for attraction with keyword
         placeRepositoryImpl.searchExplorePlace(
             searchKeyword,
             PlaceCategory.ATTRACTION,
+            lat = randomLat,
+            long = randomLng,
             object : ResultListener<List<Place>> {
                 override fun onSuccess(data: List<Place>?) {
                     if (data.isNullOrEmpty()) {
@@ -71,9 +86,21 @@ class ExplorePlacePresenter internal constructor(
             searchKeyword = randomFoodKeyword()
         }
 
+        // Get user's last location
+        val lastLocation = userRepository.getUserLastLocation()
+
+        val lastLat = if (lastLocation.first != 0.0) lastLocation.first else DEFAULT_LAT
+        val lastLng = if (lastLocation.second != 0.0) lastLocation.second else DEFAULT_LONG
+
+        val randomLocation = LocationUtils.generateRandomLocation(lastLat, lastLng)
+        val randomLat = randomLocation.first
+        val randomLng = randomLocation.second
+
         placeRepositoryImpl.searchExplorePlace(
             searchKeyword,
             PlaceCategory.RESTAURANT,
+            lat = randomLat,
+            long = randomLng,
             object : ResultListener<List<Place>> {
 
                 override fun onSuccess(data: List<Place>?) {
@@ -101,10 +128,21 @@ class ExplorePlacePresenter internal constructor(
     }
 
     override fun getExploreHotel() {
-        // TODO get random hotel around user's location & remove hardcode string
+        // Get user's last location
+        val lastLocation = userRepository.getUserLastLocation()
+
+        val lastLat = if (lastLocation.first != 0.0) lastLocation.first else DEFAULT_LAT
+        val lastLng = if (lastLocation.second != 0.0) lastLocation.second else DEFAULT_LONG
+
+        val randomLocation = LocationUtils.generateRandomLocation(lastLat, lastLng)
+        val randomLat = randomLocation.first
+        val randomLng = randomLocation.second
+
         placeRepositoryImpl.searchExplorePlace(
             "hotel",
             PlaceCategory.HOTEL,
+            randomLat,
+            randomLng,
             object : ResultListener<List<Place>> {
                 override fun onSuccess(data: List<Place>?) {
                     if (data.isNullOrEmpty()) {
@@ -189,11 +227,11 @@ class ExplorePlacePresenter internal constructor(
     }
 
     override fun onStart() {
-//        TODO("Not yet implemented")
+        /* no-op */
     }
 
     override fun onStop() {
-//        TODO("Not yet implemented")
+        /* no-op */
     }
 
     override fun setView(view: ExplorePlaceContract.View?) {

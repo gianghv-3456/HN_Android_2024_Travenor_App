@@ -15,12 +15,16 @@ class PlaceRepositoryImpl private constructor(
     override fun searchExplorePlace(
         keyword: String,
         category: PlaceCategory,
+        lat: Double,
+        long: Double,
         listener: ResultListener<List<Place>>
     ) {
         // Try get online mode
         getExploreOnlineMode(
             keyword,
             category,
+            lat,
+            long,
             object : ResultListener<List<Place>> {
                 override fun onSuccess(data: List<Place>?) {
                     // No data
@@ -45,6 +49,8 @@ class PlaceRepositoryImpl private constructor(
     private fun getExploreOnlineMode(
         keyword: String,
         category: PlaceCategory,
+        lat: Double,
+        long: Double,
         listener: ResultListener<List<Place>>
     ) {
         // Get local data and check freshness
@@ -64,7 +70,7 @@ class PlaceRepositoryImpl private constructor(
 
         // No data stored, so get remote
         if (result.isEmpty()) {
-            getExplorePlaceFromRemote(keyword, category, listener)
+            getExplorePlaceFromRemote(keyword, lat, long, category, listener)
             return
         }
 
@@ -80,7 +86,7 @@ class PlaceRepositoryImpl private constructor(
             )
         } else {
             // Get remote data from api and store to local
-            getExplorePlaceFromRemote(keyword, category, listener)
+            getExplorePlaceFromRemote(keyword, lat, long, category, listener)
         }
     }
 
@@ -132,12 +138,14 @@ class PlaceRepositoryImpl private constructor(
 
     private fun getExplorePlaceFromRemote(
         keyword: String,
+        lat: Double,
+        long: Double,
         category: PlaceCategory,
         listener: ResultListener<List<Place>>
     ) {
         when (category) {
             PlaceCategory.ATTRACTION ->
-                getExploreAttractionRemote(keyword, listener)
+                getExploreAttractionRemote(keyword, lat, long, listener)
 
             PlaceCategory.RESTAURANT ->
                 getExploreRestaurantRemote(keyword, listener)
@@ -149,10 +157,14 @@ class PlaceRepositoryImpl private constructor(
 
     private fun getExploreAttractionRemote(
         keyword: String,
+        lat: Double,
+        long: Double,
         listener: ResultListener<List<Place>>
     ) {
         remote.searchExploreAttraction(
             keyword,
+            lat,
+            long,
             object : ResultListener<List<Place>> {
                 override fun onSuccess(data: List<Place>?) {
                     if (data.isNullOrEmpty()) {

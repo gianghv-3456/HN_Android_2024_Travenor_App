@@ -25,6 +25,19 @@ class SharedPreferencesManager private constructor(context: Context?) {
         editor?.apply()
     }
 
+    fun getLocation(): Pair<Double, Double> {
+        val lat = mSharedPrefs?.getFloat(PREF_USER_LOCATION_LAT, 0F)?.toDouble() ?: 0.0
+        val lng = mSharedPrefs?.getFloat(PREF_USER_LOCATION_LONG, 0F)?.toDouble() ?: 0.0
+        return Pair(lat, lng)
+    }
+
+    fun saveLocation(lat: Double, lng: Double) {
+        val editor = mSharedPrefs?.edit()
+        editor?.putFloat(PREF_USER_LOCATION_LAT, lat.toFloat())
+        editor?.putFloat(PREF_USER_LOCATION_LONG, lng.toFloat())
+        editor?.apply()
+    }
+
     fun getUserPlaceInterest(): List<Place> {
         val str = mSharedPrefs?.getString(PREF_USER_INTEREST_PLACE_TYPE, "")
         if (str.isNullOrEmpty()) return emptyList()
@@ -84,6 +97,10 @@ class SharedPreferencesManager private constructor(context: Context?) {
             "com.example.travenor.data.shared_preference.interest_place"
         private const val PREF_USER_INTEREST_FOOD_TYPE =
             "com.example.travenor.data.shared_preference.interest_food"
+        private const val PREF_USER_LOCATION_LAT =
+            "com.example.travenor.data.shared_preference.location_lat"
+        private const val PREF_USER_LOCATION_LONG =
+            "com.example.travenor.data.shared_preference.location_long"
 
         private var instance: SharedPreferencesManager? = null
 

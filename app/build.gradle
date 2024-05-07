@@ -29,6 +29,9 @@ android {
             buildConfigField "String", "TRAVEL_ADVISOR_RAPID_URL", localProperties['TRAVEL_ADVISOR_RAPID_URL']
             buildConfigField "String", "FOURSQUARE_KEY", localProperties['FOURSQUARE_KEY']
             buildConfigField "String", "FOURSQUARE_URL", localProperties['FOURSQUARE_URL']
+
+            def geoApiKey = localProperties['GEO_API_KEY']
+            buildConfigField "String", "GEO_API_KEY", geoApiKey
         }
     }
 
@@ -65,4 +68,5 @@ dependencies {
     implementation Deps.viewPager2
     implementation Deps.gson
     implementation Deps.glide
+    implementation Deps.playServiceMap
 }

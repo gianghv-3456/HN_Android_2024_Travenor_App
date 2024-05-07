@@ -6,13 +6,18 @@ import com.example.travenor.data.model.place.Place
 
 interface PlaceSource {
     interface Remote {
-        fun searchExploreAttraction(keyword: String, listener: ResultListener<List<Place>>)
         fun searchExploreRestaurant(keyword: String, listener: ResultListener<List<Place>>)
         fun searchExploreHotel(keyword: String, listener: ResultListener<List<Place>>)
 
         fun getPlaceDetail(placeId: String, listener: ResultListener<Place>)
 
         fun getPlacePhoto(placeId: String, listener: ResultListener<List<PlacePhoto>>)
+        fun searchExploreAttraction(
+            keyword: String,
+            lat: Double,
+            long: Double,
+            listener: ResultListener<List<Place>>
+        )
     }
 
     interface Local {
