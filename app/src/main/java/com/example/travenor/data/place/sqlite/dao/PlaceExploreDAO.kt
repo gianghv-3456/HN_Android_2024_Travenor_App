@@ -66,7 +66,7 @@ class PlaceExploreDAO(context: Context) {
      * @return locationIds
      */
     fun getAttractionExplore(limit: Int = 5): List<Pair<String, Long>> {
-        return getExplorePlace(limit, PlaceCategory.ATTRACTION)
+        return getExplorePlace(limit, PlaceCategory.ATTRACTIONS)
     }
 
     /**
@@ -74,7 +74,7 @@ class PlaceExploreDAO(context: Context) {
      * @return locationIds
      */
     fun getRestaurantExplore(limit: Int = 5): List<Pair<String, Long>> {
-        return getExplorePlace(limit, PlaceCategory.RESTAURANT)
+        return getExplorePlace(limit, PlaceCategory.RESTAURANTS)
     }
 
     /**
@@ -82,7 +82,7 @@ class PlaceExploreDAO(context: Context) {
      * @return locationIds
      */
     fun getHotelExplore(limit: Int = 5): List<Pair<String, Long>> {
-        return getExplorePlace(limit, PlaceCategory.HOTEL)
+        return getExplorePlace(limit, PlaceCategory.HOTELS)
     }
 
     /**
@@ -132,33 +132,33 @@ class PlaceExploreDAO(context: Context) {
 
     private fun queryConditionsString(locationType: PlaceCategory): String {
         return when (locationType) {
-            PlaceCategory.ATTRACTION -> "${ExplorePlaceTable.COL_TIMESTAMP} >?"
-            PlaceCategory.RESTAURANT -> "${ExploreRestaurantTable.COL_TIMESTAMP} >?"
-            PlaceCategory.HOTEL -> "${ExploreHotelTable.COL_TIMESTAMP} >?"
+            PlaceCategory.ATTRACTIONS -> "${ExplorePlaceTable.COL_TIMESTAMP} >?"
+            PlaceCategory.RESTAURANTS -> "${ExploreRestaurantTable.COL_TIMESTAMP} >?"
+            PlaceCategory.HOTELS -> "${ExploreHotelTable.COL_TIMESTAMP} >?"
         }
     }
 
     private fun getTableName(locationType: PlaceCategory): String {
         return when (locationType) {
-            PlaceCategory.ATTRACTION -> ExplorePlaceTable.EXPLORE_PLACE
-            PlaceCategory.RESTAURANT -> ExploreRestaurantTable.EXPLORE_RESTAURANT
-            PlaceCategory.HOTEL -> ExploreHotelTable.EXPLORE_HOTEL
+            PlaceCategory.ATTRACTIONS -> ExplorePlaceTable.EXPLORE_PLACE
+            PlaceCategory.RESTAURANTS -> ExploreRestaurantTable.EXPLORE_RESTAURANT
+            PlaceCategory.HOTELS -> ExploreHotelTable.EXPLORE_HOTEL
         }
     }
 
     private fun getQueryColumn(locationType: PlaceCategory): Array<String> {
         return when (locationType) {
-            PlaceCategory.ATTRACTION -> arrayOf(
+            PlaceCategory.ATTRACTIONS -> arrayOf(
                 ExplorePlaceTable.COL_LOCATION_ID,
                 ExplorePlaceTable.COL_TIMESTAMP
             )
 
-            PlaceCategory.RESTAURANT -> arrayOf(
+            PlaceCategory.RESTAURANTS -> arrayOf(
                 ExploreRestaurantTable.COL_LOCATION_ID,
                 ExploreRestaurantTable.COL_TIMESTAMP
             )
 
-            PlaceCategory.HOTEL -> arrayOf(
+            PlaceCategory.HOTELS -> arrayOf(
                 ExploreHotelTable.COL_LOCATION_ID,
                 ExploreHotelTable.COL_TIMESTAMP
             )

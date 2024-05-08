@@ -2,6 +2,7 @@ package com.example.travenor.data.place.source.local
 
 import android.content.Context
 import android.database.sqlite.SQLiteException
+import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.place.source.PlaceSource
@@ -9,8 +10,7 @@ import com.example.travenor.data.place.sqlite.dao.PlaceDAO
 import com.example.travenor.data.place.sqlite.dao.PlacePhotoDAO
 
 class PlaceLocalDataSource(
-    private val placeDao: PlaceDAO,
-    private val placePhotoDAO: PlacePhotoDAO
+    private val placeDao: PlaceDAO, private val placePhotoDAO: PlacePhotoDAO
 
 ) : PlaceSource.Local {
 
@@ -58,6 +58,19 @@ class PlaceLocalDataSource(
         }
     }
 
+    override fun getNearbyPlaceLocal(
+        lat: Double, long: Double, category: PlaceCategory, limit: Int, radius: Double
+    ): List<Place>? {
+        try {
+            val result = placeDao.getNearByPlace(lat, long, limit, radius, category)
+            if (result.isEmpty()) return null
+            return result
+        } catch (e: SQLiteException) {
+            e.run { printStackTrace() }
+            return null
+        }
+    }
+
     companion object {
         private var instance: PlaceLocalDataSource? = null
 
@@ -65,8 +78,7 @@ class PlaceLocalDataSource(
             val placeDao = PlaceDAO(context)
             val placePhotoDAO = PlacePhotoDAO(context)
             instance ?: PlaceLocalDataSource(
-                placeDao,
-                placePhotoDAO
+                placeDao, placePhotoDAO
             ).also { instance = it }
         }
     }

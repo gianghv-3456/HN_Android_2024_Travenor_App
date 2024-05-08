@@ -4,11 +4,13 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
+import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.data.model.place.Address
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.place.sqlite.PlaceSqliteHelper
 import com.example.travenor.data.place.sqlite.tables.AddressTable
 import com.example.travenor.data.place.sqlite.tables.PlaceTable
+import com.example.travenor.utils.location.LocationUtils
 
 class PlaceDAO(context: Context) {
     private val sqlHelper = PlaceSqliteHelper(context)
@@ -22,10 +24,7 @@ class PlaceDAO(context: Context) {
 
         val db = sqlHelper.writableDatabase
         val result = db.insertWithOnConflict(
-            PlaceTable.TABLE_PLACE,
-            null,
-            values,
-            SQLiteDatabase.CONFLICT_REPLACE
+            PlaceTable.TABLE_PLACE, null, values, SQLiteDatabase.CONFLICT_REPLACE
         )
         return if (result == falseCode) {
             Log.d(TAG, "Fail to insert data")
@@ -49,6 +48,63 @@ class PlaceDAO(context: Context) {
         return db.update(PlaceTable.TABLE_PLACE, values, whereString, arrayOf(locationId))
     }
 
+    fun isFavoritePlace(locationId: String): Int {
+        val db = sqlHelper.readableDatabase
+        val columns = arrayOf(PlaceTable.COL_IS_FAVORITE)
+        val selectionString = "${PlaceTable.COL_LOCATION_ID} =? "
+        val args = arrayOf(locationId)
+
+        val cursor = db.query(
+            PlaceTable.TABLE_PLACE, columns, selectionString, args, null, null, null
+        )
+
+        val columnIndex = 0
+        if (cursor != null && cursor.moveToFirst()) {
+            val placeCategory = cursor.getInt(columnIndex)
+            cursor.close()
+            return placeCategory
+        }
+        return 0
+    }
+
+    fun getPlaceCategory(locationId: String): String {
+        val db = sqlHelper.readableDatabase
+        val columns = arrayOf(PlaceTable.COL_PLACE_CATEGORY)
+        val selectionString = "${PlaceTable.COL_LOCATION_ID} =? "
+
+        val cursor = db.query(
+            PlaceTable.TABLE_PLACE, columns, selectionString, arrayOf(locationId), null, null, null
+        )
+
+        val columnIndex = 0
+        if (cursor != null && cursor.moveToFirst()) {
+            val placeCategory = cursor.getString(columnIndex)
+            cursor.close()
+
+            return placeCategory
+        }
+        return ""
+    }
+
+    fun getNearByPlace(
+        lat: Double, long: Double, limit: Int, radius: Double, category: PlaceCategory
+    ): List<Place> {
+        val result = mutableListOf<Place>()
+        val places = getAllPlaceData()
+        for (place in places) {
+            val tLat = place.latitude.toDouble()
+            val tLong = place.longitude.toDouble()
+
+            if (category.name.lowercase() != place.locationType?.lowercase())
+                continue
+
+            if (LocationUtils.calculateDistance(lat, long, tLat, tLong) <= radius) result.add(place)
+        }
+
+        result.shuffle()
+        return result.take(limit)
+    }
+
     fun getPlaceData(locationId: String): Place? {
         val db = sqlHelper.readableDatabase
         val columns = arrayOf(
@@ -67,13 +123,7 @@ class PlaceDAO(context: Context) {
         val args = arrayOf(locationId)
 
         val cursor = db.query(
-            PlaceTable.TABLE_PLACE,
-            columns,
-            selectionString,
-            args,
-            null,
-            null,
-            null
+            PlaceTable.TABLE_PLACE, columns, selectionString, args, null, null, null
         )
 
         var columnIndex = 0
@@ -113,6 +163,71 @@ class PlaceDAO(context: Context) {
             }
         }
         return null
+    }
+
+    fun getAllPlaceData(): List<Place> {
+        val queryResult = mutableListOf<Place>()
+        val db = sqlHelper.readableDatabase
+        val columns = arrayOf(
+            PlaceTable.COL_NAME,
+            PlaceTable.COL_LOCATION_ID,
+            PlaceTable.COL_DESCRIPTION,
+            PlaceTable.COL_WEB_URL,
+            PlaceTable.COL_LATITUDE,
+            PlaceTable.COL_LONGITUDE,
+            PlaceTable.COL_RATING,
+            PlaceTable.COL_RATING_AMOUNT,
+            PlaceTable.COL_PHOTO_COUNT,
+            PlaceTable.COL_PLACE_CATEGORY,
+            PlaceTable.COL_IS_FAVORITE
+        )
+        val cursor = db.query(
+            PlaceTable.TABLE_PLACE, columns, null, null, null, null, null
+        )
+
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                // Get data from cursor
+                var columnIndex = 0
+                val name = cursor.getString(columnIndex++).orEmpty()
+                val locationId = cursor.getString(columnIndex++).orEmpty()
+                val desc = cursor.getString(columnIndex++).orEmpty()
+                val webUrl = cursor.getString(columnIndex++).orEmpty()
+                val latitude = cursor.getFloat(columnIndex++)
+                val longitude = cursor.getFloat(columnIndex++)
+                val rating = cursor.getFloat(columnIndex++)
+                val ratingAmount = cursor.getInt(columnIndex++)
+                val photoCount = cursor.getInt(columnIndex++)
+                val placeCategory = cursor.getString(columnIndex++).orEmpty()
+                val isFavorite = cursor.getInt(columnIndex)
+
+
+                // Address field is an Object, so query from address table before
+                val address = getPlaceAddress(locationId)
+                if (address != null) {
+                    val place = Place(
+                        locationId,
+                        name,
+                        desc,
+                        webUrl,
+                        address,
+                        latitude,
+                        longitude,
+                        rating,
+                        ratingAmount,
+                        photoCount,
+                        "",
+                        placeCategory,
+                        isFavorite
+                    )
+                    queryResult.add(place)
+                }
+            } while (cursor.moveToNext())
+            cursor.close()
+        }
+
+        return queryResult
     }
 
     /**
@@ -169,10 +284,7 @@ class PlaceDAO(context: Context) {
         }
         val db = sqlHelper.writableDatabase
         val result = db.insertWithOnConflict(
-            AddressTable.TABLE_ADDRESS,
-            null,
-            values,
-            SQLiteDatabase.CONFLICT_REPLACE
+            AddressTable.TABLE_ADDRESS, null, values, SQLiteDatabase.CONFLICT_REPLACE
         )
         return result != -1L
     }
@@ -181,6 +293,8 @@ class PlaceDAO(context: Context) {
      * Create content value object for Place
      */
     private fun createPlaceContentValue(place: Place): ContentValues {
+        val isFavorite = isFavoritePlace(place.locationId)
+
         val values = ContentValues()
         values.put(PlaceTable.COL_LOCATION_ID, place.locationId)
         values.put(PlaceTable.COL_NAME, place.name)
@@ -192,7 +306,18 @@ class PlaceDAO(context: Context) {
         values.put(PlaceTable.COL_RATING, place.rating)
         values.put(PlaceTable.COL_RATING_AMOUNT, place.ratingAmount)
         values.put(PlaceTable.COL_PHOTO_COUNT, place.photoAmount)
-        values.put(PlaceTable.COL_PLACE_CATEGORY, place.locationType)
+
+        // keep category not change when conflict replace
+        if (place.locationType.isNullOrEmpty()) {
+            val category = getPlaceCategory(place.locationId)
+            values.put(PlaceTable.COL_PLACE_CATEGORY, category)
+        } else {
+            values.put(PlaceTable.COL_PLACE_CATEGORY, place.locationType)
+        }
+
+        // keep
+        values.put(PlaceTable.COL_IS_FAVORITE, isFavorite)
+
         return values
     }
 
