@@ -75,114 +75,119 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <ScrollView
         android:id="@+id/container_bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/card_top_corner_only"
-        android:paddingBottom="@dimen/dp_40"
         app:behavior_hideable="false"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:layout_marginBottom="@dimen/dp_minus60"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         >
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/dp_16"
-            android:layout_marginEnd="@dimen/dp_16"
-            android:layout_marginTop="@dimen/dp_32"
-            android:layout_marginBottom="@dimen/dp_16"
-            android:paddingBottom="@dimen/dp_40"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_top_corner_only"
             >
 
-            <TextView
-                android:id="@+id/text_place_name"
-                android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/card_place_title"
-                android:textSize="@dimen/sp_22"
-                android:layout_alignParentTop="true"
-                />
-
-            <TextView
-                android:id="@+id/text_place_address"
-                android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_place_name"
-                android:text="@string/card_place_address"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/dp_16"
                 android:layout_marginEnd="@dimen/dp_16"
-                android:layout_marginTop="@dimen/dp_8"
-                android:layout_toStartOf="@id/text_place_rating"
-                android:textSize="@dimen/sp_16"
-                />
+                android:layout_marginTop="@dimen/dp_32"
+                android:layout_marginBottom="@dimen/dp_16"
+                >
 
-            <TextView
-                android:id="@+id/text_place_rating"
-                android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/card_place_rating"
-                android:layout_alignBaseline="@id/text_place_address"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="@dimen/dp_16"
-                android:drawableStart="@drawable/ic_star"
-                android:drawablePadding="@dimen/dp_8"
-                />
+                <TextView
+                    android:id="@+id/text_place_name"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/card_place_title"
+                    android:textSize="@dimen/sp_22"
+                    android:layout_alignParentTop="true"
+                    />
 
-            <TextView
-                android:id="@+id/text_place_desc_label"
-                android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
-                android:textSize="@dimen/sp_22"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/detail_about_destination"
-                android:layout_below="@id/text_place_address"
-                android:layout_marginTop="@dimen/dp_16"
-                />
+                <TextView
+                    android:id="@+id/text_place_address"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_place_name"
+                    android:text="@string/card_place_address"
+                    android:layout_marginEnd="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:layout_toStartOf="@id/text_place_rating"
+                    android:textSize="@dimen/sp_16"
+                    />
 
-            <TextView
-                android:id="@+id/text_place_desc"
-                android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_place_desc_label"
-                tools:text="@string/default_place_desc"
-                android:layout_marginTop="@dimen/dp_8"
-                android:textSize="@dimen/sp_16"
-                />
+                <TextView
+                    android:id="@+id/text_place_rating"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/card_place_rating"
+                    android:layout_alignBaseline="@id/text_place_address"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/dp_16"
+                    android:drawableStart="@drawable/ic_star"
+                    android:drawablePadding="@dimen/dp_8"
+                    />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button_more_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@id/text_place_desc"
-                android:maxWidth="@dimen/dp_300"
-                android:layout_margin="@dimen/dp_32"
-                android:elevation="@dimen/dp_4"
-                android:background="@drawable/big_primary_btn_bg"
-                android:fontFamily="@font/baloobhaina2_bold"
-                android:text="@string/detail_button_more_detail"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_20"
-                />
+                <TextView
+                    android:id="@+id/text_place_desc_label"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
+                    android:textSize="@dimen/sp_22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/detail_about_destination"
+                    android:layout_below="@id/text_place_address"
+                    android:layout_marginTop="@dimen/dp_16"
+                    />
 
-            <View
-                android:id="@+id/view_bottom_spacing"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_0"
-                android:layout_alignParentBottom="true"
-                android:layout_below="@id/button_more_detail"
-                android:layout_marginBottom="@dimen/dp_40"
-                />
+                <TextView
+                    android:id="@+id/text_place_desc"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_place_desc_label"
+                    tools:text="@string/default_place_desc"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:textSize="@dimen/sp_16"
+                    />
 
-        </RelativeLayout>
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/button_more_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@id/text_place_desc"
+                    android:maxWidth="@dimen/dp_300"
+                    android:layout_margin="@dimen/dp_32"
+                    android:elevation="@dimen/dp_4"
+                    android:background="@drawable/big_primary_btn_bg"
+                    android:fontFamily="@font/baloobhaina2_bold"
+                    android:text="@string/detail_button_more_detail"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_20"
+                    />
 
-    </LinearLayout>
+                <View
+                    android:id="@+id/view_bottom_spacing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_0"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@id/button_more_detail"
+                    />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

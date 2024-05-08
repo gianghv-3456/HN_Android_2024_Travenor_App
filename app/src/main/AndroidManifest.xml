@@ -19,6 +19,10 @@
         android:theme="@style/Theme.Androidtemplate"
         tools:ignore="LockedOrientationActivity"
         tools:targetApi="31">
+        <activity
+            android:name=".screen.moredetail.MoreDetailActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="$GEO_API_KEY" />

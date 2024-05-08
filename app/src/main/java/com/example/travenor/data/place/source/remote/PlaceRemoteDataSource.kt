@@ -58,13 +58,21 @@ class PlaceRemoteDataSource private constructor(
         )
     }
 
-    override fun searchExploreRestaurant(keyword: String, listener: ResultListener<List<Place>>) {
+    override fun searchExploreRestaurant(
+        keyword: String,
+        lat: Double,
+        long: Double,
+        listener: ResultListener<List<Place>>
+    ) {
         val category = PlaceCategory.RESTAURANT.name.lowercase()
+
+        val latLongString = "$lat,$long"
 
         placeApi.searchPlaceTripadvisor(
             TRIP_ADVISOR_API_KEY,
             keyword,
-            category
+            category,
+            latLong = latLongString
         ).enqueue(
             PlaceSearchResponse::class.java,
             object : Callback<PlaceSearchResponse> {
@@ -86,13 +94,20 @@ class PlaceRemoteDataSource private constructor(
         )
     }
 
-    override fun searchExploreHotel(keyword: String, listener: ResultListener<List<Place>>) {
+    override fun searchExploreHotel(
+        keyword: String,
+        lat: Double,
+        long: Double,
+        listener: ResultListener<List<Place>>
+    ) {
         val category = PlaceCategory.HOTEL.name.lowercase()
+        val latLongString = "$lat,$long"
 
         placeApi.searchPlaceTripadvisor(
             TRIP_ADVISOR_API_KEY,
             keyword,
-            category
+            category,
+            latLong = latLongString
         ).enqueue(
             PlaceSearchResponse::class.java,
             object : Callback<PlaceSearchResponse> {
@@ -132,7 +147,7 @@ class PlaceRemoteDataSource private constructor(
     }
 
     override fun getPlacePhoto(placeId: String, listener: ResultListener<List<PlacePhoto>>) {
-        placeApi.getPlacePhoto(placeId, TRIP_ADVISOR_KEY)
+        placeApi.getPlacePhoto(placeId, TRIP_ADVISOR_KEY, limit = 10)
             .enqueue(
                 PlacePhotoResponse::class.java,
                 object : Callback<PlacePhotoResponse> {
