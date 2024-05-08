@@ -16,4 +16,7 @@
     <color name="light_pink">#FFDFE6</color>
     <color name="greeting_card_color">#ECECF8</color>
     <color name="transparent">#00000000</color>
+    <color name="transparent1">#50000000</color>
+    <color name="blur_gray">#99F5EEEE</color>
+    <color name="card_gray">#EDE9E9</color>
 </resources>

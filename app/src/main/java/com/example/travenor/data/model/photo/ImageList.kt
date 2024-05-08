@@ -8,4 +8,8 @@ data class ImageList(
     @SerializedName("medium") val medium: Image?,
     @SerializedName("large") val large: Image?,
     @SerializedName("original") val original: Image?
-)
+) {
+    fun getBiggestImageAvailable(): Image? {
+        return original ?: large ?: medium ?: small ?: thumbnail
+    }
+}

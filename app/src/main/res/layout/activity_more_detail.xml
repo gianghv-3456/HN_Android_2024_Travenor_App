@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screen.moredetail.MoreDetailActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/layout_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/transparent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/button_back"
+                android:layout_width="@dimen/dp_44"
+                android:layout_height="@dimen/dp_44"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/button_mark_favorite_bg"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_toStartOf="@id/button_mark_favorite"
+                android:layout_toEndOf="@id/button_back"
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="center"
+                android:lines="1"
+                tools:text="@string/detail_title"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_22"
+                android:paddingStart="@dimen/dp_8"
+                android:paddingEnd="@dimen/dp_8"
+                android:textStyle="bold"/>
+
+            <ImageButton
+                android:id="@+id/button_mark_favorite"
+                android:layout_width="@dimen/dp_44"
+                android:layout_height="@dimen/dp_44"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/button_mark_favorite_bg"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_mark_favorite" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_image_header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:layout_marginStart="@dimen/dp_32"
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginEnd="@dimen/dp_32"
+            app:cardCornerRadius="@dimen/dp_24"
+            app:cardElevation="@dimen/dp_4"
+            app:layout_constraintHeight_percent="0.3"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/image_header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/sample_vinh_ha_long" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/text_place_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_32"
+            android:layout_marginTop="@dimen/dp_32"
+            android:layout_marginEnd="@dimen/dp_32"
+            android:maxLines="2"
+            tools:text="Vinh Ha Long"
+            android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
+            android:textSize="@dimen/sp_22"
+            app:layout_constraintTop_toBottomOf="@id/card_image_header" />
+
+        <TextView
+            android:id="@+id/text_place_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_32"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_32"
+            android:layout_marginBottom="@dimen/dp_8"
+            tools:text="Tp. Ha Long, Quang Ninh\nViet Nam"
+            android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
+            android:textColor="@color/gray_subtext_color"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintTop_toBottomOf="@id/text_place_name" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_place_address">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/text_rating"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_32"
+                    android:drawableStart="@drawable/ic_star"
+                    android:drawablePadding="@dimen/dp_8"
+                    android:gravity="center"
+                    android:lines="1"
+                    tools:text="4.5"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/text_rating_amount"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/text_rating"
+                    android:layout_marginStart="@dimen/dp_8"
+                    android:layout_toEndOf="@id/text_rating"
+                    android:gravity="center"
+                    android:lines="1"
+                    tools:text="(10000)" />
+
+                <TextView
+                    android:id="@+id/text_label_desc"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_rating"
+                    android:layout_marginStart="@dimen/dp_32"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:layout_marginEnd="@dimen/dp_32"
+                    android:lines="1"
+                    android:text="@string/more_detail_description_label"
+                    android:textSize="@dimen/sp_22" />
+
+                <TextView
+                    android:id="@+id/text_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_label_desc"
+                    android:layout_marginStart="@dimen/dp_32"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginEnd="@dimen/dp_32"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_16"
+                    tools:text="@string/default_place_desc" />
+
+                <TextView
+                    android:id="@+id/text_label_gallery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_desc"
+                    android:layout_marginStart="@dimen/dp_32"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:layout_marginEnd="@dimen/dp_32"
+                    android:lines="1"
+                    android:text="@string/more_detail_label_gallery"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
+                    android:textSize="@dimen/sp_22" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/container_gallery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_label_gallery"
+                    android:layout_marginStart="@dimen/dp_32"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginEnd="@dimen/dp_32">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_gallery_1"
+                        android:layout_width="@dimen/dp_0"
+                        android:layout_height="@dimen/dp_0"
+                        app:cardCornerRadius="@dimen/dp_8"
+                        app:cardElevation="@dimen/dp_2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="0.3">
+
+                        <ImageView
+                            android:id="@+id/image_place_image_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="gone"
+                            android:scaleType="centerCrop"
+                            tools:src="@drawable/sample_vinh_ha_long" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <View
+                        android:id="@+id/divider_1"
+                        android:layout_width="@dimen/dp_0"
+                        android:layout_height="@dimen/dp_1"
+                        android:background="@color/transparent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/card_gallery_1"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="0.05" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_gallery_2"
+                        android:layout_width="@dimen/dp_0"
+                        android:layout_height="@dimen/dp_0"
+                        app:cardCornerRadius="@dimen/dp_8"
+                        app:cardElevation="@dimen/dp_2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="1"
+                        app:layout_constraintStart_toEndOf="@id/divider_1"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:visibility="gone"
+                        app:layout_constraintWidth_percent="0.3">
+
+                        <ImageView
+                            android:id="@+id/image_place_image_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            tools:src="@drawable/sample_vinh_ha_long" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- This view is spacing between image card without using fixed margin. This is to keep set of 3 image card view stretch full width    -->
+                    <View
+                        android:id="@+id/divider_2"
+                        android:layout_width="@dimen/dp_0"
+                        android:layout_height="@dimen/dp_1"
+                        android:background="@color/transparent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/card_gallery_2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="0.05" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_gallery_3"
+                        android:layout_width="@dimen/dp_0"
+                        android:layout_height="@dimen/dp_0"
+                        app:cardCornerRadius="@dimen/dp_8"
+                        app:cardElevation="@dimen/dp_2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="1"
+                        app:layout_constraintStart_toEndOf="@id/divider_2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:visibility="gone"
+                        app:layout_constraintWidth_percent="0.3">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/image_place_image_3"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                tools:src="@drawable/sample_vinh_ha_long" />
+
+                            <TextView
+                                android:id="@+id/text_image_amount_hint"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/image_amount_hint_background"
+                                android:gravity="center"
+                                tools:text="+12"
+                                android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/sp_20"
+                                android:textStyle="bold"
+                                android:visibility="gone" />
+
+                        </FrameLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/text_label_nearby_restaurant"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/container_gallery"
+                    android:layout_marginStart="@dimen/dp_32"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:layout_marginEnd="@dimen/dp_32"
+                    android:lines="1"
+                    android:text="@string/more_detail_label_nearby_restaurant"
+                    android:textSize="@dimen/sp_22" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_nearby_restaurant"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_label_nearby_restaurant"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_nearby_place" />
+
+                <TextView
+                    android:id="@+id/text_label_nearby_hotel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/recycler_nearby_restaurant"
+                    android:layout_marginStart="@dimen/dp_32"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:layout_marginEnd="@dimen/dp_32"
+                    android:lines="1"
+                    android:text="@string/more_detail_label_nearby_hotel"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
+                    android:textSize="@dimen/sp_22" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_nearby_hotel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_label_nearby_hotel"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_nearby_place" />
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

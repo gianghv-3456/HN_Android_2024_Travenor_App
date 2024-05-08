@@ -1,5 +1,6 @@
 package com.example.travenor.screen.detail
 
+import android.content.Intent
 import android.content.res.Resources
 import android.os.Build
 import android.view.View
@@ -15,14 +16,15 @@ import com.example.travenor.data.place.source.local.PlaceExploreLocalSource
 import com.example.travenor.data.place.source.local.PlaceLocalDataSource
 import com.example.travenor.data.place.source.remote.PlaceRemoteDataSource
 import com.example.travenor.databinding.ActivityDetailBinding
+import com.example.travenor.screen.moredetail.MoreDetailActivity
 import com.example.travenor.utils.base.BaseActivity
 import com.example.travenor.utils.ext.loadImageCenterCrop
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class DetailActivity : BaseActivity(), DetailContract.View {
-    private lateinit var mBinding: ActivityDetailBinding
     private var mPlaceId: String = ""
     private var mPresenter: DetailPresenter? = null
+    private lateinit var mBinding: ActivityDetailBinding
 
     override fun getLayoutRoot(): View {
         mBinding = ActivityDetailBinding.inflate(layoutInflater)
@@ -73,7 +75,9 @@ class DetailActivity : BaseActivity(), DetailContract.View {
     }
 
     private fun openMoreDetailScreen() {
-        // TODO OPEN MORE DETAIL SCREEN
+        val intent = Intent(this, MoreDetailActivity::class.java)
+        intent.putExtra(MoreDetailActivity.EXTRA_PLACE_ID, mPlaceId)
+        startActivity(intent)
     }
 
     private fun markFavorite() {

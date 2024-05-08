@@ -50,5 +50,9 @@
     <string name="detail_about_destination">About Destination</string>
     <string name="detail_button_more_detail">More Detail</string>
     <string name="detail_get_detail_fail_toast">Cannot get Place detail</string>
+    <string name="more_detail_description_label">Description</string>
+    <string name="more_detail_label_gallery">Gallery photos</string>
+    <string name="more_detail_label_nearby_hotel">Nearby hotel</string>
+    <string name="more_detail_label_nearby_restaurant">Nearby restaurant</string>
 
 </resources>

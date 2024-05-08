@@ -148,10 +148,10 @@ class PlaceRepositoryImpl private constructor(
                 getExploreAttractionRemote(keyword, lat, long, listener)
 
             PlaceCategory.RESTAURANT ->
-                getExploreRestaurantRemote(keyword, listener)
+                getExploreRestaurantRemote(keyword, lat, long, listener)
 
             PlaceCategory.HOTEL ->
-                getExploreHotelRemote(keyword, listener)
+                getExploreHotelRemote(keyword, lat, long, listener)
         }
     }
 
@@ -189,9 +189,16 @@ class PlaceRepositoryImpl private constructor(
         )
     }
 
-    private fun getExploreRestaurantRemote(keyword: String, listener: ResultListener<List<Place>>) {
+    private fun getExploreRestaurantRemote(
+        keyword: String,
+        lat: Double,
+        long: Double,
+        listener: ResultListener<List<Place>>
+    ) {
         remote.searchExploreRestaurant(
             keyword,
+            lat,
+            long,
             object : ResultListener<List<Place>> {
                 override fun onSuccess(data: List<Place>?) {
                     // No data
@@ -219,10 +226,14 @@ class PlaceRepositoryImpl private constructor(
 
     private fun getExploreHotelRemote(
         keyword: String,
+        lat: Double,
+        long: Double,
         listener: ResultListener<List<Place>>
     ) {
         remote.searchExploreHotel(
             keyword,
+            lat,
+            long,
             object : ResultListener<List<Place>> {
                 override fun onSuccess(data: List<Place>?) {
                     if (data.isNullOrEmpty()) {
@@ -285,6 +296,9 @@ class PlaceRepositoryImpl private constructor(
                     if (data.isNullOrEmpty()) {
                         listener.onError(Exception("No data!"))
                         return
+                    }
+                    data.forEach {
+                        it.locationId = placeId
                     }
                     listener.onSuccess(data)
 
