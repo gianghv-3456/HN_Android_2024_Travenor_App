@@ -121,6 +121,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/dp_32"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -204,6 +205,7 @@
                         app:cardElevation="@dimen/dp_2"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="1"
+                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintWidth_percent="0.3">
@@ -212,7 +214,6 @@
                             android:id="@+id/image_place_image_1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:visibility="gone"
                             android:scaleType="centerCrop"
                             tools:src="@drawable/sample_vinh_ha_long" />
 
@@ -314,6 +315,7 @@
                     android:layout_marginTop="@dimen/dp_16"
                     android:layout_marginEnd="@dimen/dp_32"
                     android:lines="1"
+                    android:visibility="gone"
                     android:text="@string/more_detail_label_nearby_restaurant"
                     android:textSize="@dimen/sp_22" />
 
@@ -324,6 +326,7 @@
                     android:layout_below="@id/text_label_nearby_restaurant"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_marginTop="@dimen/dp_8"
                     tools:listitem="@layout/item_nearby_place" />
 
                 <TextView
@@ -335,6 +338,7 @@
                     android:layout_marginTop="@dimen/dp_16"
                     android:layout_marginEnd="@dimen/dp_32"
                     android:lines="1"
+                    android:visibility="gone"
                     android:text="@string/more_detail_label_nearby_hotel"
                     android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
                     android:textSize="@dimen/sp_22" />
@@ -346,7 +350,9 @@
                     android:layout_below="@id/text_label_nearby_hotel"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_nearby_place" />
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginBottom="@dimen/dp_32"
+                    tools:listitem="@layout/item_nearby_place"/>
 
             </RelativeLayout>
 

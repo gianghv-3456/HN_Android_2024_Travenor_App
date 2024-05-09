@@ -48,9 +48,13 @@ object LocationUtils {
      * Distance between two location in double number
      */
     fun calculateDistance(lat1: Double, long1: Double, lat2: Double, long2: Double): Double {
-        val results = FloatArray(size = 1)
-        Location.distanceBetween(lat1, long1, lat2, long2, results)
-        return results[0].toDouble()
+        val l1 = Location("A")
+        l1.latitude = lat1
+        l1.longitude = long1
+        val l2 = Location("B")
+        l2.latitude = lat2
+        l2.longitude = long2
+        return l1.distanceTo(l2).toDouble()
     }
 
     // Earth radius in meters
