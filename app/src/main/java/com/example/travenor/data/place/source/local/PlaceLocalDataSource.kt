@@ -2,6 +2,7 @@ package com.example.travenor.data.place.source.local
 
 import android.content.Context
 import android.database.sqlite.SQLiteException
+import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.place.source.PlaceSource
@@ -55,6 +56,22 @@ class PlaceLocalDataSource(
             placeDao.insertPlaceAddress(place.addressObj, place.locationId)
         } catch (e: SQLiteException) {
             e.run { printStackTrace() }
+        }
+    }
+
+    override fun getNearbyPlaceLocal(
+        lat: Double,
+        long: Double,
+        category: PlaceCategory,
+        limit: Int,
+        radius: Double
+    ): List<Place>? {
+        return try {
+            val result = placeDao.getNearByPlace(lat, long, limit, radius, category)
+            result.ifEmpty { null }
+        } catch (e: SQLiteException) {
+            e.run { printStackTrace() }
+            null
         }
     }
 

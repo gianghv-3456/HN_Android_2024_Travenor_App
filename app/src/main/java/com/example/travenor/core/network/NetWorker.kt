@@ -113,11 +113,19 @@ class NetWorker(
                             val responseBody =
                                 inputStream.bufferedReader().use(BufferedReader::readText)
 
+                            Log.d(LOG_TAG, "HTTP CONNECTION\nRequest:$url\nResponse: $responseBody")
+
                             val data = Gson().fromJson(responseBody, parseType) as T
                             callback.onResponse(responseBody, Response(data))
                         } else {
                             // Throw ApiException for non-OK HTTP response codes
-                            callback.onFailure(NetworkException("HTTP error: $responseCode when try get: $apiUrl"))
+                            callback.onFailure(
+                                NetworkException(
+                                    "HTTP error: " +
+                                        "$responseCode when try get: $apiUrl\n" +
+                                        connection.responseMessage
+                                )
+                            )
                         }
                     } catch (e: IOException) {
                         // Catch any other exceptions and invoke onFailure callback

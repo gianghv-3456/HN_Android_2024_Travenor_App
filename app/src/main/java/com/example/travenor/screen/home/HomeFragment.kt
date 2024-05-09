@@ -106,17 +106,17 @@ class HomeFragment :
     override fun onGetExplorePlaceSuccess(locationList: List<Place>, placeCategory: PlaceCategory) {
         activity?.runOnUiThread {
             when (placeCategory) {
-                PlaceCategory.ATTRACTION -> {
+                PlaceCategory.ATTRACTIONS -> {
                     viewBinding.containerExploreAttractionTitle.visibility = View.VISIBLE
                     mAttractionAdapter.setData(locationList)
                 }
 
-                PlaceCategory.RESTAURANT -> {
+                PlaceCategory.RESTAURANTS -> {
                     viewBinding.containerExploreRestaurantTitle.visibility = View.VISIBLE
                     mRestaurantAdapter.setData(locationList)
                 }
 
-                PlaceCategory.HOTEL -> {
+                PlaceCategory.HOTELS -> {
                     viewBinding.containerExploreHotelTitle.visibility = View.VISIBLE
                     mHotelAdapter.setData(locationList)
                 }
@@ -128,15 +128,15 @@ class HomeFragment :
         exception?.printStackTrace()
         activity?.runOnUiThread {
             when (placeCategory) {
-                PlaceCategory.ATTRACTION ->
+                PlaceCategory.ATTRACTIONS ->
                     viewBinding.containerExploreAttractionTitle.visibility =
                         View.GONE
 
-                PlaceCategory.RESTAURANT ->
+                PlaceCategory.RESTAURANTS ->
                     viewBinding.containerExploreRestaurantTitle.visibility =
                         View.GONE
 
-                PlaceCategory.HOTEL -> viewBinding.containerExploreHotelTitle.visibility = View.GONE
+                PlaceCategory.HOTELS -> viewBinding.containerExploreHotelTitle.visibility = View.GONE
             }
         }
     }
@@ -147,9 +147,9 @@ class HomeFragment :
             mAttractionAdapter.updateThumbnail(locationId, photos)
 
             when (placeCategory) {
-                PlaceCategory.ATTRACTION -> mAttractionAdapter.updateThumbnail(locationId, photos)
-                PlaceCategory.RESTAURANT -> mRestaurantAdapter.updateThumbnail(locationId, photos)
-                PlaceCategory.HOTEL -> mHotelAdapter.updateThumbnail(locationId, photos)
+                PlaceCategory.ATTRACTIONS -> mAttractionAdapter.updateThumbnail(locationId, photos)
+                PlaceCategory.RESTAURANTS -> mRestaurantAdapter.updateThumbnail(locationId, photos)
+                PlaceCategory.HOTELS -> mHotelAdapter.updateThumbnail(locationId, photos)
             }
         }
     }

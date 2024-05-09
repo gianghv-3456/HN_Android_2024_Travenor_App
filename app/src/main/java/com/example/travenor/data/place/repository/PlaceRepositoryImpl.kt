@@ -55,15 +55,15 @@ class PlaceRepositoryImpl private constructor(
     ) {
         // Get local data and check freshness
         val result = when (category) {
-            PlaceCategory.ATTRACTION -> {
+            PlaceCategory.ATTRACTIONS -> {
                 localExplore.getExploreAttractionLocal(limit = 5)
             }
 
-            PlaceCategory.RESTAURANT -> {
+            PlaceCategory.RESTAURANTS -> {
                 localExplore.getExploreRestaurantLocal(limit = 5)
             }
 
-            PlaceCategory.HOTEL -> {
+            PlaceCategory.HOTELS -> {
                 localExplore.getExploreHotelLocal(limit = 5)
             }
         }
@@ -100,15 +100,15 @@ class PlaceRepositoryImpl private constructor(
     ) {
         // Get local data and check freshness
         val result = when (category) {
-            PlaceCategory.ATTRACTION -> {
+            PlaceCategory.ATTRACTIONS -> {
                 localExplore.getExploreAttractionLocal(limit = 5)
             }
 
-            PlaceCategory.RESTAURANT -> {
+            PlaceCategory.RESTAURANTS -> {
                 localExplore.getExploreRestaurantLocal(limit = 5)
             }
 
-            PlaceCategory.HOTEL -> {
+            PlaceCategory.HOTELS -> {
                 localExplore.getExploreHotelLocal(limit = 5)
             }
         }
@@ -144,14 +144,11 @@ class PlaceRepositoryImpl private constructor(
         listener: ResultListener<List<Place>>
     ) {
         when (category) {
-            PlaceCategory.ATTRACTION ->
-                getExploreAttractionRemote(keyword, lat, long, listener)
+            PlaceCategory.ATTRACTIONS -> getExploreAttractionRemote(keyword, lat, long, listener)
 
-            PlaceCategory.RESTAURANT ->
-                getExploreRestaurantRemote(keyword, lat, long, listener)
+            PlaceCategory.RESTAURANTS -> getExploreRestaurantRemote(keyword, lat, long, listener)
 
-            PlaceCategory.HOTEL ->
-                getExploreHotelRemote(keyword, lat, long, listener)
+            PlaceCategory.HOTELS -> getExploreHotelRemote(keyword, lat, long, listener)
         }
     }
 
@@ -177,6 +174,7 @@ class PlaceRepositoryImpl private constructor(
                     // Save to local DB
                     localExplore.saveExploreAttractionLocal(data.map { it.locationId })
                     data.forEach {
+                        it.locationType = PlaceCategory.ATTRACTIONS.name
                         local.savePlaceDetail(it)
                         local.savePlaceAddress(it)
                     }
@@ -212,6 +210,7 @@ class PlaceRepositoryImpl private constructor(
                     // Save to local DB
                     localExplore.saveExploreRestaurantLocal(data.map { it.locationId })
                     data.forEach {
+                        it.locationType = PlaceCategory.RESTAURANTS.name
                         local.savePlaceDetail(it)
                         local.savePlaceAddress(it)
                     }
@@ -245,6 +244,7 @@ class PlaceRepositoryImpl private constructor(
                     // Save to local DB
                     localExplore.saveExploreHotelLocal(data.map { it.locationId })
                     data.forEach {
+                        it.locationType = PlaceCategory.HOTELS.name
                         local.savePlaceDetail(it)
                         local.savePlaceAddress(it)
                     }
@@ -259,19 +259,22 @@ class PlaceRepositoryImpl private constructor(
 
     override fun getPlaceDetail(placeId: String, listener: ResultListener<Place>) {
         // Online mode
-
         remote.getPlaceDetail(
             placeId,
             object : ResultListener<Place> {
                 override fun onSuccess(data: Place?) {
                     if (data == null) {
-                        listener.onError(Exception("No data!"))
-                        return
+                        local.getPlaceDetail(placeId).apply {
+                            if (this == null) {
+                                listener.onError(Exception("No data!"))
+                            } else {
+                                listener.onSuccess(this)
+                            }
+                        }
+                    } else {
+                        listener.onSuccess(data)
+                        local.savePlaceDetail(data)
                     }
-                    listener.onSuccess(data)
-
-                    // Save to local DB
-                    local.savePlaceDetail(data)
                 }
 
                 override fun onError(exception: Exception?) {
@@ -328,13 +331,12 @@ class PlaceRepositoryImpl private constructor(
             remote: PlaceSource.Remote,
             local: PlaceSource.Local,
             localExplore: PlaceSource.ExplorePlaceLocal
-        ) =
-            synchronized(this) {
-                instance ?: PlaceRepositoryImpl(
-                    remote,
-                    local,
-                    localExplore
-                ).also { instance = it }
-            }
+        ) = synchronized(this) {
+            instance ?: PlaceRepositoryImpl(
+                remote,
+                local,
+                localExplore
+            ).also { instance = it }
+        }
     }
 }

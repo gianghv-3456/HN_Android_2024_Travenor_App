@@ -77,6 +77,10 @@ class DetailActivity : BaseActivity(), DetailContract.View {
     private fun openMoreDetailScreen() {
         val intent = Intent(this, MoreDetailActivity::class.java)
         intent.putExtra(MoreDetailActivity.EXTRA_PLACE_ID, mPlaceId)
+        intent.putExtra(
+            MoreDetailActivity.EXTRA_ACTIVITY_OPEN_MODE,
+            MoreDetailActivity.MODE_DISPLAY_NEARBY_PLACE
+        )
         startActivity(intent)
     }
 

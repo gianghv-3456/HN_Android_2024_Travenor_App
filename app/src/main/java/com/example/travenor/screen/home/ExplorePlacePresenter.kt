@@ -13,6 +13,7 @@ import com.example.travenor.data.user.repository.UserRepository
 import com.example.travenor.utils.location.LocationUtils
 import java.util.Random
 
+@Suppress("TooManyFunctions")
 class ExplorePlacePresenter internal constructor(
     private val placeRepositoryImpl: PlaceRepository,
     private val userRepository: UserRepository
@@ -44,7 +45,7 @@ class ExplorePlacePresenter internal constructor(
         // Search explore for attraction with keyword
         placeRepositoryImpl.searchExplorePlace(
             searchKeyword,
-            PlaceCategory.ATTRACTION,
+            PlaceCategory.ATTRACTIONS,
             lat = randomLat,
             long = randomLng,
             object : ResultListener<List<Place>> {
@@ -52,7 +53,7 @@ class ExplorePlacePresenter internal constructor(
                     if (data.isNullOrEmpty()) {
                         mView?.onGetExplorePlaceFail(
                             Exception(GET_NULL_EXCEPTION_MSG),
-                            PlaceCategory.ATTRACTION
+                            PlaceCategory.ATTRACTIONS
                         )
                     }
 
@@ -61,14 +62,15 @@ class ExplorePlacePresenter internal constructor(
                         locationIdList.add(it.locationId)
                     }
 
-                    mView?.onGetExplorePlaceSuccess(data, PlaceCategory.ATTRACTION)
+                    prefetchPlaceDetail(data.map { it.locationId }.toMutableList())
+                    mView?.onGetExplorePlaceSuccess(data, PlaceCategory.ATTRACTIONS)
 
                     // Get thumbnail for each place with locationId
-                    getThumbnail(locationIdList, PlaceCategory.ATTRACTION)
+                    getThumbnail(locationIdList, PlaceCategory.ATTRACTIONS)
                 }
 
                 override fun onError(exception: Exception?) {
-                    mView?.onGetExplorePlaceFail(exception, PlaceCategory.ATTRACTION)
+                    mView?.onGetExplorePlaceFail(exception, PlaceCategory.ATTRACTIONS)
                 }
             }
         )
@@ -98,7 +100,7 @@ class ExplorePlacePresenter internal constructor(
 
         placeRepositoryImpl.searchExplorePlace(
             searchKeyword,
-            PlaceCategory.RESTAURANT,
+            PlaceCategory.RESTAURANTS,
             lat = randomLat,
             long = randomLng,
             object : ResultListener<List<Place>> {
@@ -107,21 +109,22 @@ class ExplorePlacePresenter internal constructor(
                     if (data.isNullOrEmpty()) {
                         mView?.onGetExplorePlaceFail(
                             Exception(GET_NULL_EXCEPTION_MSG),
-                            PlaceCategory.RESTAURANT
+                            PlaceCategory.RESTAURANTS
                         )
                     }
                     val locationIdList = mutableListOf<String>()
                     data!!.forEach {
                         locationIdList.add(it.locationId)
                     }
-                    mView?.onGetExplorePlaceSuccess(data, PlaceCategory.RESTAURANT)
+                    prefetchPlaceDetail(data.map { it.locationId }.toMutableList())
+                    mView?.onGetExplorePlaceSuccess(data, PlaceCategory.RESTAURANTS)
 
                     // Get thumbnail for each place with locationId
-                    getThumbnail(locationIdList, PlaceCategory.RESTAURANT)
+                    getThumbnail(locationIdList, PlaceCategory.RESTAURANTS)
                 }
 
                 override fun onError(exception: Exception?) {
-                    mView?.onGetExplorePlaceFail(exception, PlaceCategory.RESTAURANT)
+                    mView?.onGetExplorePlaceFail(exception, PlaceCategory.RESTAURANTS)
                 }
             }
         )
@@ -140,7 +143,7 @@ class ExplorePlacePresenter internal constructor(
 
         placeRepositoryImpl.searchExplorePlace(
             "hotel",
-            PlaceCategory.HOTEL,
+            PlaceCategory.HOTELS,
             randomLat,
             randomLng,
             object : ResultListener<List<Place>> {
@@ -148,24 +151,44 @@ class ExplorePlacePresenter internal constructor(
                     if (data.isNullOrEmpty()) {
                         mView?.onGetExplorePlaceFail(
                             Exception(GET_NULL_EXCEPTION_MSG),
-                            PlaceCategory.HOTEL
+                            PlaceCategory.HOTELS
                         )
                     }
                     val locationIdList = mutableListOf<String>()
                     data!!.forEach {
                         locationIdList.add(it.locationId)
                     }
-                    mView?.onGetExplorePlaceSuccess(data, PlaceCategory.HOTEL)
+                    prefetchPlaceDetail(data.map { it.locationId }.toMutableList())
+                    mView?.onGetExplorePlaceSuccess(data, PlaceCategory.HOTELS)
 
                     // Get thumbnail for each place with locationId
-                    getThumbnail(locationIdList, PlaceCategory.HOTEL)
+                    getThumbnail(locationIdList, PlaceCategory.HOTELS)
                 }
 
                 override fun onError(exception: Exception?) {
-                    mView?.onGetExplorePlaceFail(exception, PlaceCategory.HOTEL)
+                    mView?.onGetExplorePlaceFail(exception, PlaceCategory.HOTELS)
                 }
             }
         )
+    }
+
+    private fun prefetchPlaceDetail(placeIdList: MutableList<String>) {
+        placeIdList.forEach {
+            placeRepositoryImpl.getPlaceDetail(
+                it,
+                object : ResultListener<Place> {
+                    override fun onSuccess(data: Place?) {
+                        /* no-op */
+                        /* prefetch & save data to local only, no event handling */
+                    }
+
+                    override fun onError(exception: Exception?) {
+                        /* no-op */
+                        /* prefetch & save data to local only, no event handling */
+                    }
+                }
+            )
+        }
     }
 
     private fun getThumbnail(placeIdList: MutableList<String>, category: PlaceCategory) {

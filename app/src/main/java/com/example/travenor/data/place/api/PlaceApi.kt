@@ -2,6 +2,7 @@ package com.example.travenor.data.place.api
 
 import com.example.travenor.constant.DEFAULT_LAT
 import com.example.travenor.constant.DEFAULT_LONG
+import com.example.travenor.constant.NEARBY_DISTANCE_IN_METERS
 import com.example.travenor.core.network.Call
 import com.example.travenor.core.network.annotation.GET
 import com.example.travenor.core.network.annotation.Path
@@ -35,4 +36,15 @@ interface PlaceApi {
         @Query("language") language: String = "vi",
         @Query("currency") currency: String = "VND"
     ): Call<Place>
+
+    @Suppress("LongParameterList")
+    @GET("/location/nearby_search")
+    fun getNearbyPlace(
+        @Query("key") apiKey: String,
+        @Query("latLong") latLong: String = "$DEFAULT_LAT,$DEFAULT_LONG",
+        @Query("radius") radius: Double = NEARBY_DISTANCE_IN_METERS,
+        @Query("radiusUnit") radiusUnit: String = "m",
+        @Query("category") category: String = "attraction",
+        @Query("language") language: String = "vi"
+    ): Call<PlaceSearchResponse>
 }
