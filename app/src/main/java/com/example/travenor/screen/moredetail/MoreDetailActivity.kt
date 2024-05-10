@@ -5,12 +5,15 @@ import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.ViewCompat
+import com.example.travenor.R
+import com.example.travenor.constant.IS_FAVORITE
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
-import com.example.travenor.data.place.repository.NearbyRepositoryImpl
 import com.example.travenor.data.place.repository.PlaceRepositoryImpl
+import com.example.travenor.data.place.repositoryimpl.NearbyRepositoryImpl
 import com.example.travenor.data.place.source.local.PlaceExploreLocalSource
 import com.example.travenor.data.place.source.local.PlaceLocalDataSource
 import com.example.travenor.data.place.source.remote.PlaceRemoteDataSource
@@ -21,9 +24,15 @@ import com.example.travenor.utils.base.BaseActivity
 import com.example.travenor.utils.ext.loadImageCenterCrop
 
 @Suppress("TooManyFunctions")
-class MoreDetailActivity : BaseActivity(), MoreDetailContract.View, NearbyPlaceAdapter.OnNearbyPlaceClickListener {
+class MoreDetailActivity :
+    BaseActivity(),
+    MoreDetailContract.View,
+    NearbyPlaceAdapter.OnNearbyPlaceClickListener {
+
     private var placeId = ""
     private var photos: List<PlacePhoto> = emptyList()
+
+    private var mIsFavorite: Int = IS_FAVORITE
 
     private val mNearbyRestaurantAdapter: NearbyPlaceAdapter by lazy { NearbyPlaceAdapter(this) }
     private val mNearbyHotelAdapter: NearbyPlaceAdapter by lazy { NearbyPlaceAdapter(this) }
@@ -72,7 +81,8 @@ class MoreDetailActivity : BaseActivity(), MoreDetailContract.View, NearbyPlaceA
         setLayoutBelowSystemBar()
         setWhiteStatusBar()
 
-        mActivityOpenMode = intent.getIntExtra(EXTRA_ACTIVITY_OPEN_MODE, MODE_NON_DISPLAY_NEARBY_PLACE)
+        mActivityOpenMode =
+            intent.getIntExtra(EXTRA_ACTIVITY_OPEN_MODE, MODE_NON_DISPLAY_NEARBY_PLACE)
 
         mBinding.buttonBack.setOnClickListener { _ -> onBackPressed() }
 
@@ -119,6 +129,9 @@ class MoreDetailActivity : BaseActivity(), MoreDetailContract.View, NearbyPlaceA
             mBinding.textRating.text = place.rating.toString()
             mBinding.textRatingAmount.text = place.ratingAmount.toString()
             mBinding.textTitle.text = place.name
+
+            mBinding.buttonMarkFavorite.setOnClickListener { _ -> markFavorite() }
+
             mNearbyHotelAdapter.setTargetLocation(
                 place.latitude.toDouble(),
                 place.longitude.toDouble()
@@ -127,11 +140,30 @@ class MoreDetailActivity : BaseActivity(), MoreDetailContract.View, NearbyPlaceA
                 place.latitude.toDouble(),
                 place.longitude.toDouble()
             )
+
+            mIsFavorite = place.isFavorite
+            if (mIsFavorite == IS_FAVORITE) {
+                val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_unmark_favorite)
+                mBinding.buttonMarkFavorite.setImageDrawable(drawable)
+            } else {
+                val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_mark_favorite)
+                mBinding.buttonMarkFavorite.setImageDrawable(drawable)
+            }
         }
 
         if (mActivityOpenMode == MODE_DISPLAY_NEARBY_PLACE) {
             mPresenter.getNearbyRestaurant(place.latitude.toDouble(), place.longitude.toDouble())
             mPresenter.getNearbyHotel(place.latitude.toDouble(), place.longitude.toDouble())
+        }
+    }
+
+    private fun markFavorite() {
+        mBinding.buttonMarkFavorite.setOnClickListener { _ ->
+            if (mIsFavorite == IS_FAVORITE) {
+                mPresenter.markFavorite(placeId, false)
+            } else {
+                mPresenter.markFavorite(placeId, true)
+            }
         }
     }
 
@@ -145,6 +177,7 @@ class MoreDetailActivity : BaseActivity(), MoreDetailContract.View, NearbyPlaceA
     }
 
     override fun onGetNearbyRestaurantSuccess(place: List<Place>) {
+        // TODO remove runOnUiThread
         runOnUiThread {
             if (mActivityOpenMode == MODE_DISPLAY_NEARBY_PLACE) {
                 mBinding.recyclerNearbyRestaurant.visibility = View.VISIBLE
@@ -155,6 +188,7 @@ class MoreDetailActivity : BaseActivity(), MoreDetailContract.View, NearbyPlaceA
     }
 
     override fun onGetNearbyHotelSuccess(places: List<Place>) {
+        // TODO remove runOnUiThread
         runOnUiThread {
             if (mActivityOpenMode == MODE_DISPLAY_NEARBY_PLACE) {
                 mBinding.recyclerNearbyHotel.visibility = View.VISIBLE
@@ -165,6 +199,7 @@ class MoreDetailActivity : BaseActivity(), MoreDetailContract.View, NearbyPlaceA
     }
 
     override fun onGetNearbyPlacePhotoSuccess(photos: List<PlacePhoto>, category: PlaceCategory) {
+        // TODO remove runOnUiThread
         runOnUiThread {
             when (category) {
                 PlaceCategory.RESTAURANTS -> {
@@ -179,6 +214,22 @@ class MoreDetailActivity : BaseActivity(), MoreDetailContract.View, NearbyPlaceA
                     // do nothing
                 }
             }
+        }
+    }
+
+    override fun onMarkFavoriteSuccess() {
+        // TODO remove runOnUiThread
+        runOnUiThread {
+            val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_unmark_favorite)
+            mBinding.buttonMarkFavorite.setImageDrawable(drawable)
+        }
+    }
+
+    override fun onMarkNotFavoriteSuccess() {
+        // TODO remove runOnUiThread
+        runOnUiThread {
+            val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_mark_favorite)
+            mBinding.buttonMarkFavorite.setImageDrawable(drawable)
         }
     }
 

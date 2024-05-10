@@ -18,4 +18,10 @@ interface PlaceRepository {
     fun getPlaceDetail(placeId: String, listener: ResultListener<Place>)
 
     fun getPlacePhoto(placeId: String, listener: ResultListener<List<PlacePhoto>>)
+
+    fun markFavorite(placeId: String, listener: ResultListener<Boolean>)
+
+    fun unmarkFavorite(placeId: String, listener: ResultListener<Boolean>)
+
+    fun getFavoritePlace(listener: ResultListener<List<Place>>)
 }

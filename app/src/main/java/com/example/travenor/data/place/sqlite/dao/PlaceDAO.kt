@@ -4,6 +4,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
+import com.example.travenor.constant.IS_FAVORITE
+import com.example.travenor.constant.IS_NOT_FAVORITE
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.data.model.place.Address
 import com.example.travenor.data.model.place.Place
@@ -13,7 +15,7 @@ import com.example.travenor.data.place.sqlite.tables.PlaceTable
 import com.example.travenor.utils.location.LocationUtils
 
 @Suppress("TooManyFunctions")
-class PlaceDAO(context: Context) {
+class PlaceDAO private constructor(context: Context) {
     private val sqlHelper = PlaceSqliteHelper(context)
 
     /**
@@ -52,7 +54,41 @@ class PlaceDAO(context: Context) {
         return db.update(PlaceTable.TABLE_PLACE, values, whereString, arrayOf(locationId))
     }
 
-    fun isFavoritePlace(locationId: String): Int {
+    fun markFavorite(locationId: String): Boolean {
+        val values = ContentValues().apply {
+            put(PlaceTable.COL_IS_FAVORITE, IS_FAVORITE)
+        }
+        val db = sqlHelper.writableDatabase
+        val whereString = "${PlaceTable.COL_LOCATION_ID} =? "
+        val result = db.update(PlaceTable.TABLE_PLACE, values, whereString, arrayOf(locationId))
+        val valueFalse = -1
+
+        return result != valueFalse
+    }
+
+    fun markNotFavorite(locationId: String): Boolean {
+        val values = ContentValues().apply {
+            put(PlaceTable.COL_IS_FAVORITE, IS_NOT_FAVORITE)
+        }
+        val db = sqlHelper.writableDatabase
+
+        val whereString = "${PlaceTable.COL_LOCATION_ID} =? "
+        val result = db.update(PlaceTable.TABLE_PLACE, values, whereString, arrayOf(locationId))
+        val valueFalse = -1
+
+        return result != valueFalse
+    }
+
+    fun getFavoritePlace(): List<Place> {
+        val result = mutableListOf<Place>()
+        val places = getAllPlaceData()
+        for (place in places) {
+            if (place.isFavorite == IS_FAVORITE) result.add(place)
+        }
+        return result
+    }
+
+    private fun isFavoritePlace(locationId: String): Int {
         val db = sqlHelper.readableDatabase
         val columns = arrayOf(PlaceTable.COL_IS_FAVORITE)
         val selectionString = "${PlaceTable.COL_LOCATION_ID} =? "
@@ -77,7 +113,7 @@ class PlaceDAO(context: Context) {
         return 0
     }
 
-    fun getPlaceCategory(locationId: String): String {
+    private fun getPlaceCategory(locationId: String): String {
         val db = sqlHelper.readableDatabase
         val columns = arrayOf(PlaceTable.COL_PLACE_CATEGORY)
         val selectionString = "${PlaceTable.COL_LOCATION_ID} =? "
@@ -147,6 +183,7 @@ class PlaceDAO(context: Context) {
         if (cursor != null && cursor.moveToFirst()) {
             // Get data from cursor
             val name = cursor.getString(columnIndex++).orEmpty()
+            cursor.getString(columnIndex++).orEmpty()
             val desc = cursor.getString(columnIndex++).orEmpty()
             val webUrl = cursor.getString(columnIndex++).orEmpty()
             val latitude = cursor.getFloat(columnIndex++)
@@ -351,5 +388,12 @@ class PlaceDAO(context: Context) {
 
     companion object {
         private const val TAG = "com.example.travenor.dao.place"
+        private var instance: PlaceDAO? = null
+        fun getInstance(context: Context): PlaceDAO {
+            if (instance == null) {
+                instance = PlaceDAO(context)
+            }
+            return instance as PlaceDAO
+        }
     }
 }

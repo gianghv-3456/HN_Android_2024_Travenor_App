@@ -9,11 +9,16 @@ interface DetailContract {
         fun onGetPlaceDetailSuccess(place: Place)
         fun onGetPlaceDetailFail(e: Exception)
         fun onGetPhotoSuccess(photos: PlacePhoto)
+        fun onMarkFavoriteSuccess()
+        fun onMarkNotFavoriteSuccess()
     }
 
     interface Presenter : BasePresenter<View> {
         fun getPlaceDetail(locationId: String)
 
         fun getPlacePhotos(locationId: String)
+
+        fun markFavorite(placeId: String)
+        fun markNotFavorite(placeId: String)
     }
 }

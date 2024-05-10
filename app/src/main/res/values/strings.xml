@@ -55,4 +55,7 @@
     <string name="more_detail_label_nearby_hotel">Nearby hotel</string>
     <string name="more_detail_label_nearby_restaurant">Nearby restaurant</string>
 
+    <string name="no_place_notice_text">No favorite Place.\n Waiting for your awesome places.</string>
+    <string name="favorite_title">Your favorite</string>
+
 </resources>

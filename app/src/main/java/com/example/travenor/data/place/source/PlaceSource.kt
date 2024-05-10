@@ -57,6 +57,12 @@ interface PlaceSource {
             limit: Int = 5,
             radius: Double = 10000.0
         ): List<Place>?
+
+        fun markFavorite(placeId: String, listener: ResultListener<Boolean>)
+
+        fun markNotFavorite(placeId: String, listener: ResultListener<Boolean>)
+
+        fun getFavoritePlace(listener: ResultListener<List<Place>>)
     }
 
     interface ExplorePlaceLocal {

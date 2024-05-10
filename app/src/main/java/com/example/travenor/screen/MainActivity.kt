@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import com.example.travenor.R
 import com.example.travenor.data.sharedpreference.SharedPreferencesManager
 import com.example.travenor.databinding.ActivityMainBinding
+import com.example.travenor.screen.favorite.FavoriteFragment
 import com.example.travenor.screen.home.HomeFragment
 import com.example.travenor.utils.base.BaseActivity
 import com.example.travenor.utils.network.NetworkUtils
@@ -19,7 +20,6 @@ import com.google.android.gms.location.LocationServices
 
 class MainActivity : BaseActivity() {
     private lateinit var mBinding: ActivityMainBinding
-    private lateinit var mHomeFragment: HomeFragment
     private var fusedLocationClient: FusedLocationProviderClient? = null
 
     override fun getLayoutRoot(): View {
@@ -39,14 +39,20 @@ class MainActivity : BaseActivity() {
         mBinding.containerBottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_bottom_home -> openHomeFragment()
-                else -> removeHomeFragment()
+                R.id.menu_bottom_favorite -> openFavoriteFragment()
+                else -> {
+                    removeHomeFragment()
+                    removeFavoriteFragment()
+                }
             }
             return@setOnItemSelectedListener true
         }
 
         // Check for location permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
         ) {
             // Request permission
             ActivityCompat.requestPermissions(
@@ -94,13 +100,26 @@ class MainActivity : BaseActivity() {
     }
 
     private fun openHomeFragment() {
-        mHomeFragment = HomeFragment.newInstance()
+        val homeFragment = HomeFragment.newInstance()
         supportFragmentManager.beginTransaction().addToBackStack(HomeFragment::class.java.name)
-            .replace(R.id.container_fragment, mHomeFragment).commit()
+            .replace(R.id.container_fragment, homeFragment).commit()
+    }
+
+    private fun openFavoriteFragment() {
+        val favoriteFragment = FavoriteFragment.newInstance()
+        supportFragmentManager.beginTransaction().addToBackStack(FavoriteFragment::class.java.name)
+            .replace(R.id.container_fragment, favoriteFragment).commit()
     }
 
     private fun removeHomeFragment() {
-        supportFragmentManager.beginTransaction().remove(mHomeFragment).commit()
+        val homeFragment = supportFragmentManager.findFragmentByTag(HomeFragment::class.java.name)
+        homeFragment?.let { supportFragmentManager.beginTransaction().remove(it).commit() }
+    }
+
+    private fun removeFavoriteFragment() {
+        val favoriteFragment =
+            supportFragmentManager.findFragmentByTag(FavoriteFragment::class.java.name)
+        favoriteFragment?.let { supportFragmentManager.beginTransaction().remove(it).commit() }
     }
 
     private fun saveLastLocation(lat: Double, long: Double) {

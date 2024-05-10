@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.ViewCompat
 import com.example.travenor.R
 import com.example.travenor.constant.PlaceCategory
+import com.example.travenor.core.observable.FavoritePlaceObserver
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.place.repository.PlaceRepositoryImpl
@@ -25,13 +26,17 @@ import com.example.travenor.screen.home.apdater.PlaceListAdapter
 import com.example.travenor.utils.base.BaseFragment
 import java.util.Calendar
 
+@Suppress("TooManyFunctions")
 class HomeFragment :
     BaseFragment<FragmentHomeBinding>(),
     ExplorePlaceContract.View,
-    PlaceListAdapter.OnPlaceClickListener {
+    PlaceListAdapter.OnPlaceClickListener,
+    FavoritePlaceObserver {
     private val mAttractionAdapter: PlaceListAdapter by lazy { PlaceListAdapter() }
     private val mRestaurantAdapter: PlaceListAdapter by lazy { PlaceListAdapter() }
     private val mHotelAdapter: PlaceListAdapter by lazy { PlaceListAdapter() }
+
+    private var detailOpenedPlace: String? = null
     private lateinit var mExplorePlacePresenter: ExplorePlacePresenter
 
     override fun inflateViewBinding(inflater: LayoutInflater): FragmentHomeBinding {
@@ -45,13 +50,11 @@ class HomeFragment :
         val remoteDataSource = PlaceRemoteDataSource.getInstance()
         val localDataSource = PlaceLocalDataSource.getInstance(requireContext())
         val localExploreDataSource = PlaceExploreLocalSource.getInstance(requireContext())
-
-        val placeRepositoryImpl =
-            PlaceRepositoryImpl.getInstance(
-                remoteDataSource,
-                localDataSource,
-                localExploreDataSource
-            )
+        val placeRepositoryImpl = PlaceRepositoryImpl.getInstance(
+            remoteDataSource,
+            localDataSource,
+            localExploreDataSource
+        )
         val userRepository =
             UserRepository.getInstance(UserInterestLocalSource.getInstance(sharedPresenterManager))
 
@@ -60,6 +63,9 @@ class HomeFragment :
 
         // Get user interested place type, we'll get Place when it done
         mExplorePlacePresenter.getUserInterest()
+
+        // Register observer when favorite place change
+        placeRepositoryImpl.registerObserver(this)
     }
 
     override fun initView() {
@@ -104,6 +110,7 @@ class HomeFragment :
     }
 
     override fun onGetExplorePlaceSuccess(locationList: List<Place>, placeCategory: PlaceCategory) {
+        // TODO remove runOnUiThread
         activity?.runOnUiThread {
             when (placeCategory) {
                 PlaceCategory.ATTRACTIONS -> {
@@ -126,6 +133,7 @@ class HomeFragment :
 
     override fun onGetExplorePlaceFail(exception: Exception?, placeCategory: PlaceCategory) {
         exception?.printStackTrace()
+        // TODO remove runOnUiThread
         activity?.runOnUiThread {
             when (placeCategory) {
                 PlaceCategory.ATTRACTIONS ->
@@ -136,12 +144,15 @@ class HomeFragment :
                     viewBinding.containerExploreRestaurantTitle.visibility =
                         View.GONE
 
-                PlaceCategory.HOTELS -> viewBinding.containerExploreHotelTitle.visibility = View.GONE
+                PlaceCategory.HOTELS ->
+                    viewBinding.containerExploreHotelTitle.visibility =
+                        View.GONE
             }
         }
     }
 
     override fun onGetPhotoSuccess(photos: PlacePhoto, placeCategory: PlaceCategory) {
+        // TODO remove runOnUiThread
         activity?.runOnUiThread {
             val locationId = photos.locationId
             mAttractionAdapter.updateThumbnail(locationId, photos)
@@ -160,8 +171,6 @@ class HomeFragment :
 
     override fun onGetUserInterestFoodDone() {
         mExplorePlacePresenter.getExploreRestaurant()
-
-        // TODO Implement explore hotel based on user's location
         mExplorePlacePresenter.getExploreHotel()
     }
 
@@ -169,6 +178,25 @@ class HomeFragment :
         val intent = Intent(activity, DetailActivity::class.java)
         intent.putExtra(DetailActivity.KEY_INTENT_PLACE_ID, locationId)
         activity?.startActivity(intent)
+        detailOpenedPlace = locationId
+    }
+
+    override fun onFavoriteClick(locationId: String, isFavorite: Boolean) {
+        if (isFavorite) {
+            mExplorePlacePresenter.markFavorite(locationId)
+        } else {
+            mExplorePlacePresenter.markNotFavorite(locationId)
+        }
+    }
+
+    override fun onFavoritePlaceChange(placeId: String, isFavorite: Int) {
+        if (mHotelAdapter.containPlaceId(placeId)) {
+            mHotelAdapter.updateFavoritePlace(placeId, isFavorite)
+        } else if (mRestaurantAdapter.containPlaceId(placeId)) {
+            mRestaurantAdapter.updateFavoritePlace(placeId, isFavorite)
+        } else if (mAttractionAdapter.containPlaceId(placeId)) {
+            mAttractionAdapter.updateFavoritePlace(placeId, isFavorite)
+        }
     }
 
     companion object {

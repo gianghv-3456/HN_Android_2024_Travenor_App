@@ -7,8 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.ViewCompat
 import com.example.travenor.R
+import com.example.travenor.constant.IS_FAVORITE
+import com.example.travenor.core.observable.FavoritePlaceObserver
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.place.repository.PlaceRepositoryImpl
@@ -21,9 +24,11 @@ import com.example.travenor.utils.base.BaseActivity
 import com.example.travenor.utils.ext.loadImageCenterCrop
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
-class DetailActivity : BaseActivity(), DetailContract.View {
+@Suppress("TooManyFunctions")
+class DetailActivity : BaseActivity(), DetailContract.View, FavoritePlaceObserver {
     private var mPlaceId: String = ""
     private var mPresenter: DetailPresenter? = null
+    private var mIsFavorite: Int = IS_FAVORITE
     private lateinit var mBinding: ActivityDetailBinding
 
     override fun getLayoutRoot(): View {
@@ -42,21 +47,29 @@ class DetailActivity : BaseActivity(), DetailContract.View {
         val localDataSource = PlaceLocalDataSource.getInstance(baseContext)
         val localExploreDataSource = PlaceExploreLocalSource.getInstance(baseContext)
 
-        val placeRepositoryImpl =
-            PlaceRepositoryImpl.getInstance(
-                remoteDataSource,
-                localDataSource,
-                localExploreDataSource
-            )
+        val placeRepositoryImpl = PlaceRepositoryImpl.getInstance(
+            remoteDataSource,
+            localDataSource,
+            localExploreDataSource
+        )
 
         mPresenter = DetailPresenter(placeRepositoryImpl)
         mPresenter?.setView(this)
 
         mBinding.buttonBack.setOnClickListener { _ -> finish() }
         mBinding.buttonMoreDetail.setOnClickListener { _ -> openMoreDetailScreen() }
-        mBinding.buttonMarkFavorite.setOnClickListener { _ -> markFavorite() }
+        mBinding.buttonMarkFavorite.setOnClickListener { _ ->
+            if (mIsFavorite == IS_FAVORITE) {
+                mPresenter?.markNotFavorite(mPlaceId)
+            } else {
+                mPresenter?.markFavorite(mPlaceId)
+            }
+        }
 
         initBottomSheet()
+
+        // Register favorite place change
+        placeRepositoryImpl.registerObserver(this)
     }
 
     private fun initBottomSheet() {
@@ -84,20 +97,28 @@ class DetailActivity : BaseActivity(), DetailContract.View {
         startActivity(intent)
     }
 
-    private fun markFavorite() {
-        // TODO Integrate Favorite future
-    }
-
     override fun onGetPlaceDetailSuccess(place: Place) {
+        // TODO remove runOnUiThread
         runOnUiThread {
             mBinding.textPlaceName.text = place.name
             mBinding.textPlaceDesc.text = place.description
             mBinding.textPlaceAddress.text = place.addressObj.addressString
             mBinding.textPlaceRating.text = place.rating.toString()
+
+            mIsFavorite = place.isFavorite
+            if (place.isFavorite == IS_FAVORITE) {
+                val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_unmark_favorite)
+                mBinding.buttonMarkFavorite.setImageDrawable(drawable)
+            } else {
+                val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_mark_favorite)
+                mBinding.buttonMarkFavorite.setImageDrawable(drawable)
+            }
+            mBinding.buttonMarkFavorite.isClickable = true
         }
     }
 
     override fun onGetPlaceDetailFail(e: Exception) {
+        // TODO remove runOnUiThread
         runOnUiThread {
             Toast.makeText(
                 this,
@@ -109,8 +130,25 @@ class DetailActivity : BaseActivity(), DetailContract.View {
     }
 
     override fun onGetPhotoSuccess(photos: PlacePhoto) {
+        // TODO remove runOnUiThread
         runOnUiThread {
             mBinding.imagePlaceHeader.loadImageCenterCrop(photos.imageList.original?.url.toString())
+        }
+    }
+
+    override fun onMarkFavoriteSuccess() {
+        // TODO remove runOnUiThread
+        runOnUiThread {
+            val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_unmark_favorite)
+            mBinding.buttonMarkFavorite.setImageDrawable(drawable)
+        }
+    }
+
+    override fun onMarkNotFavoriteSuccess() {
+        // TODO remove runOnUiThread
+        runOnUiThread {
+            val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_mark_favorite)
+            mBinding.buttonMarkFavorite.setImageDrawable(drawable)
         }
     }
 
@@ -127,5 +165,19 @@ class DetailActivity : BaseActivity(), DetailContract.View {
         const val KEY_INTENT_PLACE_ID = "activity.detail.key.intent_place_id"
         private const val EIGHTY_PERCENT = 0.8
         private const val FIFTY_PERCENT = 0.5
+    }
+
+    /**
+     * Favorite place status change, refresh mark favorite button icon
+     */
+    override fun onFavoritePlaceChange(placeId: String, isFavorite: Int) {
+        mIsFavorite = isFavorite
+        if (mIsFavorite == IS_FAVORITE) {
+            val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_unmark_favorite)
+            mBinding.buttonMarkFavorite.setImageDrawable(drawable)
+        } else {
+            val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_mark_favorite)
+            mBinding.buttonMarkFavorite.setImageDrawable(drawable)
+        }
     }
 }

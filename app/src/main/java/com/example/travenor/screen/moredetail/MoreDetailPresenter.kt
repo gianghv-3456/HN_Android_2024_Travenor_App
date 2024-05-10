@@ -36,6 +36,39 @@ class MoreDetailPresenter internal constructor(
         )
     }
 
+    override fun markFavorite(placeId: String, isFavorite: Boolean) {
+        // Toggle favorite
+        if (isFavorite) {
+            placeRepository.markFavorite(
+                placeId,
+                object : ResultListener<Boolean> {
+                    override fun onSuccess(data: Boolean?) {
+                        if (data == true) mView?.onMarkFavoriteSuccess()
+                    }
+
+                    override fun onError(exception: Exception?) {
+                        exception?.printStackTrace()
+                        /* no-op */
+                    }
+                }
+            )
+        } else {
+            placeRepository.unmarkFavorite(
+                placeId,
+                object : ResultListener<Boolean> {
+                    override fun onSuccess(data: Boolean?) {
+                        if (data == true) mView?.onMarkNotFavoriteSuccess()
+                    }
+
+                    override fun onError(exception: Exception?) {
+                        exception?.printStackTrace()
+                        /* no-op */
+                    }
+                }
+            )
+        }
+    }
+
     override fun getPlacePhotos(locationId: String) {
         placeRepository.getPlacePhoto(
             locationId,

@@ -55,5 +55,7 @@
     <string name="more_detail_label_gallery">Ảnh</string>
     <string name="more_detail_label_nearby_hotel">khách sạn gần đây</string>
     <string name="more_detail_label_nearby_restaurant">Nhà hàng gần đây</string>
+    <string name="no_place_notice_text">Chưa địa điểm ưa thích nào được lưu trữ</string>
+    <string name="favorite_title">Yêu thích</string>
 
 </resources>
