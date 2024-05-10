@@ -46,6 +46,38 @@ class DetailPresenter internal constructor(private val placeRepositoryImpl: Plac
         )
     }
 
+    override fun markFavorite(placeId: String) {
+        placeRepositoryImpl.markFavorite(
+            placeId,
+            object : ResultListener<Boolean> {
+                override fun onSuccess(data: Boolean?) {
+                    if (data == true) mView?.onMarkFavoriteSuccess()
+                }
+
+                override fun onError(exception: Exception?) {
+                    exception?.printStackTrace()
+                    /* no-op */
+                }
+            }
+        )
+    }
+
+    override fun markNotFavorite(placeId: String) {
+        placeRepositoryImpl.unmarkFavorite(
+            placeId,
+            object : ResultListener<Boolean> {
+                override fun onSuccess(data: Boolean?) {
+                    if (data == true) mView?.onMarkNotFavoriteSuccess()
+                }
+
+                override fun onError(exception: Exception?) {
+                    exception?.printStackTrace()
+                    /* no-op */
+                }
+            }
+        )
+    }
+
     override fun onStart() { /* no-op */
     }
 

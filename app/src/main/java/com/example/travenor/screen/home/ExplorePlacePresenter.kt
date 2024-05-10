@@ -58,15 +58,18 @@ class ExplorePlacePresenter internal constructor(
                     }
 
                     val locationIdList = mutableListOf<String>()
-                    data!!.forEach {
-                        locationIdList.add(it.locationId)
+
+                    if (data != null) {
+                        data.forEach {
+                            locationIdList.add(it.locationId)
+                        }
+
+                        prefetchPlaceDetail(data.map { it.locationId }.toMutableList())
+                        mView?.onGetExplorePlaceSuccess(data, PlaceCategory.ATTRACTIONS)
+
+                        // Get thumbnail for each place with locationId
+                        getThumbnail(locationIdList, PlaceCategory.ATTRACTIONS)
                     }
-
-                    prefetchPlaceDetail(data.map { it.locationId }.toMutableList())
-                    mView?.onGetExplorePlaceSuccess(data, PlaceCategory.ATTRACTIONS)
-
-                    // Get thumbnail for each place with locationId
-                    getThumbnail(locationIdList, PlaceCategory.ATTRACTIONS)
                 }
 
                 override fun onError(exception: Exception?) {
@@ -113,14 +116,16 @@ class ExplorePlacePresenter internal constructor(
                         )
                     }
                     val locationIdList = mutableListOf<String>()
-                    data!!.forEach {
-                        locationIdList.add(it.locationId)
-                    }
-                    prefetchPlaceDetail(data.map { it.locationId }.toMutableList())
-                    mView?.onGetExplorePlaceSuccess(data, PlaceCategory.RESTAURANTS)
+                    if (data != null) {
+                        data.forEach {
+                            locationIdList.add(it.locationId)
+                        }
+                        prefetchPlaceDetail(data.map { it.locationId }.toMutableList())
+                        data.let { mView?.onGetExplorePlaceSuccess(it, PlaceCategory.RESTAURANTS) }
 
-                    // Get thumbnail for each place with locationId
-                    getThumbnail(locationIdList, PlaceCategory.RESTAURANTS)
+                        // Get thumbnail for each place with locationId
+                        getThumbnail(locationIdList, PlaceCategory.RESTAURANTS)
+                    }
                 }
 
                 override fun onError(exception: Exception?) {
@@ -155,14 +160,17 @@ class ExplorePlacePresenter internal constructor(
                         )
                     }
                     val locationIdList = mutableListOf<String>()
-                    data!!.forEach {
-                        locationIdList.add(it.locationId)
-                    }
-                    prefetchPlaceDetail(data.map { it.locationId }.toMutableList())
-                    mView?.onGetExplorePlaceSuccess(data, PlaceCategory.HOTELS)
+                    if (data != null) {
+                        data.forEach {
+                            locationIdList.add(it.locationId)
+                        }
 
-                    // Get thumbnail for each place with locationId
-                    getThumbnail(locationIdList, PlaceCategory.HOTELS)
+                        prefetchPlaceDetail(data.map { it.locationId }.toMutableList())
+                        mView?.onGetExplorePlaceSuccess(data, PlaceCategory.HOTELS)
+
+                        // Get thumbnail for each place with locationId
+                        getThumbnail(locationIdList, PlaceCategory.HOTELS)
+                    }
                 }
 
                 override fun onError(exception: Exception?) {
@@ -249,12 +257,38 @@ class ExplorePlacePresenter internal constructor(
         })
     }
 
-    override fun onStart() {
-        /* no-op */
+    override fun markFavorite(placeId: String) {
+        placeRepositoryImpl.markFavorite(
+            placeId,
+            object : ResultListener<Boolean> {
+                override fun onSuccess(data: Boolean?) { /* no-op *//* view was updated before*/
+                }
+
+                override fun onError(exception: Exception?) {
+                    exception?.printStackTrace()
+                }
+            }
+        )
     }
 
-    override fun onStop() {
-        /* no-op */
+    override fun markNotFavorite(placeId: String) {
+        placeRepositoryImpl.unmarkFavorite(
+            placeId,
+            object : ResultListener<Boolean> {
+                override fun onSuccess(data: Boolean?) { /* no-op *//* view was updated before*/
+                }
+
+                override fun onError(exception: Exception?) {
+                    exception?.printStackTrace()
+                }
+            }
+        )
+    }
+
+    override fun onStart() { /* no-op */
+    }
+
+    override fun onStop() { /* no-op */
     }
 
     override fun setView(view: ExplorePlaceContract.View?) {

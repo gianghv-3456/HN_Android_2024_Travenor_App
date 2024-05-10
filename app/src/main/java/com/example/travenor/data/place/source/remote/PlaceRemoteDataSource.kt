@@ -211,7 +211,7 @@ class PlaceRemoteDataSource private constructor(
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun getInstance() = synchronized(this) {
-            val placeApi = NetWorker(
+            val placeApi = NetWorker.getInstance(
                 TRIP_ADVISOR_URL,
                 CONNECT_TIME_OUT,
                 READ_TIME_OUT

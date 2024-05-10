@@ -100,7 +100,7 @@ class PlaceExploreLocalSource(
         private var instance: PlaceExploreLocalSource? = null
 
         fun getInstance(context: Context) = synchronized(this) {
-            val placeDao = PlaceDAO(context)
+            val placeDao = PlaceDAO.getInstance(context)
             val placeExploreDAO = PlaceExploreDAO(context)
             instance ?: PlaceExploreLocalSource(
                 placeDao,

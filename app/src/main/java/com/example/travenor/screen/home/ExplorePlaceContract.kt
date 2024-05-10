@@ -19,5 +19,7 @@ class ExplorePlaceContract {
         fun getExploreRestaurant()
         fun getExploreHotel()
         fun getUserInterest()
+        fun markFavorite(placeId: String)
+        fun markNotFavorite(placeId: String)
     }
 }

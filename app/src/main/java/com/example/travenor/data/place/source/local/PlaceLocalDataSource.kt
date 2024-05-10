@@ -3,6 +3,7 @@ package com.example.travenor.data.place.source.local
 import android.content.Context
 import android.database.sqlite.SQLiteException
 import com.example.travenor.constant.PlaceCategory
+import com.example.travenor.core.ResultListener
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.place.source.PlaceSource
@@ -75,11 +76,39 @@ class PlaceLocalDataSource(
         }
     }
 
+    override fun markFavorite(placeId: String, listener: ResultListener<Boolean>) {
+        try {
+            val result = placeDao.markFavorite(placeId)
+            listener.onSuccess(result)
+        } catch (e: SQLiteException) {
+            listener.onError(e)
+        }
+    }
+
+    override fun markNotFavorite(placeId: String, listener: ResultListener<Boolean>) {
+        try {
+            val result = placeDao.markNotFavorite(placeId)
+            listener.onSuccess(result)
+        } catch (e: SQLiteException) {
+            listener.onError(e)
+        }
+    }
+
+    override fun getFavoritePlace(listener: ResultListener<List<Place>>) {
+        try {
+            val result = placeDao.getFavoritePlace()
+            listener.onSuccess(result)
+        } catch (e: SQLiteException) {
+            e.run { printStackTrace() }
+            listener.onError(e)
+        }
+    }
+
     companion object {
         private var instance: PlaceLocalDataSource? = null
 
         fun getInstance(context: Context) = synchronized(this) {
-            val placeDao = PlaceDAO(context)
+            val placeDao = PlaceDAO.getInstance(context)
             val placePhotoDAO = PlacePhotoDAO(context)
             instance ?: PlaceLocalDataSource(
                 placeDao,

@@ -1,16 +1,22 @@
 package com.example.travenor.data.place.repository
 
+import com.example.travenor.constant.IS_FAVORITE
+import com.example.travenor.constant.IS_NOT_FAVORITE
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.core.ResultListener
+import com.example.travenor.core.observable.FavoritePlaceObservable
+import com.example.travenor.core.observable.FavoritePlaceObserver
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.place.source.PlaceSource
 
+@Suppress("TooManyFunctions")
 class PlaceRepositoryImpl private constructor(
     private val remote: PlaceSource.Remote,
     private val local: PlaceSource.Local,
     private val localExplore: PlaceSource.ExplorePlaceLocal
-) : PlaceRepository {
+) : PlaceRepository, FavoritePlaceObservable {
+    private val favoritePlaceObserverList = mutableListOf<FavoritePlaceObserver>()
 
     override fun searchExplorePlace(
         keyword: String,
@@ -321,6 +327,39 @@ class PlaceRepositoryImpl private constructor(
                 }
             }
         )
+    }
+
+    override fun markFavorite(placeId: String, listener: ResultListener<Boolean>) {
+        local.markFavorite(placeId, listener)
+        notifyChanged(placeId, IS_FAVORITE)
+    }
+
+    override fun unmarkFavorite(placeId: String, listener: ResultListener<Boolean>) {
+        local.markNotFavorite(placeId, listener)
+        notifyChanged(placeId, IS_NOT_FAVORITE)
+    }
+
+    override fun getFavoritePlace(listener: ResultListener<List<Place>>) {
+        local.getFavoritePlace(listener)
+    }
+
+    override fun registerObserver(favoritePlaceObserver: FavoritePlaceObserver?) {
+        if (favoritePlaceObserverList.contains(favoritePlaceObserver)) {
+            return
+        }
+        if (favoritePlaceObserver == null) return
+
+        favoritePlaceObserverList.add(favoritePlaceObserver)
+    }
+
+    override fun removeObserver(favoritePlaceObserver: FavoritePlaceObserver?) {
+        favoritePlaceObserverList.remove(favoritePlaceObserver)
+    }
+
+    override fun notifyChanged(placeId: String, isFavorite: Int) {
+        favoritePlaceObserverList.forEach { observer ->
+            observer.onFavoritePlaceChange(placeId, isFavorite)
+        }
     }
 
     companion object {

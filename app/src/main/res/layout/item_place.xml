@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/dp_16"
@@ -43,7 +44,7 @@
                 android:layout_height="match_parent"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
-                android:src="@drawable/sample_vinh_ha_long" />
+                tools:src="@drawable/sample_vinh_ha_long" />
 
         </androidx.cardview.widget.CardView>
 
@@ -57,7 +58,7 @@
             android:ellipsize="end"
             android:gravity="start|top"
             android:lines="2"
-            android:text="@string/card_place_title"
+            tools:text="@string/card_place_title"
             android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Medium"
             app:layout_constraintEnd_toStartOf="@id/text_place_rating"
             app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +72,7 @@
             android:layout_marginTop="@dimen/dp_16"
             android:layout_marginEnd="@dimen/dp_16"
             android:gravity="center"
-            android:text="@string/card_place_rating"
+            tools:text="@string/card_place_rating"
             android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Medium"
             app:drawableStartCompat="@drawable/ic_star"
             app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +85,7 @@
             android:layout_margin="@dimen/dp_16"
             android:ellipsize="end"
             android:lines="2"
-            android:text="@string/card_place_address"
+            tools:text="@string/card_place_address"
             android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
             android:textSize="@dimen/sp_15"
             app:layout_constraintBottom_toBottomOf="parent"

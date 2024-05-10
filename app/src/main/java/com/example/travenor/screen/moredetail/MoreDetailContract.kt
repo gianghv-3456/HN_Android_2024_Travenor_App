@@ -15,6 +15,8 @@ interface MoreDetailContract {
         fun onGetNearbyHotelSuccess(places: List<Place>)
 
         fun onGetNearbyPlacePhotoSuccess(photos: List<PlacePhoto>, category: PlaceCategory)
+        fun onMarkFavoriteSuccess()
+        fun onMarkNotFavoriteSuccess()
     }
 
     interface Presenter : BasePresenter<View> {
@@ -27,5 +29,6 @@ interface MoreDetailContract {
         fun getNearbyHotel(lat: Double, long: Double)
 
         fun getNearbyPlacePhoto(locationId: String, category: PlaceCategory)
+        fun markFavorite(placeId: String, isFavorite: Boolean)
     }
 }
