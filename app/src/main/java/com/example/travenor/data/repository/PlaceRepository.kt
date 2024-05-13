@@ -15,6 +15,10 @@ interface PlaceRepository {
         listener: ResultListener<List<Place>>
     )
 
+    fun searchPlace(
+        keyword: String, category: PlaceCategory?, listener: ResultListener<List<Place>>
+    )
+
     fun getPlaceDetail(placeId: String, listener: ResultListener<Place>)
 
     fun getPlacePhoto(placeId: String, listener: ResultListener<List<PlacePhoto>>)

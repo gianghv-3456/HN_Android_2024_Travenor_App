@@ -231,17 +231,17 @@ class ExplorePlacePresenter internal constructor(
 
         // Get user interest place saved on sharedPrefs
         userRepository.getUserInterestedPlace(object :
-                ResultListener<List<com.example.travenor.constant.Place>> {
-                override fun onSuccess(data: List<com.example.travenor.constant.Place>?) {
-                    data?.let { UserInterestData.interestedPlaceList.addAll(it) }
-                    mView?.onGetUserInterestPlaceDone()
-                }
+            ResultListener<List<com.example.travenor.constant.Place>> {
+            override fun onSuccess(data: List<com.example.travenor.constant.Place>?) {
+                data?.let { UserInterestData.interestedPlaceList.addAll(it) }
+                mView?.onGetUserInterestPlaceDone()
+            }
 
-                override fun onError(exception: Exception?) {
-                    // Done with no data, then we'll generate random value for interest
-                    mView?.onGetUserInterestPlaceDone()
-                }
-            })
+            override fun onError(exception: Exception?) {
+                // Done with no data, then we'll generate random value for interest
+                mView?.onGetUserInterestPlaceDone()
+            }
+        })
 
         // Get user interest food saved on sharedPrefs
         userRepository.getUserInterestedFood(object : ResultListener<List<Food>> {

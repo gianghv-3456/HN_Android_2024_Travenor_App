@@ -52,6 +52,21 @@ class PlaceLocalDataSource(
         }
     }
 
+    override fun searchPlace(
+        query: String,
+        category: PlaceCategory?,
+        listener: ResultListener<List<Place>>
+    ) {
+        try {
+            val result = placeDao.search(query, category)
+
+            listener.onSuccess(result)
+        } catch (e: SQLiteException) {
+            e.run { printStackTrace() }
+            return listener.onError(e)
+        }
+    }
+
     override fun savePlaceAddress(place: Place) {
         try {
             placeDao.insertPlaceAddress(place.addressObj, place.locationId)

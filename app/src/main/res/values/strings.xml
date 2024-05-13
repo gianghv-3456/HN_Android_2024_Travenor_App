@@ -57,5 +57,6 @@
 
     <string name="no_place_notice_text">No favorite Place.\n Waiting for your awesome places.</string>
     <string name="favorite_title">Your favorite</string>
+    <string name="search_screen_title">Search a place</string>
 
 </resources>

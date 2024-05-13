@@ -58,4 +58,6 @@
     <string name="no_place_notice_text">Chưa địa điểm ưa thích nào được lưu trữ</string>
     <string name="favorite_title">Yêu thích</string>
 
+    <string name="search_screen_title">Tìm kiếm</string>
+
 </resources>

@@ -6,12 +6,14 @@ import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.example.travenor.constant.IS_FAVORITE
 import com.example.travenor.constant.IS_NOT_FAVORITE
+import com.example.travenor.constant.MAX_RECENT_SEARCH_RESULTS
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.data.model.place.Address
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.source.local.database.PlaceSqliteHelper
 import com.example.travenor.data.source.local.database.table.AddressTable
 import com.example.travenor.data.source.local.database.table.PlaceTable
+import com.example.travenor.data.source.local.database.table.RecentSearchTable
 import com.example.travenor.utils.location.LocationUtils
 
 @Suppress("TooManyFunctions")
@@ -27,10 +29,7 @@ class PlaceDAO private constructor(context: Context) {
 
         val db = sqlHelper.writableDatabase
         val result = db.insertWithOnConflict(
-            PlaceTable.TABLE_PLACE,
-            null,
-            values,
-            SQLiteDatabase.CONFLICT_REPLACE
+            PlaceTable.TABLE_PLACE, null, values, SQLiteDatabase.CONFLICT_REPLACE
         )
         return if (result == falseCode) {
             Log.d(TAG, "Fail to insert data")
@@ -95,13 +94,7 @@ class PlaceDAO private constructor(context: Context) {
         val args = arrayOf(locationId)
 
         val cursor = db.query(
-            PlaceTable.TABLE_PLACE,
-            columns,
-            selectionString,
-            args,
-            null,
-            null,
-            null
+            PlaceTable.TABLE_PLACE, columns, selectionString, args, null, null, null
         )
 
         val columnIndex = 0
@@ -119,13 +112,7 @@ class PlaceDAO private constructor(context: Context) {
         val selectionString = "${PlaceTable.COL_LOCATION_ID} =? "
 
         val cursor = db.query(
-            PlaceTable.TABLE_PLACE,
-            columns,
-            selectionString,
-            arrayOf(locationId),
-            null,
-            null,
-            null
+            PlaceTable.TABLE_PLACE, columns, selectionString, arrayOf(locationId), null, null, null
         )
 
         val columnIndex = 0
@@ -139,11 +126,7 @@ class PlaceDAO private constructor(context: Context) {
     }
 
     fun getNearByPlace(
-        lat: Double,
-        long: Double,
-        limit: Int,
-        radius: Double,
-        category: PlaceCategory
+        lat: Double, long: Double, limit: Int, radius: Double, category: PlaceCategory
     ): List<Place> {
         val result = mutableListOf<Place>()
         val places = getAllPlaceData()
@@ -170,13 +153,7 @@ class PlaceDAO private constructor(context: Context) {
         val args = arrayOf(locationId)
 
         val cursor = db.query(
-            PlaceTable.TABLE_PLACE,
-            columns,
-            selectionString,
-            args,
-            null,
-            null,
-            null
+            PlaceTable.TABLE_PLACE, columns, selectionString, args, null, null, null
         )
 
         var columnIndex = 0
@@ -224,13 +201,7 @@ class PlaceDAO private constructor(context: Context) {
         val db = sqlHelper.readableDatabase
         val columns = getPlaceDataQueryColumnArray()
         val cursor = db.query(
-            PlaceTable.TABLE_PLACE,
-            columns,
-            null,
-            null,
-            null,
-            null,
-            null
+            PlaceTable.TABLE_PLACE, columns, null, null, null, null, null
         )
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -274,6 +245,56 @@ class PlaceDAO private constructor(context: Context) {
         }
 
         return queryResult
+    }
+
+    fun search(query: String, category: PlaceCategory?): List<Place> {
+        val result = mutableListOf<Place>()
+        val places = getAllPlaceData()
+
+        places.forEach {
+            val isMatchCategory =
+                category == null || it.locationType?.lowercase() == category.name.lowercase()
+
+            if (it.name.contains(query, true) && isMatchCategory) {
+                result.add(it)
+            }
+        }
+
+        return result
+    }
+
+    fun getRecentSearch(): List<String> {
+        val db = sqlHelper.readableDatabase
+
+        val columns = arrayOf(RecentSearchTable.COL_SEARCH_QUERY)
+        val cursor = db.query(
+            RecentSearchTable.TABLE_NAME, columns, null, null, null, null, null
+        )
+
+        val result = mutableListOf<String>()
+
+        if (cursor != null && cursor.moveToFirst()) {
+            val columnIndex = 0
+            do {
+                val query = cursor.getString(columnIndex)
+                result.add(query)
+            } while (cursor.moveToNext())
+        }
+
+        return result
+    }
+
+    fun saveRecentSearch(queryStrings: List<String>) {
+        val db = sqlHelper.writableDatabase
+        val reversedQueryStrings = queryStrings.reversed()
+        reversedQueryStrings.take(MAX_RECENT_SEARCH_RESULTS)
+        db.delete(RecentSearchTable.TABLE_NAME, null, null)
+        for (query in reversedQueryStrings) {
+            val values = ContentValues().apply {
+                put(RecentSearchTable.COL_SEARCH_QUERY, query)
+            }
+            db.insert(RecentSearchTable.TABLE_NAME, null, values)
+        }
     }
 
     private fun getPlaceDataQueryColumnArray(): Array<String> {
@@ -346,10 +367,7 @@ class PlaceDAO private constructor(context: Context) {
         }
         val db = sqlHelper.writableDatabase
         val result = db.insertWithOnConflict(
-            AddressTable.TABLE_ADDRESS,
-            null,
-            values,
-            SQLiteDatabase.CONFLICT_REPLACE
+            AddressTable.TABLE_ADDRESS, null, values, SQLiteDatabase.CONFLICT_REPLACE
         )
         return result != -1L
     }
