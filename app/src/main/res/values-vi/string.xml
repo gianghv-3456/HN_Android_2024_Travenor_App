@@ -59,5 +59,8 @@
     <string name="favorite_title">Yêu thích</string>
 
     <string name="search_screen_title">Tìm kiếm</string>
+    <string name="search_recent_text">Tìm gần đây</string>
+    <string name="search_result_label">Kết quả</string>
+    <string name="search_no_result">Không tìm thấy</string>
 
 </resources>

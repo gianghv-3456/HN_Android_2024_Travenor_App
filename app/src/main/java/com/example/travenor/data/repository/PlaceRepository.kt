@@ -15,8 +15,14 @@ interface PlaceRepository {
         listener: ResultListener<List<Place>>
     )
 
+    fun getRecentSearch(listener: ResultListener<List<String>>)
+
+    fun saveRecentSearch(keyword: List<String>)
+
     fun searchPlace(
-        keyword: String, category: PlaceCategory?, listener: ResultListener<List<Place>>
+        keyword: String,
+        category: PlaceCategory?,
+        listener: ResultListener<List<Place>>
     )
 
     fun getPlaceDetail(placeId: String, listener: ResultListener<Place>)

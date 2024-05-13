@@ -18,6 +18,7 @@
         app:drawableStartCompat="@drawable/ic_recent_search"
         tools:text="text_recent_search"
         android:drawablePadding="@dimen/dp_4"
+        android:textSize="@dimen/dp_16"
         android:layout_gravity="center_vertical"
         />
 

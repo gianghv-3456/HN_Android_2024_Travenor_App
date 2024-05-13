@@ -119,6 +119,23 @@ class PlaceLocalDataSource(
         }
     }
 
+    override fun getRecentSearchPlaces(listener: ResultListener<List<String>>) {
+        try {
+            val result = placeDao.getRecentSearch()
+            listener.onSuccess(result)
+        } catch (e: SQLiteException) {
+            listener.onError(e)
+        }
+    }
+
+    override fun saveRecentSearchPlaces(keyword: List<String>) {
+        try {
+            placeDao.saveRecentSearch(keyword)
+        } catch (e: SQLiteException) {
+            e.run { printStackTrace() }
+        }
+    }
+
     companion object {
         private var instance: PlaceLocalDataSource? = null
 

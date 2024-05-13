@@ -29,6 +29,17 @@ class RecentSearchAdapter() : RecyclerView.Adapter<RecentSearchAdapter.ViewHolde
         notifyDataSetChanged()
     }
 
+    fun addRecentSearchText(text: String) {
+        if (mRecentSearchList.contains(text)) {
+            mRecentSearchList.remove(text)
+        }
+        mRecentSearchList.add(text)
+    }
+
+    fun getRecentSearchList(): List<String> {
+        return mRecentSearchList
+    }
+
     class ViewHolder(val binding: ItemRecentSearchTextBinding) :
         RecyclerView.ViewHolder(binding.root)
 
@@ -57,7 +68,6 @@ class RecentSearchAdapter() : RecyclerView.Adapter<RecentSearchAdapter.ViewHolde
                 notifyDataSetChanged()
             }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -67,7 +77,7 @@ class RecentSearchAdapter() : RecyclerView.Adapter<RecentSearchAdapter.ViewHolde
     }
 
     override fun getItemCount(): Int {
-        return mRecentSearchList.size
+        return mDisplayList.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

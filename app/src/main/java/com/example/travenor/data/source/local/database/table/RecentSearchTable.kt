@@ -5,6 +5,6 @@ object RecentSearchTable {
     const val COL_ID = "id"
     const val COL_SEARCH_QUERY = "search_query"
     const val QUERY_CREATE_RECENT_SEARCH_DB = "CREATE TABLE $TABLE_NAME (" +
-            "$COL_ID PRIMARY KEY AUTOINCREMENT," +
-            "$COL_SEARCH_QUERY TEXT)"
+        "$COL_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+        "$COL_SEARCH_QUERY TEXT)"
 }

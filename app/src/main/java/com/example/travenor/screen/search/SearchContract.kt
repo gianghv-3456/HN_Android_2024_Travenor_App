@@ -17,5 +17,6 @@ interface SearchContract {
         fun getRecentSearchString()
         fun onSearchPlace(searchString: String, category: PlaceCategory?)
         fun getPlaceThumbnailPhoto(placeId: String)
+        fun saveRecentSearchString(searchString: List<String>)
     }
 }

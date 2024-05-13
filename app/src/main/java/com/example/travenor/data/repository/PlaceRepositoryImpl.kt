@@ -26,49 +26,68 @@ class PlaceRepositoryImpl private constructor(
         listener: ResultListener<List<Place>>
     ) {
         // Try get online mode
-        getExploreOnlineMode(keyword, category, lat, long, object : ResultListener<List<Place>> {
-            override fun onSuccess(data: List<Place>?) {
-                // No data
-                if (data.isNullOrEmpty()) {
-                    listener.onError(Exception("No data!"))
-                    return
+        getExploreOnlineMode(
+            keyword,
+            category,
+            lat,
+            long,
+            object : ResultListener<List<Place>> {
+                override fun onSuccess(data: List<Place>?) {
+                    // No data
+                    if (data.isNullOrEmpty()) {
+                        listener.onError(Exception("No data!"))
+                        return
+                    }
+                    listener.onSuccess(data)
                 }
-                listener.onSuccess(data)
-            }
 
-            override fun onError(exception: Exception?) {
-                getExploreOfflineMode(category, listener)
+                override fun onError(exception: Exception?) {
+                    getExploreOfflineMode(category, listener)
+                }
             }
-        })
+        )
+    }
+
+    override fun getRecentSearch(listener: ResultListener<List<String>>) {
+        local.getRecentSearchPlaces(listener)
+    }
+
+    override fun saveRecentSearch(keyword: List<String>) {
+        local.saveRecentSearchPlaces(keyword)
     }
 
     override fun searchPlace(
-        keyword: String, category: PlaceCategory?, listener: ResultListener<List<Place>>
+        keyword: String,
+        category: PlaceCategory?,
+        listener: ResultListener<List<Place>>
     ) {
-        //try online
-        remote.searchPlace(keyword, category, object : ResultListener<List<Place>> {
-            override fun onSuccess(data: List<Place>?) {
-                // No data
-                if (data.isNullOrEmpty()) {
-                    listener.onError(Exception("No data!"))
-                    return
-                }
-                listener.onSuccess(data)
+        // try online
+        remote.searchPlace(
+            keyword,
+            category,
+            object : ResultListener<List<Place>> {
+                override fun onSuccess(data: List<Place>?) {
+                    // No data
+                    if (data.isNullOrEmpty()) {
+                        listener.onError(Exception("No data!"))
+                        return
+                    }
+                    listener.onSuccess(data)
 
-                // Save to local DB
-                data.forEach {
-                    it.locationType = category?.name.toString()
-                    local.savePlaceDetail(it)
-                    local.savePlaceAddress(it)
+                    // Save to local DB
+                    data.forEach {
+                        it.locationType = category?.name.toString()
+                        local.savePlaceDetail(it)
+                        local.savePlaceAddress(it)
+                    }
+                }
+
+                override fun onError(exception: Exception?) {
+                    // get Offline
+                    local.searchPlace(keyword, category, listener)
                 }
             }
-
-            override fun onError(exception: Exception?) {
-                // get Offline
-                local.searchPlace(keyword, category, listener)
-            }
-
-        })
+        )
     }
 
     /**
@@ -108,9 +127,11 @@ class PlaceRepositoryImpl private constructor(
 
         // Data is fresh, so return local data
         if (isDataExploreFresh(timeStamp)) {
-            listener.onSuccess(result.map {
-                it.first
-            })
+            listener.onSuccess(
+                result.map {
+                    it.first
+                }
+            )
         } else {
             // Get remote data from api and store to local
             getExplorePlaceFromRemote(keyword, lat, long, category, listener)
@@ -122,7 +143,8 @@ class PlaceRepositoryImpl private constructor(
      * Get local data only
      */
     private fun getExploreOfflineMode(
-        category: PlaceCategory, listener: ResultListener<List<Place>>
+        category: PlaceCategory,
+        listener: ResultListener<List<Place>>
     ) {
         // Get local data and check freshness
         val result = when (category) {
@@ -142,9 +164,11 @@ class PlaceRepositoryImpl private constructor(
         if (result.isEmpty()) {
             listener.onError(Exception("No data!"))
         } else {
-            listener.onSuccess(result.map {
-                it.first
-            })
+            listener.onSuccess(
+                result.map {
+                    it.first
+                }
+            )
         }
     }
 
@@ -177,91 +201,132 @@ class PlaceRepositoryImpl private constructor(
     }
 
     private fun getExploreAttractionRemote(
-        keyword: String, lat: Double, long: Double, listener: ResultListener<List<Place>>
+        keyword: String,
+        lat: Double,
+        long: Double,
+        listener: ResultListener<List<Place>>
     ) {
-        remote.searchExploreAttraction(keyword, lat, long, object : ResultListener<List<Place>> {
-            override fun onSuccess(data: List<Place>?) {
-                if (data.isNullOrEmpty()) {
-                    listener.onError(Exception("No data!"))
-                    return
+        remote.searchExploreAttraction(
+            keyword,
+            lat,
+            long,
+            object : ResultListener<List<Place>> {
+                override fun onSuccess(data: List<Place>?) {
+                    if (data.isNullOrEmpty()) {
+                        listener.onError(Exception("No data!"))
+                        return
+                    }
+
+                    listener.onSuccess(data)
+
+                    // Save to local DB
+                    localExplore.saveExploreAttractionLocal(data.map { it.locationId })
+                    data.forEach {
+                        it.locationType = PlaceCategory.ATTRACTIONS.name
+                        local.savePlaceDetail(it)
+                        local.savePlaceAddress(it)
+                    }
                 }
 
-                listener.onSuccess(data)
-
-                // Save to local DB
-                localExplore.saveExploreAttractionLocal(data.map { it.locationId })
-                data.forEach {
-                    it.locationType = PlaceCategory.ATTRACTIONS.name
-                    local.savePlaceDetail(it)
-                    local.savePlaceAddress(it)
+                override fun onError(exception: Exception?) {
+                    listener.onError(exception)
                 }
             }
-
-            override fun onError(exception: Exception?) {
-                listener.onError(exception)
-            }
-        })
+        )
     }
 
     private fun getExploreRestaurantRemote(
-        keyword: String, lat: Double, long: Double, listener: ResultListener<List<Place>>
+        keyword: String,
+        lat: Double,
+        long: Double,
+        listener: ResultListener<List<Place>>
     ) {
-        remote.searchExploreRestaurant(keyword, lat, long, object : ResultListener<List<Place>> {
-            override fun onSuccess(data: List<Place>?) {
-                // No data
-                if (data.isNullOrEmpty()) {
-                    listener.onError(Exception("No data!"))
-                    return
+        remote.searchExploreRestaurant(
+            keyword,
+            lat,
+            long,
+            object : ResultListener<List<Place>> {
+                override fun onSuccess(data: List<Place>?) {
+                    // No data
+                    if (data.isNullOrEmpty()) {
+                        listener.onError(Exception("No data!"))
+                        return
+                    }
+
+                    listener.onSuccess(data)
+
+                    // Save to local DB
+                    localExplore.saveExploreRestaurantLocal(data.map { it.locationId })
+                    data.forEach {
+                        it.locationType = PlaceCategory.RESTAURANTS.name
+                        local.savePlaceDetail(it)
+                        local.savePlaceAddress(it)
+                    }
                 }
 
-                listener.onSuccess(data)
-
-                // Save to local DB
-                localExplore.saveExploreRestaurantLocal(data.map { it.locationId })
-                data.forEach {
-                    it.locationType = PlaceCategory.RESTAURANTS.name
-                    local.savePlaceDetail(it)
-                    local.savePlaceAddress(it)
+                override fun onError(exception: Exception?) {
+                    listener.onError(exception)
                 }
             }
-
-            override fun onError(exception: Exception?) {
-                listener.onError(exception)
-            }
-        })
+        )
     }
 
     private fun getExploreHotelRemote(
-        keyword: String, lat: Double, long: Double, listener: ResultListener<List<Place>>
+        keyword: String,
+        lat: Double,
+        long: Double,
+        listener: ResultListener<List<Place>>
     ) {
-        remote.searchExploreHotel(keyword, lat, long, object : ResultListener<List<Place>> {
-            override fun onSuccess(data: List<Place>?) {
-                if (data.isNullOrEmpty()) {
-                    listener.onError(Exception("No data!"))
-                    return
+        remote.searchExploreHotel(
+            keyword,
+            lat,
+            long,
+            object : ResultListener<List<Place>> {
+                override fun onSuccess(data: List<Place>?) {
+                    if (data.isNullOrEmpty()) {
+                        listener.onError(Exception("No data!"))
+                        return
+                    }
+
+                    listener.onSuccess(data)
+                    // Save to local DB
+                    localExplore.saveExploreHotelLocal(data.map { it.locationId })
+                    data.forEach {
+                        it.locationType = PlaceCategory.HOTELS.name
+                        local.savePlaceDetail(it)
+                        local.savePlaceAddress(it)
+                    }
                 }
 
-                listener.onSuccess(data)
-                // Save to local DB
-                localExplore.saveExploreHotelLocal(data.map { it.locationId })
-                data.forEach {
-                    it.locationType = PlaceCategory.HOTELS.name
-                    local.savePlaceDetail(it)
-                    local.savePlaceAddress(it)
+                override fun onError(exception: Exception?) {
+                    listener.onError(exception)
                 }
             }
-
-            override fun onError(exception: Exception?) {
-                listener.onError(exception)
-            }
-        })
+        )
     }
 
     override fun getPlaceDetail(placeId: String, listener: ResultListener<Place>) {
         // Online mode
-        remote.getPlaceDetail(placeId, object : ResultListener<Place> {
-            override fun onSuccess(data: Place?) {
-                if (data == null) {
+        remote.getPlaceDetail(
+            placeId,
+            object : ResultListener<Place> {
+                override fun onSuccess(data: Place?) {
+                    if (data == null) {
+                        local.getPlaceDetail(placeId).apply {
+                            if (this == null) {
+                                listener.onError(Exception("No data!"))
+                            } else {
+                                listener.onSuccess(this)
+                            }
+                        }
+                    } else {
+                        listener.onSuccess(data)
+                        local.savePlaceDetail(data)
+                    }
+                }
+
+                override fun onError(exception: Exception?) {
+                    exception?.printStackTrace()
                     local.getPlaceDetail(placeId).apply {
                         if (this == null) {
                             listener.onError(Exception("No data!"))
@@ -269,52 +334,41 @@ class PlaceRepositoryImpl private constructor(
                             listener.onSuccess(this)
                         }
                     }
-                } else {
-                    listener.onSuccess(data)
-                    local.savePlaceDetail(data)
                 }
             }
-
-            override fun onError(exception: Exception?) {
-                exception?.printStackTrace()
-                local.getPlaceDetail(placeId).apply {
-                    if (this == null) {
-                        listener.onError(Exception("No data!"))
-                    } else {
-                        listener.onSuccess(this)
-                    }
-                }
-            }
-        })
+        )
     }
 
     override fun getPlacePhoto(placeId: String, listener: ResultListener<List<PlacePhoto>>) {
-        remote.getPlacePhoto(placeId, object : ResultListener<List<PlacePhoto>> {
-            override fun onSuccess(data: List<PlacePhoto>?) {
-                if (data.isNullOrEmpty()) {
-                    listener.onError(Exception("No data!"))
-                    return
-                }
-                data.forEach {
-                    it.locationId = placeId
-                }
-                listener.onSuccess(data)
-
-                // Save to local DB
-                local.savePlacePhoto(data)
-            }
-
-            override fun onError(exception: Exception?) {
-                exception?.printStackTrace()
-                local.getPlacePhoto(placeId).apply {
-                    if (this.isNullOrEmpty()) {
+        remote.getPlacePhoto(
+            placeId,
+            object : ResultListener<List<PlacePhoto>> {
+                override fun onSuccess(data: List<PlacePhoto>?) {
+                    if (data.isNullOrEmpty()) {
                         listener.onError(Exception("No data!"))
-                    } else {
-                        listener.onSuccess(this)
+                        return
+                    }
+                    data.forEach {
+                        it.locationId = placeId
+                    }
+                    listener.onSuccess(data)
+
+                    // Save to local DB
+                    local.savePlacePhoto(data)
+                }
+
+                override fun onError(exception: Exception?) {
+                    exception?.printStackTrace()
+                    local.getPlacePhoto(placeId).apply {
+                        if (this.isNullOrEmpty()) {
+                            listener.onError(Exception("No data!"))
+                        } else {
+                            listener.onSuccess(this)
+                        }
                     }
                 }
             }
-        })
+        )
     }
 
     override fun markFavorite(placeId: String, listener: ResultListener<Boolean>) {
@@ -360,7 +414,9 @@ class PlaceRepositoryImpl private constructor(
             localExplore: PlaceSource.ExplorePlaceLocal
         ) = synchronized(this) {
             instance ?: PlaceRepositoryImpl(
-                remote, local, localExplore
+                remote,
+                local,
+                localExplore
             ).also { instance = it }
         }
     }

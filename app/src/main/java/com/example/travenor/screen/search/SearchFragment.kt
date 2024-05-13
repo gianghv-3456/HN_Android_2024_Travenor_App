@@ -22,8 +22,11 @@ import com.example.travenor.screen.search.adapter.RecentSearchAdapter
 import com.example.travenor.screen.search.adapter.SearchResultAdapter
 import com.example.travenor.utils.base.BaseFragment
 
-class SearchFragment : BaseFragment<FragmentSearchBinding>(), SearchContract.View,
-    RecentSearchAdapter.OnItemClickListener, SearchResultAdapter.OnItemClickListener {
+class SearchFragment :
+    BaseFragment<FragmentSearchBinding>(),
+    SearchContract.View,
+    RecentSearchAdapter.OnItemClickListener,
+    SearchResultAdapter.OnItemClickListener {
     private val mRecentSearchAdapter: RecentSearchAdapter by lazy { RecentSearchAdapter() }
     private val mSearchResultAdapter: SearchResultAdapter by lazy { SearchResultAdapter() }
     private var mPresenter: SearchPresenter? = null
@@ -48,13 +51,20 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(), SearchContract.Vie
         val localExploreDataSource = PlaceExploreLocalSource.getInstance(requireContext())
 
         val placeRepository = PlaceRepositoryImpl.getInstance(
-            remoteDataSource, localDataSource, localExploreDataSource
+            remoteDataSource,
+            localDataSource,
+            localExploreDataSource
         )
 
         mPresenter = SearchPresenter(placeRepository)
         mPresenter?.setView(this)
 
         mPresenter?.getRecentSearchString()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mPresenter?.saveRecentSearchString(mRecentSearchAdapter.getRecentSearchList())
     }
 
     override fun initView() {
@@ -71,12 +81,13 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(), SearchContract.Vie
             override fun onQueryTextSubmit(query: String?): Boolean {
                 mPresenter?.onSearchPlace(query.toString(), null)
 
-                //close soft keyboard
+                // close soft keyboard
                 hideKeyboard()
                 toggleDisplayLoading(true)
                 toggleDisplayShowRecentSearch(false)
                 toggleDisplayShowResultSearch(true)
 
+                mRecentSearchAdapter.addRecentSearchText(query.toString())
                 return true
             }
 
@@ -90,6 +101,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(), SearchContract.Vie
                 return true
             }
         })
+
+        toggleDisplayLoading(false)
+        toggleDisplayShowResultSearch(false)
+        toggleDisplayShowRecentSearch(false)
     }
 
     private fun hideKeyboard() {
@@ -98,7 +113,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(), SearchContract.Vie
         val currentFocusedView = activity?.currentFocus
         currentFocusedView?.let {
             inputMethodManager.hideSoftInputFromWindow(
-                it.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
+                it.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
             )
         }
     }
@@ -121,9 +137,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(), SearchContract.Vie
 
     private fun toggleDisplayShowResultSearch(isShow: Boolean) {
         if (isShow) {
-            viewBinding.recyclerViewResultSearchPlace.visibility = View.VISIBLE
+            viewBinding.groupResult.visibility = View.VISIBLE
         } else {
-            viewBinding.recyclerViewResultSearchPlace.visibility = View.GONE
+            viewBinding.groupResult.visibility = View.GONE
         }
     }
 
@@ -132,7 +148,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(), SearchContract.Vie
         fun newInstance() = SearchFragment()
     }
 
-    override fun onGetRecentSearchStringSuccess(data: List<String>) {/* no-op */
+    override fun onGetRecentSearchStringSuccess(data: List<String>) {
+        mRecentSearchAdapter.updateList(data)
+        toggleDisplayShowRecentSearch(true)
+        toggleDisplayLoading(false)
+        toggleDisplayShowResultSearch(false)
     }
 
     override fun onSearchPlaceSuccess(data: List<Place>) {
@@ -166,8 +186,12 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(), SearchContract.Vie
     }
 
     override fun onRecentSearchTextClick(text: String) {
+        viewBinding.searchView.setQuery(text, false)
         mPresenter?.onSearchPlace(text, null)
         hideKeyboard()
+        toggleDisplayLoading(true)
+        toggleDisplayShowRecentSearch(false)
+        toggleDisplayShowResultSearch(true)
     }
 
     override fun onPlaceClick(placeId: String) {

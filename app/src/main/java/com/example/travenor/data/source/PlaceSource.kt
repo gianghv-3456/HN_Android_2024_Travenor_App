@@ -75,6 +75,10 @@ interface PlaceSource {
         fun markNotFavorite(placeId: String, listener: ResultListener<Boolean>)
 
         fun getFavoritePlace(listener: ResultListener<List<Place>>)
+
+        fun getRecentSearchPlaces(listener: ResultListener<List<String>>)
+
+        fun saveRecentSearchPlaces(keyword: List<String>)
     }
 
     interface ExplorePlaceLocal {
