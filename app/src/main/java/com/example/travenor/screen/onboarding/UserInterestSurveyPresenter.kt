@@ -3,7 +3,7 @@ package com.example.travenor.screen.onboarding
 import com.example.travenor.constant.Food
 import com.example.travenor.constant.Place
 import com.example.travenor.core.ResultListener
-import com.example.travenor.data.user.repository.UserRepository
+import com.example.travenor.data.repository.UserRepository
 import java.io.IOException
 
 class UserInterestSurveyPresenter internal constructor(private val userRepository: UserRepository) :

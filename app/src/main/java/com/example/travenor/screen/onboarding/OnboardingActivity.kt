@@ -10,9 +10,9 @@ import com.example.travenor.constant.Food
 import com.example.travenor.constant.Place
 import com.example.travenor.constant.genericValueOf
 import com.example.travenor.constant.isNameOfEnum
-import com.example.travenor.data.sharedpreference.SharedPreferencesManager
-import com.example.travenor.data.user.repository.UserRepository
-import com.example.travenor.data.user.repository.local.UserInterestLocalSource
+import com.example.travenor.data.repository.UserRepository
+import com.example.travenor.data.source.local.UserInterestLocalSource
+import com.example.travenor.data.source.local.sharedpreference.SharedPreferencesManager
 import com.example.travenor.databinding.ActivityOnboardingBinding
 import com.example.travenor.screen.MainActivity
 import com.example.travenor.screen.onboarding.adapter.OnboardingAdapter

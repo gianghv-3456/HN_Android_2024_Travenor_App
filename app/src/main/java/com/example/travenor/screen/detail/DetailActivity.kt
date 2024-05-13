@@ -14,10 +14,10 @@ import com.example.travenor.constant.IS_FAVORITE
 import com.example.travenor.core.observable.FavoritePlaceObserver
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
-import com.example.travenor.data.place.repository.PlaceRepositoryImpl
-import com.example.travenor.data.place.source.local.PlaceExploreLocalSource
-import com.example.travenor.data.place.source.local.PlaceLocalDataSource
-import com.example.travenor.data.place.source.remote.PlaceRemoteDataSource
+import com.example.travenor.data.repository.PlaceRepositoryImpl
+import com.example.travenor.data.source.local.PlaceExploreLocalSource
+import com.example.travenor.data.source.local.PlaceLocalDataSource
+import com.example.travenor.data.source.remote.PlaceRemoteDataSource
 import com.example.travenor.databinding.ActivityDetailBinding
 import com.example.travenor.screen.moredetail.MoreDetailActivity
 import com.example.travenor.utils.base.BaseActivity

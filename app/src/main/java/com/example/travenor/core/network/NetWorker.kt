@@ -1,6 +1,8 @@
 package com.example.travenor.core.network
 
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.travenor.core.network.annotation.GET
@@ -20,13 +22,17 @@ import java.lang.reflect.Type
 import java.net.HttpRetryException
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
 
 @Suppress("UNCHECKED_CAST")
-class NetWorker(
+class NetWorker private constructor(
     private val baseUrl: String,
     private val mConnectTimeout: Int,
     private val mReadTimeout: Int
 ) {
+    private val executeService = Executors.newFixedThreadPool(MAX_THREAD_POOL_SIZE)
+    private val uiHandler = Handler(Looper.getMainLooper())
 
     /**
      * We create an ApiService instance with Java Reflection!
@@ -97,10 +103,9 @@ class NetWorker(
         // Return a Call
         return object : Call<T> {
             override fun enqueue(parseType: Type, callback: Callback<T>) {
-                Thread {
+                val callable = Callable {
+                    Log.d(LOG_TAG, "Network request")
                     try {
-                        Log.d(LOG_TAG, "Network request")
-
                         val connection = (apiUrl.openConnection() as HttpURLConnection).apply {
                             useCaches = true // Enable or ensure usage of the cache
                             connectTimeout = mConnectTimeout // Optional: 15 seconds timeout
@@ -113,29 +118,44 @@ class NetWorker(
                             val responseBody =
                                 inputStream.bufferedReader().use(BufferedReader::readText)
 
-                            Log.d(LOG_TAG, "HTTP CONNECTION\nRequest:$url\nResponse: $responseBody")
+                            Log.d(
+                                LOG_TAG,
+                                "HTTP CONNECTION\nRequest:$url\nResponse: $responseBody"
+                            )
 
                             val data = Gson().fromJson(responseBody, parseType) as T
-                            callback.onResponse(responseBody, Response(data))
+                            uiHandler.post {
+                                callback.onResponse(responseBody, Response(data))
+                            }
                         } else {
                             // Throw ApiException for non-OK HTTP response codes
-                            callback.onFailure(
-                                NetworkException(
-                                    "HTTP error: " +
-                                        "$responseCode when try get: $apiUrl\n" +
-                                        connection.responseMessage
-                                )
+                            val exception = NetworkException(
+                                "HTTP error: " + "$responseCode when try get: $apiUrl\n" + connection.responseMessage
                             )
+                            uiHandler.post {
+                                callback.onFailure(exception)
+                            }
                         }
                     } catch (e: IOException) {
                         // Catch any other exceptions and invoke onFailure callback
-                        callback.onFailure(e)
+                        val exception = NetworkException(e.message.toString())
+                        uiHandler.post {
+                            callback.onFailure(exception)
+                        }
                     } catch (e: JSONException) {
-                        callback.onFailure(e)
+                        val exception = NetworkException(e.message.toString())
+                        uiHandler.post {
+                            callback.onFailure(exception)
+                        }
                     } catch (e: HttpRetryException) {
-                        callback.onFailure(e)
+                        val exception = NetworkException(e.message.toString())
+                        uiHandler.post {
+                            callback.onFailure(exception)
+                        }
                     }
-                }.start()
+                }
+
+                executeService.submit(callable)
             }
         }
     }
@@ -187,5 +207,13 @@ class NetWorker(
     companion object {
         const val GET_METHOD = "GET"
         const val LOG_TAG = "NET"
+        const val MAX_THREAD_POOL_SIZE = 5
+
+        @Volatile
+        private var instance: NetWorker? = null
+        fun getInstance(baseUrl: String, connectTimeout: Int, readTimeout: Int): NetWorker =
+            instance ?: synchronized(this) {
+                instance ?: NetWorker(baseUrl, connectTimeout, readTimeout).also { instance = it }
+            }
     }
 }

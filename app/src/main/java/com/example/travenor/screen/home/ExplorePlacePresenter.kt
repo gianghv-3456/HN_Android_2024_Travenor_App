@@ -5,11 +5,11 @@ import com.example.travenor.constant.DEFAULT_LONG
 import com.example.travenor.constant.Food
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.core.ResultListener
+import com.example.travenor.data.UserInterestData
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
-import com.example.travenor.data.place.repository.PlaceRepository
-import com.example.travenor.data.user.UserInterestData
-import com.example.travenor.data.user.repository.UserRepository
+import com.example.travenor.data.repository.PlaceRepository
+import com.example.travenor.data.repository.UserRepository
 import com.example.travenor.utils.location.LocationUtils
 import java.util.Random
 

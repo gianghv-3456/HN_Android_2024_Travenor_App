@@ -8,10 +8,10 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.ViewCompat
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
-import com.example.travenor.data.place.repository.PlaceRepositoryImpl
-import com.example.travenor.data.place.source.local.PlaceExploreLocalSource
-import com.example.travenor.data.place.source.local.PlaceLocalDataSource
-import com.example.travenor.data.place.source.remote.PlaceRemoteDataSource
+import com.example.travenor.data.repository.PlaceRepositoryImpl
+import com.example.travenor.data.source.local.PlaceExploreLocalSource
+import com.example.travenor.data.source.local.PlaceLocalDataSource
+import com.example.travenor.data.source.remote.PlaceRemoteDataSource
 import com.example.travenor.databinding.FragmentFavoriteBinding
 import com.example.travenor.screen.favorite.adapter.FavoriteListAdapter
 import com.example.travenor.screen.moredetail.MoreDetailActivity
@@ -59,30 +59,22 @@ class FavoriteFragment :
     }
 
     override fun onGetFavoritePlacesSuccess(places: List<Place>) {
-        // TODO remove runOnUiThread
-        activity?.runOnUiThread {
-            mAdapter.updateData(places)
-        }
+        mAdapter.updateData(places)
         for (place in places) {
             mPresenter.getPlacePhoto(place.locationId)
         }
     }
 
     override fun onGetFavoritePlacesFailed(message: String) {
-        // TODO remove runOnUiThread
-        activity?.runOnUiThread { mAdapter.notifyDataSetChanged() }
+        mAdapter.notifyDataSetChanged()
     }
 
     override fun onGetPlacePhotoSuccess(placeId: String, photos: List<PlacePhoto>) {
-        // TODO remove runOnUiThread
-        activity?.runOnUiThread { mAdapter.loadImages(placeId, photos[0]) }
+        mAdapter.loadImages(placeId, photos[0])
     }
 
     override fun onRemoveFavoritePlaceSuccess(placeId: String) {
-        // TODO remove runOnUiThread
-        activity?.runOnUiThread {
-            mAdapter.removePlace(placeId)
-        }
+        mAdapter.removePlace(placeId)
     }
 
     override fun onPlaceClick(locationId: String) {

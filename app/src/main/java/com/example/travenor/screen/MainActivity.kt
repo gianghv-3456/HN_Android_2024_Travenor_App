@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.travenor.R
-import com.example.travenor.data.sharedpreference.SharedPreferencesManager
+import com.example.travenor.data.source.local.sharedpreference.SharedPreferencesManager
 import com.example.travenor.databinding.ActivityMainBinding
 import com.example.travenor.screen.favorite.FavoriteFragment
 import com.example.travenor.screen.home.HomeFragment

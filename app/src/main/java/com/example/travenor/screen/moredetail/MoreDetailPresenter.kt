@@ -5,8 +5,8 @@ import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.core.ResultListener
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
-import com.example.travenor.data.place.repository.NearbyRepository
-import com.example.travenor.data.place.repository.PlaceRepository
+import com.example.travenor.data.repository.NearbyRepository
+import com.example.travenor.data.repository.PlaceRepository
 import java.util.concurrent.Callable
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
