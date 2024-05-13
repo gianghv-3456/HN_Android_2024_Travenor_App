@@ -3,7 +3,7 @@ package com.example.travenor.screen.detail
 import com.example.travenor.core.ResultListener
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
-import com.example.travenor.data.place.repository.PlaceRepository
+import com.example.travenor.data.repository.PlaceRepository
 
 class DetailPresenter internal constructor(private val placeRepositoryImpl: PlaceRepository) :
     DetailContract.Presenter {

@@ -12,11 +12,11 @@ import com.example.travenor.constant.IS_FAVORITE
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
-import com.example.travenor.data.place.repository.PlaceRepositoryImpl
-import com.example.travenor.data.place.repositoryimpl.NearbyRepositoryImpl
-import com.example.travenor.data.place.source.local.PlaceExploreLocalSource
-import com.example.travenor.data.place.source.local.PlaceLocalDataSource
-import com.example.travenor.data.place.source.remote.PlaceRemoteDataSource
+import com.example.travenor.data.repository.NearbyRepositoryImpl
+import com.example.travenor.data.repository.PlaceRepositoryImpl
+import com.example.travenor.data.source.local.PlaceExploreLocalSource
+import com.example.travenor.data.source.local.PlaceLocalDataSource
+import com.example.travenor.data.source.remote.PlaceRemoteDataSource
 import com.example.travenor.databinding.ActivityMoreDetailBinding
 import com.example.travenor.screen.moredetail.adapter.NearbyPlaceAdapter
 import com.example.travenor.screen.popup.imageview.ImageViewDialogFragment
