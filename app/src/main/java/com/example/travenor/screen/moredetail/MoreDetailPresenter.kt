@@ -1,5 +1,7 @@
 package com.example.travenor.screen.moredetail
 
+import android.os.Handler
+import android.os.Looper
 import com.example.travenor.constant.NEARBY_DISTANCE_IN_METERS
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.core.ResultListener
@@ -47,8 +49,7 @@ class MoreDetailPresenter internal constructor(
                     }
 
                     override fun onError(exception: Exception?) {
-                        exception?.printStackTrace()
-                        /* no-op */
+                        exception?.printStackTrace()/* no-op */
                     }
                 }
             )
@@ -61,8 +62,7 @@ class MoreDetailPresenter internal constructor(
                     }
 
                     override fun onError(exception: Exception?) {
-                        exception?.printStackTrace()
-                        /* no-op */
+                        exception?.printStackTrace()/* no-op */
                     }
                 }
             )
@@ -173,19 +173,25 @@ class MoreDetailPresenter internal constructor(
             listFuture.add(callable)
         }
 
-        val futureList = executor.invokeAll(listFuture)
-        val result = mutableListOf<Place>()
-        futureList.forEach {
-            it.get()?.let { it1 -> result.add(it1) }
-        }
+        executor.execute {
+            val futureList = executor.invokeAll(listFuture)
+            val result = mutableListOf<Place>()
+            futureList.forEach {
+                it.get()?.let { it1 -> result.add(it1) }
+            }
 
-        if (result.isNotEmpty()) {
-            when (category) {
-                PlaceCategory.RESTAURANTS -> mView?.onGetNearbyRestaurantSuccess(result)
-                PlaceCategory.HOTELS -> mView?.onGetNearbyHotelSuccess(result)
-                else -> { /* no-op */
+            // Post result to main ui thread
+            Handler(Looper.getMainLooper()).post {
+                if (result.isNotEmpty()) {
+                    when (category) {
+                        PlaceCategory.RESTAURANTS -> mView?.onGetNearbyRestaurantSuccess(result)
+                        PlaceCategory.HOTELS -> mView?.onGetNearbyHotelSuccess(result)
+                        else -> { /* no-op */
+                        }
+                    }
                 }
             }
+            executor.shutdown()
         }
     }
 

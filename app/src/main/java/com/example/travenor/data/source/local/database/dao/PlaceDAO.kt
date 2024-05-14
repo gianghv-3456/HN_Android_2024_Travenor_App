@@ -6,12 +6,14 @@ import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.example.travenor.constant.IS_FAVORITE
 import com.example.travenor.constant.IS_NOT_FAVORITE
+import com.example.travenor.constant.MAX_RECENT_SEARCH_RESULTS
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.data.model.place.Address
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.source.local.database.PlaceSqliteHelper
 import com.example.travenor.data.source.local.database.table.AddressTable
 import com.example.travenor.data.source.local.database.table.PlaceTable
+import com.example.travenor.data.source.local.database.table.RecentSearchTable
 import com.example.travenor.utils.location.LocationUtils
 
 @Suppress("TooManyFunctions")
@@ -274,6 +276,62 @@ class PlaceDAO private constructor(context: Context) {
         }
 
         return queryResult
+    }
+
+    fun search(query: String, category: PlaceCategory?): List<Place> {
+        val result = mutableListOf<Place>()
+        val places = getAllPlaceData()
+
+        places.forEach {
+            val isMatchCategory =
+                category == null || it.locationType?.lowercase() == category.name.lowercase()
+
+            if (it.name.contains(query, true) && isMatchCategory) {
+                result.add(it)
+            }
+        }
+
+        return result
+    }
+
+    fun getRecentSearch(): List<String> {
+        val db = sqlHelper.readableDatabase
+
+        val columns = arrayOf(RecentSearchTable.COL_SEARCH_QUERY)
+        val cursor = db.query(
+            RecentSearchTable.TABLE_NAME,
+            columns,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        val result = mutableListOf<String>()
+
+        if (cursor != null && cursor.moveToFirst()) {
+            val columnIndex = 0
+            do {
+                val query = cursor.getString(columnIndex)
+                result.add(query)
+            } while (cursor.moveToNext())
+        }
+
+        return result
+    }
+
+    fun saveRecentSearch(queryStrings: List<String>) {
+        val db = sqlHelper.writableDatabase
+        val reversedQueryStrings = queryStrings.reversed()
+        reversedQueryStrings.take(MAX_RECENT_SEARCH_RESULTS)
+        db.delete(RecentSearchTable.TABLE_NAME, null, null)
+        for (query in reversedQueryStrings) {
+            val values = ContentValues().apply {
+                put(RecentSearchTable.COL_SEARCH_QUERY, query)
+            }
+            db.insert(RecentSearchTable.TABLE_NAME, null, values)
+        }
     }
 
     private fun getPlaceDataQueryColumnArray(): Array<String> {

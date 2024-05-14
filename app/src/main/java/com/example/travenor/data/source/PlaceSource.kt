@@ -7,6 +7,12 @@ import com.example.travenor.data.model.place.Place
 
 interface PlaceSource {
     interface Remote {
+        fun searchPlace(
+            query: String,
+            category: PlaceCategory?,
+            listener: ResultListener<List<Place>>
+        )
+
         fun searchExploreRestaurant(
             keyword: String,
             lat: Double,
@@ -40,6 +46,7 @@ interface PlaceSource {
         )
     }
 
+    @Suppress("TooManyFunctions")
     interface Local {
         fun getPlaceDetail(locationId: String): Place?
 
@@ -48,6 +55,12 @@ interface PlaceSource {
         fun savePlaceDetail(place: Place)
 
         fun savePlacePhoto(placePhotos: List<PlacePhoto>)
+
+        fun searchPlace(
+            query: String,
+            category: PlaceCategory?,
+            listener: ResultListener<List<Place>>
+        )
 
         fun savePlaceAddress(place: Place)
         fun getNearbyPlaceLocal(
@@ -63,6 +76,10 @@ interface PlaceSource {
         fun markNotFavorite(placeId: String, listener: ResultListener<Boolean>)
 
         fun getFavoritePlace(listener: ResultListener<List<Place>>)
+
+        fun getRecentSearchPlaces(listener: ResultListener<List<String>>)
+
+        fun saveRecentSearchPlaces(keyword: List<String>)
     }
 
     interface ExplorePlaceLocal {
