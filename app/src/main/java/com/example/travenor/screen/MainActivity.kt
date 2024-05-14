@@ -13,6 +13,7 @@ import com.example.travenor.data.source.local.sharedpreference.SharedPreferences
 import com.example.travenor.databinding.ActivityMainBinding
 import com.example.travenor.screen.favorite.FavoriteFragment
 import com.example.travenor.screen.home.HomeFragment
+import com.example.travenor.screen.nearby.NearbyFragment
 import com.example.travenor.screen.search.SearchFragment
 import com.example.travenor.utils.base.BaseActivity
 import com.example.travenor.utils.network.NetworkUtils
@@ -42,10 +43,7 @@ class MainActivity : BaseActivity() {
                 R.id.menu_bottom_home -> openHomeFragment()
                 R.id.menu_bottom_favorite -> openFavoriteFragment()
                 R.id.menu_bottom_search -> openSearchFragment()
-                else -> {
-                    removeHomeFragment()
-                    removeFavoriteFragment()
-                }
+                R.id.menu_bottom_nearby -> openNearbyFragment()
             }
             return@setOnItemSelectedListener true
         }
@@ -119,15 +117,10 @@ class MainActivity : BaseActivity() {
             .replace(R.id.container_fragment, favoriteFragment).commit()
     }
 
-    private fun removeHomeFragment() {
-        val homeFragment = supportFragmentManager.findFragmentByTag(HomeFragment::class.java.name)
-        homeFragment?.let { supportFragmentManager.beginTransaction().remove(it).commit() }
-    }
-
-    private fun removeFavoriteFragment() {
-        val favoriteFragment =
-            supportFragmentManager.findFragmentByTag(FavoriteFragment::class.java.name)
-        favoriteFragment?.let { supportFragmentManager.beginTransaction().remove(it).commit() }
+    private fun openNearbyFragment() {
+        val nearbyFragment = NearbyFragment.newInstance()
+        supportFragmentManager.beginTransaction().addToBackStack(NearbyFragment::class.java.name)
+            .replace(R.id.container_fragment, nearbyFragment).commit()
     }
 
     private fun saveLastLocation(lat: Double, long: Double) {
