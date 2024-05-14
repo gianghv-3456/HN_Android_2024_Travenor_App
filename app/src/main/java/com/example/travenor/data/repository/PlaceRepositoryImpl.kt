@@ -48,6 +48,48 @@ class PlaceRepositoryImpl private constructor(
         )
     }
 
+    override fun getRecentSearch(listener: ResultListener<List<String>>) {
+        local.getRecentSearchPlaces(listener)
+    }
+
+    override fun saveRecentSearch(keyword: List<String>) {
+        local.saveRecentSearchPlaces(keyword)
+    }
+
+    override fun searchPlace(
+        keyword: String,
+        category: PlaceCategory?,
+        listener: ResultListener<List<Place>>
+    ) {
+        // try online
+        remote.searchPlace(
+            keyword,
+            category,
+            object : ResultListener<List<Place>> {
+                override fun onSuccess(data: List<Place>?) {
+                    // No data
+                    if (data.isNullOrEmpty()) {
+                        listener.onError(Exception("No data!"))
+                        return
+                    }
+                    listener.onSuccess(data)
+
+                    // Save to local DB
+                    data.forEach {
+                        it.locationType = category?.name.toString()
+                        local.savePlaceDetail(it)
+                        local.savePlaceAddress(it)
+                    }
+                }
+
+                override fun onError(exception: Exception?) {
+                    // get Offline
+                    local.searchPlace(keyword, category, listener)
+                }
+            }
+        )
+    }
+
     /**
      * Online Mode.
      * Get local then check freshness and refresh local data with api

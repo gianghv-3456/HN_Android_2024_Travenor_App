@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/dp_16"
-    android:layout_marginBottom="@dimen/dp_16"
+    android:layout_marginTop="@dimen/dp_4"
+    android:layout_marginBottom="@dimen/dp_4"
     app:cardBackgroundColor="@color/card_gray"
+    app:cardUseCompatPadding="true"
     app:cardCornerRadius="@dimen/dp_8"
     app:cardElevation="@dimen/dp_4">
 
@@ -85,8 +86,6 @@
                     android:id="@+id/text_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@id/text_distance"
                     android:drawablePadding="@dimen/dp_8"
                     android:gravity="center_vertical"
                     app:drawableStartCompat="@drawable/ic_star"
@@ -96,7 +95,6 @@
                     android:id="@+id/text_rating_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:layout_marginStart="@dimen/dp_4"
                     tools:text="(1000)" />
 
@@ -110,6 +108,7 @@
             android:layout_height="@dimen/dp_40"
             android:background="@drawable/button_mark_favorite_bg"
             android:elevation="@dimen/dp_2"
+            android:importantForAccessibility="no"
             android:src="@drawable/ic_unmark_favorite"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

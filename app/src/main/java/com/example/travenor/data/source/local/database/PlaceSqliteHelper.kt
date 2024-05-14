@@ -10,6 +10,7 @@ import com.example.travenor.data.source.local.database.table.ExplorePlaceTable
 import com.example.travenor.data.source.local.database.table.ExploreRestaurantTable
 import com.example.travenor.data.source.local.database.table.PlacePhotoTable
 import com.example.travenor.data.source.local.database.table.PlaceTable
+import com.example.travenor.data.source.local.database.table.RecentSearchTable
 
 class PlaceSqliteHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -21,6 +22,7 @@ class PlaceSqliteHelper(context: Context) :
             p0?.execSQL(ExplorePlaceTable.QUERY_CREATE_TABLE)
             p0?.execSQL(ExploreRestaurantTable.QUERY_CREATE_TABLE)
             p0?.execSQL(ExploreHotelTable.QUERY_CREATE_TABLE)
+            p0?.execSQL(RecentSearchTable.QUERY_CREATE_RECENT_SEARCH_DB)
         } catch (e: SQLiteException) {
             e.run { printStackTrace() }
         }
@@ -33,6 +35,7 @@ class PlaceSqliteHelper(context: Context) :
         p0?.execSQL("DROP TABLE IF EXISTS " + ExplorePlaceTable.EXPLORE_PLACE)
         p0?.execSQL("DROP TABLE IF EXISTS " + ExploreRestaurantTable.EXPLORE_RESTAURANT)
         p0?.execSQL("DROP TABLE IF EXISTS " + ExploreHotelTable.EXPLORE_HOTEL)
+        p0?.execSQL("DROP TABLE IF EXISTS " + RecentSearchTable.TABLE_NAME)
         onCreate(p0)
     }
 

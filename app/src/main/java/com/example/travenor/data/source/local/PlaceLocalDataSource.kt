@@ -10,6 +10,7 @@ import com.example.travenor.data.source.PlaceSource
 import com.example.travenor.data.source.local.database.dao.PlaceDAO
 import com.example.travenor.data.source.local.database.dao.PlacePhotoDAO
 
+@Suppress("TooManyFunctions")
 class PlaceLocalDataSource(
     private val placeDao: PlaceDAO,
     private val placePhotoDAO: PlacePhotoDAO
@@ -49,6 +50,21 @@ class PlaceLocalDataSource(
             }
         } catch (e: SQLiteException) {
             e.run { printStackTrace() }
+        }
+    }
+
+    override fun searchPlace(
+        query: String,
+        category: PlaceCategory?,
+        listener: ResultListener<List<Place>>
+    ) {
+        try {
+            val result = placeDao.search(query, category)
+
+            listener.onSuccess(result)
+        } catch (e: SQLiteException) {
+            e.run { printStackTrace() }
+            return listener.onError(e)
         }
     }
 
@@ -101,6 +117,23 @@ class PlaceLocalDataSource(
         } catch (e: SQLiteException) {
             e.run { printStackTrace() }
             listener.onError(e)
+        }
+    }
+
+    override fun getRecentSearchPlaces(listener: ResultListener<List<String>>) {
+        try {
+            val result = placeDao.getRecentSearch()
+            listener.onSuccess(result)
+        } catch (e: SQLiteException) {
+            listener.onError(e)
+        }
+    }
+
+    override fun saveRecentSearchPlaces(keyword: List<String>) {
+        try {
+            placeDao.saveRecentSearch(keyword)
+        } catch (e: SQLiteException) {
+            e.run { printStackTrace() }
         }
     }
 

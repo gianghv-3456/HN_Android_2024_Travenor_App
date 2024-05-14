@@ -13,6 +13,7 @@ import com.example.travenor.data.source.local.sharedpreference.SharedPreferences
 import com.example.travenor.databinding.ActivityMainBinding
 import com.example.travenor.screen.favorite.FavoriteFragment
 import com.example.travenor.screen.home.HomeFragment
+import com.example.travenor.screen.search.SearchFragment
 import com.example.travenor.utils.base.BaseActivity
 import com.example.travenor.utils.network.NetworkUtils
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -40,6 +41,7 @@ class MainActivity : BaseActivity() {
             when (it.itemId) {
                 R.id.menu_bottom_home -> openHomeFragment()
                 R.id.menu_bottom_favorite -> openFavoriteFragment()
+                R.id.menu_bottom_search -> openSearchFragment()
                 else -> {
                     removeHomeFragment()
                     removeFavoriteFragment()
@@ -97,6 +99,12 @@ class MainActivity : BaseActivity() {
                 openHomeFragment()
             }
         }
+    }
+
+    private fun openSearchFragment() {
+        val searchFragment = SearchFragment.newInstance()
+        supportFragmentManager.beginTransaction().addToBackStack(SearchFragment::class.java.name)
+            .replace(R.id.container_fragment, searchFragment).commit()
     }
 
     private fun openHomeFragment() {

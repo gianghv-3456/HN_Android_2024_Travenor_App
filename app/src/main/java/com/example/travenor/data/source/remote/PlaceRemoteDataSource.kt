@@ -45,8 +45,8 @@ class PlaceRemoteDataSource private constructor(
                     response: Response<PlaceSearchResponse>
                 ) {
                     val placeList = response.data.placeList
-                    for (place in placeList)
-                        place.locationType = PlaceCategory.ATTRACTIONS.name.lowercase()
+                    for (place in placeList) place.locationType =
+                        PlaceCategory.ATTRACTIONS.name.lowercase()
                     listener.onSuccess(placeList)
                 }
 
@@ -76,8 +76,40 @@ class PlaceRemoteDataSource private constructor(
         ).enqueue(
             PlaceSearchResponse::class.java,
             object : Callback<PlaceSearchResponse> {
+                override fun onResponse(
+                    rawResponse: String,
+                    response: Response<PlaceSearchResponse>
+                ) {
+                    val placeList = response.data.placeList
+                    listener.onSuccess(placeList)
+                }
+
+                override fun onFailure(t: Throwable) {
+                    t.printStackTrace()
+                    Log.d(LOG_TAG, t.message.toString())
+                    listener.onError(NetworkException(t.message.toString()))
+                }
+            }
+        )
+    }
+
+    override fun searchPlace(
+        query: String,
+        category: PlaceCategory?,
+        listener: ResultListener<List<Place>>
+    ) {
+        val categoryName: String = category?.name?.lowercase().toString()
+        placeApi.searchPlaceTripadvisor(
+            TRIP_ADVISOR_API_KEY,
+            query,
+            categoryName
+        ).enqueue(
+            PlaceSearchResponse::class.java,
+            object : Callback<PlaceSearchResponse> {
                 override fun onResponse(rawResponse: String, response: Response<PlaceSearchResponse>) {
                     val placeList = response.data.placeList
+                    for (place in placeList) place.locationType =
+                        PlaceCategory.RESTAURANTS.name.lowercase()
                     listener.onSuccess(placeList)
                 }
 
@@ -113,8 +145,8 @@ class PlaceRemoteDataSource private constructor(
                     response: Response<PlaceSearchResponse>
                 ) {
                     val placeList = response.data.placeList
-                    for (place in placeList)
-                        place.locationType = PlaceCategory.RESTAURANTS.name.lowercase()
+                    for (place in placeList) place.locationType =
+                        PlaceCategory.RESTAURANTS.name.lowercase()
                     listener.onSuccess(placeList)
                 }
 
@@ -149,8 +181,7 @@ class PlaceRemoteDataSource private constructor(
                     response: Response<PlaceSearchResponse>
                 ) {
                     val placeList = response.data.placeList
-                    for (place in placeList)
-                        place.locationType = PlaceCategory.HOTELS.name.lowercase()
+                    for (place in placeList) place.locationType = PlaceCategory.HOTELS.name.lowercase()
                     listener.onSuccess(placeList)
                 }
 
