@@ -1,10 +1,8 @@
 package com.example.travenor.screen.favorite
 
 import android.content.Intent
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.core.view.ViewCompat
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
@@ -28,7 +26,6 @@ class FavoriteFragment :
         return FragmentFavoriteBinding.inflate(inflater)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun initData() {
         val remoteDataSource = PlaceRemoteDataSource.getInstance()
         val localDataSource = PlaceLocalDataSource.getInstance(requireContext())

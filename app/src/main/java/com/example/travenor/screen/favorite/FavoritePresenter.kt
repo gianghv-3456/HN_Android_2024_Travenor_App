@@ -43,7 +43,7 @@ class FavoritePresenter(
     }
 
     override fun removeFavoritePlace(placeId: String) {
-        placeRepository.unmarkFavorite(
+        placeRepository.markNotFavorite(
             placeId,
             object : ResultListener<Boolean> {
                 override fun onSuccess(data: Boolean?) {

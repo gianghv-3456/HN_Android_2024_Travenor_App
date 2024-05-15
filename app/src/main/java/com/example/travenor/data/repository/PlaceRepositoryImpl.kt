@@ -2,10 +2,12 @@ package com.example.travenor.data.repository
 
 import com.example.travenor.constant.IS_FAVORITE
 import com.example.travenor.constant.IS_NOT_FAVORITE
+import com.example.travenor.constant.MAX_EXPLORE_RESULTS
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.core.ResultListener
 import com.example.travenor.core.observable.FavoritePlaceObservable
 import com.example.travenor.core.observable.FavoritePlaceObserver
+import com.example.travenor.data.model.location.LatLng
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.source.PlaceSource
@@ -21,31 +23,34 @@ class PlaceRepositoryImpl private constructor(
     override fun searchExplorePlace(
         keyword: String,
         category: PlaceCategory,
-        lat: Double,
-        long: Double,
+        latLng: LatLng,
         listener: ResultListener<List<Place>>
     ) {
         // Try get online mode
-        getExploreOnlineMode(
-            keyword,
-            category,
-            lat,
-            long,
-            object : ResultListener<List<Place>> {
-                override fun onSuccess(data: List<Place>?) {
-                    // No data
-                    if (data.isNullOrEmpty()) {
-                        listener.onError(Exception("No data!"))
-                        return
-                    }
-                    listener.onSuccess(data)
-                }
+        // Get local data and check freshness
+        val result = localExplore.getExplorePlaceLocal(limit = MAX_EXPLORE_RESULTS, category)
 
-                override fun onError(exception: Exception?) {
-                    getExploreOfflineMode(category, listener)
+        // No data stored, so get remote
+        if (result.isEmpty()) {
+            getExplorePlaceFromRemote(keyword, latLng, category, listener)
+            return
+        }
+
+        val samplePair = result[0]
+        val timeStamp = samplePair.second
+
+        // Data is fresh, so return local data
+        if (isDataExploreFresh(timeStamp)) {
+            listener.onSuccess(
+                result.map {
+                    it.first
                 }
-            }
-        )
+            )
+        } else {
+            // Data is too old, so get remote
+            // Get remote data from api and store to local
+            getExplorePlaceFromRemote(keyword, latLng, category, listener)
+        }
     }
 
     override fun getRecentSearch(listener: ResultListener<List<String>>) {
@@ -91,88 +96,6 @@ class PlaceRepositoryImpl private constructor(
     }
 
     /**
-     * Online Mode.
-     * Get local then check freshness and refresh local data with api
-     */
-    private fun getExploreOnlineMode(
-        keyword: String,
-        category: PlaceCategory,
-        lat: Double,
-        long: Double,
-        listener: ResultListener<List<Place>>
-    ) {
-        // Get local data and check freshness
-        val result = when (category) {
-            PlaceCategory.ATTRACTIONS -> {
-                localExplore.getExploreAttractionLocal(limit = 5)
-            }
-
-            PlaceCategory.RESTAURANTS -> {
-                localExplore.getExploreRestaurantLocal(limit = 5)
-            }
-
-            PlaceCategory.HOTELS -> {
-                localExplore.getExploreHotelLocal(limit = 5)
-            }
-        }
-
-        // No data stored, so get remote
-        if (result.isEmpty()) {
-            getExplorePlaceFromRemote(keyword, lat, long, category, listener)
-            return
-        }
-
-        val samplePair = result[0]
-        val timeStamp = samplePair.second
-
-        // Data is fresh, so return local data
-        if (isDataExploreFresh(timeStamp)) {
-            listener.onSuccess(
-                result.map {
-                    it.first
-                }
-            )
-        } else {
-            // Get remote data from api and store to local
-            getExplorePlaceFromRemote(keyword, lat, long, category, listener)
-        }
-    }
-
-    /**
-     * Offline Mode.
-     * Get local data only
-     */
-    private fun getExploreOfflineMode(
-        category: PlaceCategory,
-        listener: ResultListener<List<Place>>
-    ) {
-        // Get local data and check freshness
-        val result = when (category) {
-            PlaceCategory.ATTRACTIONS -> {
-                localExplore.getExploreAttractionLocal(limit = 5)
-            }
-
-            PlaceCategory.RESTAURANTS -> {
-                localExplore.getExploreRestaurantLocal(limit = 5)
-            }
-
-            PlaceCategory.HOTELS -> {
-                localExplore.getExploreHotelLocal(limit = 5)
-            }
-        }
-
-        if (result.isEmpty()) {
-            listener.onError(Exception("No data!"))
-        } else {
-            listener.onSuccess(
-                result.map {
-                    it.first
-                }
-            )
-        }
-    }
-
-    /**
      * Data explore fresh if it has been created within the previous 2 days ago
      */
     private fun isDataExploreFresh(timeStamp: Long): Boolean {
@@ -182,127 +105,6 @@ class PlaceRepositoryImpl private constructor(
         // Return true if the time since the last update is less than the freshness threshold
         val result = timeSinceLastUpdate < DATA_FRESHNESS_THRESH_HOLD
         return result
-    }
-
-    private fun getExplorePlaceFromRemote(
-        keyword: String,
-        lat: Double,
-        long: Double,
-        category: PlaceCategory,
-        listener: ResultListener<List<Place>>
-    ) {
-        when (category) {
-            PlaceCategory.ATTRACTIONS -> getExploreAttractionRemote(keyword, lat, long, listener)
-
-            PlaceCategory.RESTAURANTS -> getExploreRestaurantRemote(keyword, lat, long, listener)
-
-            PlaceCategory.HOTELS -> getExploreHotelRemote(keyword, lat, long, listener)
-        }
-    }
-
-    private fun getExploreAttractionRemote(
-        keyword: String,
-        lat: Double,
-        long: Double,
-        listener: ResultListener<List<Place>>
-    ) {
-        remote.searchExploreAttraction(
-            keyword,
-            lat,
-            long,
-            object : ResultListener<List<Place>> {
-                override fun onSuccess(data: List<Place>?) {
-                    if (data.isNullOrEmpty()) {
-                        listener.onError(Exception("No data!"))
-                        return
-                    }
-
-                    listener.onSuccess(data)
-
-                    // Save to local DB
-                    localExplore.saveExploreAttractionLocal(data.map { it.locationId })
-                    data.forEach {
-                        it.locationType = PlaceCategory.ATTRACTIONS.name
-                        local.savePlaceDetail(it)
-                        local.savePlaceAddress(it)
-                    }
-                }
-
-                override fun onError(exception: Exception?) {
-                    listener.onError(exception)
-                }
-            }
-        )
-    }
-
-    private fun getExploreRestaurantRemote(
-        keyword: String,
-        lat: Double,
-        long: Double,
-        listener: ResultListener<List<Place>>
-    ) {
-        remote.searchExploreRestaurant(
-            keyword,
-            lat,
-            long,
-            object : ResultListener<List<Place>> {
-                override fun onSuccess(data: List<Place>?) {
-                    // No data
-                    if (data.isNullOrEmpty()) {
-                        listener.onError(Exception("No data!"))
-                        return
-                    }
-
-                    listener.onSuccess(data)
-
-                    // Save to local DB
-                    localExplore.saveExploreRestaurantLocal(data.map { it.locationId })
-                    data.forEach {
-                        it.locationType = PlaceCategory.RESTAURANTS.name
-                        local.savePlaceDetail(it)
-                        local.savePlaceAddress(it)
-                    }
-                }
-
-                override fun onError(exception: Exception?) {
-                    listener.onError(exception)
-                }
-            }
-        )
-    }
-
-    private fun getExploreHotelRemote(
-        keyword: String,
-        lat: Double,
-        long: Double,
-        listener: ResultListener<List<Place>>
-    ) {
-        remote.searchExploreHotel(
-            keyword,
-            lat,
-            long,
-            object : ResultListener<List<Place>> {
-                override fun onSuccess(data: List<Place>?) {
-                    if (data.isNullOrEmpty()) {
-                        listener.onError(Exception("No data!"))
-                        return
-                    }
-
-                    listener.onSuccess(data)
-                    // Save to local DB
-                    localExplore.saveExploreHotelLocal(data.map { it.locationId })
-                    data.forEach {
-                        it.locationType = PlaceCategory.HOTELS.name
-                        local.savePlaceDetail(it)
-                        local.savePlaceAddress(it)
-                    }
-                }
-
-                override fun onError(exception: Exception?) {
-                    listener.onError(exception)
-                }
-            }
-        )
     }
 
     override fun getPlaceDetail(placeId: String, listener: ResultListener<Place>) {
@@ -376,7 +178,7 @@ class PlaceRepositoryImpl private constructor(
         notifyChanged(placeId, IS_FAVORITE)
     }
 
-    override fun unmarkFavorite(placeId: String, listener: ResultListener<Boolean>) {
+    override fun markNotFavorite(placeId: String, listener: ResultListener<Boolean>) {
         local.markNotFavorite(placeId, listener)
         notifyChanged(placeId, IS_NOT_FAVORITE)
     }
@@ -402,6 +204,39 @@ class PlaceRepositoryImpl private constructor(
         favoritePlaceObserverList.forEach { observer ->
             observer.onFavoritePlaceChange(placeId, isFavorite)
         }
+    }
+
+    private fun getExplorePlaceFromRemote(
+        keyword: String,
+        latLng: LatLng,
+        category: PlaceCategory,
+        listener: ResultListener<List<Place>>
+    ) {
+        remote.searchExplorePlace(
+            keyword,
+            latLng,
+            category,
+            object : ResultListener<List<Place>> {
+                override fun onSuccess(data: List<Place>?) {
+                    if (data.isNullOrEmpty()) {
+                        listener.onError(Exception("No data!"))
+                        return
+                    }
+
+                    // Save to local DB
+                    localExplore.saveExploreAttractionLocal(data.map { it.locationId })
+                    data.forEach {
+                        it.locationType = category.name.lowercase()
+                        local.savePlaceDetail(it)
+                        local.savePlaceAddress(it)
+                    }
+                }
+
+                override fun onError(exception: Exception?) {
+                    listener.onError(exception)
+                }
+            }
+        )
     }
 
     companion object {
