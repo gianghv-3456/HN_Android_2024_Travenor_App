@@ -2,11 +2,9 @@ package com.example.travenor.screen.detail
 
 import android.content.Intent
 import android.content.res.Resources
-import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.ViewCompat
 import com.example.travenor.R
@@ -36,7 +34,6 @@ class DetailActivity : BaseActivity(), DetailContract.View, FavoritePlaceObserve
         return mBinding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun initView() {
         setLayoutBelowSystemBar()
         if (!intent.hasExtra(KEY_INTENT_PLACE_ID)) finish()
@@ -73,9 +70,12 @@ class DetailActivity : BaseActivity(), DetailContract.View, FavoritePlaceObserve
     }
 
     private fun initBottomSheet() {
+        mBinding.containerBottomSheet.minimumHeight =
+            ((Resources.getSystem().displayMetrics.heightPixels) * SIXTEEN_PERCENT).toInt()
+
         val bottomBehavior = BottomSheetBehavior.from(mBinding.containerBottomSheet)
         bottomBehavior.peekHeight =
-            ((Resources.getSystem().displayMetrics.heightPixels) * FIFTY_PERCENT).toInt()
+            ((Resources.getSystem().displayMetrics.heightPixels) * SIXTEEN_PERCENT).toInt()
         bottomBehavior.maxHeight =
             ((Resources.getSystem().displayMetrics.heightPixels) * EIGHTY_PERCENT).toInt()
         bottomBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -98,58 +98,44 @@ class DetailActivity : BaseActivity(), DetailContract.View, FavoritePlaceObserve
     }
 
     override fun onGetPlaceDetailSuccess(place: Place) {
-        // TODO remove runOnUiThread
-        runOnUiThread {
-            mBinding.textPlaceName.text = place.name
-            mBinding.textPlaceDesc.text = place.description
-            mBinding.textPlaceAddress.text = place.addressObj.addressString
-            mBinding.textPlaceRating.text = place.rating.toString()
+        mBinding.textPlaceName.text = place.name
+        mBinding.textPlaceDesc.text = place.description
+        mBinding.textPlaceAddress.text = place.addressObj.addressString
+        mBinding.textPlaceRating.text = place.rating.toString()
 
-            mIsFavorite = place.isFavorite
-            if (place.isFavorite == IS_FAVORITE) {
-                val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_unmark_favorite)
-                mBinding.buttonMarkFavorite.setImageDrawable(drawable)
-            } else {
-                val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_mark_favorite)
-                mBinding.buttonMarkFavorite.setImageDrawable(drawable)
-            }
-            mBinding.buttonMarkFavorite.isClickable = true
+        mIsFavorite = place.isFavorite
+        if (place.isFavorite == IS_FAVORITE) {
+            val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_unmark_favorite)
+            mBinding.buttonMarkFavorite.setImageDrawable(drawable)
+        } else {
+            val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_mark_favorite)
+            mBinding.buttonMarkFavorite.setImageDrawable(drawable)
         }
+        mBinding.buttonMarkFavorite.isClickable = true
     }
 
     override fun onGetPlaceDetailFail(e: Exception) {
-        // TODO remove runOnUiThread
-        runOnUiThread {
-            Toast.makeText(
-                this,
-                getString(R.string.detail_get_detail_fail_toast),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+        Toast.makeText(
+            this,
+            getString(R.string.detail_get_detail_fail_toast),
+            Toast.LENGTH_SHORT
+        ).show()
+
         finish()
     }
 
     override fun onGetPhotoSuccess(photos: PlacePhoto) {
-        // TODO remove runOnUiThread
-        runOnUiThread {
-            mBinding.imagePlaceHeader.loadImageCenterCrop(photos.imageList.original?.url.toString())
-        }
+        mBinding.imagePlaceHeader.loadImageCenterCrop(photos.imageList.original?.url.toString())
     }
 
     override fun onMarkFavoriteSuccess() {
-        // TODO remove runOnUiThread
-        runOnUiThread {
-            val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_unmark_favorite)
-            mBinding.buttonMarkFavorite.setImageDrawable(drawable)
-        }
+        val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_unmark_favorite)
+        mBinding.buttonMarkFavorite.setImageDrawable(drawable)
     }
 
     override fun onMarkNotFavoriteSuccess() {
-        // TODO remove runOnUiThread
-        runOnUiThread {
-            val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_mark_favorite)
-            mBinding.buttonMarkFavorite.setImageDrawable(drawable)
-        }
+        val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_mark_favorite)
+        mBinding.buttonMarkFavorite.setImageDrawable(drawable)
     }
 
     private fun setLayoutBelowSystemBar() {
@@ -164,7 +150,7 @@ class DetailActivity : BaseActivity(), DetailContract.View, FavoritePlaceObserve
     companion object {
         const val KEY_INTENT_PLACE_ID = "activity.detail.key.intent_place_id"
         private const val EIGHTY_PERCENT = 0.8
-        private const val FIFTY_PERCENT = 0.5
+        private const val SIXTEEN_PERCENT = 0.6
     }
 
     /**

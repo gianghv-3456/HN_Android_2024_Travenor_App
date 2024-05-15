@@ -1,5 +1,7 @@
 package com.example.travenor.data.source.remote
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import com.example.travenor.BuildConfig.TRIP_ADVISOR_KEY
 import com.example.travenor.constant.PlaceCategory
@@ -12,60 +14,29 @@ import com.example.travenor.core.network.Response
 import com.example.travenor.core.network.exception.NetworkException
 import com.example.travenor.data.model.PlacePhotoResponse
 import com.example.travenor.data.model.PlaceSearchResponse
+import com.example.travenor.data.model.location.LatLng
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.source.PlaceSource
 import com.example.travenor.data.source.remote.api.PlaceApi
+import java.util.concurrent.Callable
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Executors
 
 class PlaceRemoteDataSource private constructor(
     private val placeApi: PlaceApi
 ) : PlaceSource.Remote {
-    override fun searchExploreAttraction(
-        keyword: String,
-        lat: Double,
-        long: Double,
-        listener: ResultListener<List<Place>>
-    ) {
-        val category = PlaceCategory.ATTRACTIONS.name.lowercase()
-
-        val latLongString = "$lat,$long"
-
-        placeApi.searchPlaceTripadvisor(
-            TRIP_ADVISOR_API_KEY,
-            keyword,
-            category,
-            latLong = latLongString
-        ).enqueue(
-            PlaceSearchResponse::class.java,
-            object : Callback<PlaceSearchResponse> {
-                override fun onResponse(
-                    rawResponse: String,
-                    response: Response<PlaceSearchResponse>
-                ) {
-                    val placeList = response.data.placeList
-                    for (place in placeList) place.locationType =
-                        PlaceCategory.ATTRACTIONS.name.lowercase()
-                    listener.onSuccess(placeList)
-                }
-
-                override fun onFailure(t: Throwable) {
-                    t.printStackTrace()
-                    Log.d(LOG_TAG, t.message.toString())
-                    listener.onError(NetworkException(t.message.toString()))
-                }
-            }
-        )
-    }
+    private val executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE)
 
     override fun getNearbyPlace(
-        lat: Double,
-        long: Double,
+        latLng: LatLng,
         category: PlaceCategory,
         radius: Double,
         listener: ResultListener<List<Place>>
     ) {
-        val latLongString = "$lat,$long"
+        val latLongString = "${latLng.lat},${latLng.lng}"
         val categoryName = category.name.lowercase()
+
         placeApi.getNearbyPlace(
             TRIP_ADVISOR_API_KEY,
             latLong = latLongString,
@@ -79,7 +50,11 @@ class PlaceRemoteDataSource private constructor(
                     response: Response<PlaceSearchResponse>
                 ) {
                     val placeList = response.data.placeList
-                    listener.onSuccess(placeList)
+
+                    // Here we have some result with (location id, address, ...)
+                    // but not enough detail => we need to get detail by location id
+                    val idList = placeList.map { it.locationId }
+                    getDetailOfPlaceList(idList, listener)
                 }
 
                 override fun onFailure(t: Throwable) {
@@ -104,11 +79,18 @@ class PlaceRemoteDataSource private constructor(
         ).enqueue(
             PlaceSearchResponse::class.java,
             object : Callback<PlaceSearchResponse> {
-                override fun onResponse(rawResponse: String, response: Response<PlaceSearchResponse>) {
+                override fun onResponse(
+                    rawResponse: String,
+                    response: Response<PlaceSearchResponse>
+                ) {
                     val placeList = response.data.placeList
                     for (place in placeList) place.locationType =
                         PlaceCategory.RESTAURANTS.name.lowercase()
-                    listener.onSuccess(placeList)
+
+                    // Here we have some result with (location id, address, ...)
+                    // but not enough detail => we need to get detail by location id
+                    val idList = placeList.map { it.locationId }
+                    getDetailOfPlaceList(idList, listener)
                 }
 
                 override fun onFailure(t: Throwable) {
@@ -120,20 +102,19 @@ class PlaceRemoteDataSource private constructor(
         )
     }
 
-    override fun searchExploreRestaurant(
+    override fun searchExplorePlace(
         keyword: String,
-        lat: Double,
-        long: Double,
+        latLng: LatLng,
+        category: PlaceCategory,
         listener: ResultListener<List<Place>>
     ) {
-        val category = PlaceCategory.RESTAURANTS.name.lowercase()
-
-        val latLongString = "$lat,$long"
+        val categoryName = category.name.lowercase()
+        val latLongString = "${latLng.lat},${latLng.lng}"
 
         placeApi.searchPlaceTripadvisor(
             TRIP_ADVISOR_API_KEY,
             keyword,
-            category,
+            categoryName,
             latLong = latLongString
         ).enqueue(
             PlaceSearchResponse::class.java,
@@ -143,44 +124,13 @@ class PlaceRemoteDataSource private constructor(
                     response: Response<PlaceSearchResponse>
                 ) {
                     val placeList = response.data.placeList
-                    for (place in placeList) place.locationType =
-                        PlaceCategory.RESTAURANTS.name.lowercase()
-                    listener.onSuccess(placeList)
-                }
+                    for (place in placeList)
+                        place.locationType = category.name.lowercase()
 
-                override fun onFailure(t: Throwable) {
-                    t.printStackTrace()
-                    Log.d(LOG_TAG, t.message.toString())
-                    listener.onError(NetworkException(t.message.toString()))
-                }
-            }
-        )
-    }
-
-    override fun searchExploreHotel(
-        keyword: String,
-        lat: Double,
-        long: Double,
-        listener: ResultListener<List<Place>>
-    ) {
-        val category = PlaceCategory.HOTELS.name.lowercase()
-        val latLongString = "$lat,$long"
-
-        placeApi.searchPlaceTripadvisor(
-            TRIP_ADVISOR_API_KEY,
-            keyword,
-            category,
-            latLong = latLongString
-        ).enqueue(
-            PlaceSearchResponse::class.java,
-            object : Callback<PlaceSearchResponse> {
-                override fun onResponse(
-                    rawResponse: String,
-                    response: Response<PlaceSearchResponse>
-                ) {
-                    val placeList = response.data.placeList
-                    for (place in placeList) place.locationType = PlaceCategory.HOTELS.name.lowercase()
-                    listener.onSuccess(placeList)
+                    // Here we have some result with (location id, address, ...)
+                    // but not enough detail => we need to get detail by location id
+                    val idList = placeList.map { it.locationId }
+                    getDetailOfPlaceList(idList, listener)
                 }
 
                 override fun onFailure(t: Throwable) {
@@ -232,7 +182,53 @@ class PlaceRemoteDataSource private constructor(
             )
     }
 
+    private fun getDetailOfPlaceList(
+        locationIdList: List<String>,
+        listener: ResultListener<List<Place>>
+    ) {
+        val taskList = mutableListOf<Callable<Place>>()
+
+        for (id in locationIdList) {
+            val callable = Callable {
+                val completableFuture = CompletableFuture<Place>()
+                getPlaceDetail(
+                    id,
+                    object : ResultListener<Place> {
+                        override fun onSuccess(data: Place?) {
+                            completableFuture.complete(data)
+                        }
+
+                        override fun onError(exception: Exception?) {
+                            completableFuture.complete(null)
+                        }
+                    }
+                )
+                return@Callable completableFuture.get()
+            }
+
+            taskList.add(callable)
+        }
+
+        executor.execute {
+            val result = mutableListOf<Place>()
+            executor.invokeAll(taskList).forEach {
+                it.get()?.let { place -> result.add(place) }
+            }
+            Log.d(LOG_TAG, result.toString())
+
+            Handler(Looper.getMainLooper()).post {
+                // return result to UI thread
+                if (result.isNotEmpty()) {
+                    listener.onSuccess(result)
+                } else {
+                    listener.onError(Exception("No result"))
+                }
+            }
+        }
+    }
+
     companion object {
+        private const val THREAD_POOL_SIZE = 10
         private var instance: PlaceRemoteDataSource? = null
         private const val CONNECT_TIME_OUT = 5000
         private const val READ_TIME_OUT = 5000

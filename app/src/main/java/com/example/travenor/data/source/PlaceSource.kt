@@ -2,6 +2,7 @@ package com.example.travenor.data.source
 
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.core.ResultListener
+import com.example.travenor.data.model.location.LatLng
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
 
@@ -13,33 +14,19 @@ interface PlaceSource {
             listener: ResultListener<List<Place>>
         )
 
-        fun searchExploreRestaurant(
+        fun searchExplorePlace(
             keyword: String,
-            lat: Double,
-            long: Double,
-            listener: ResultListener<List<Place>>
-        )
-
-        fun searchExploreHotel(
-            keyword: String,
-            lat: Double,
-            long: Double,
+            latLng: LatLng,
+            category: PlaceCategory,
             listener: ResultListener<List<Place>>
         )
 
         fun getPlaceDetail(placeId: String, listener: ResultListener<Place>)
 
         fun getPlacePhoto(placeId: String, listener: ResultListener<List<PlacePhoto>>)
-        fun searchExploreAttraction(
-            keyword: String,
-            lat: Double,
-            long: Double,
-            listener: ResultListener<List<Place>>
-        )
 
         fun getNearbyPlace(
-            lat: Double,
-            long: Double,
+            latLng: LatLng,
             category: PlaceCategory,
             radius: Double = 10000.0,
             listener: ResultListener<List<Place>>
@@ -64,8 +51,7 @@ interface PlaceSource {
 
         fun savePlaceAddress(place: Place)
         fun getNearbyPlaceLocal(
-            lat: Double,
-            long: Double,
+            latLng: LatLng,
             category: PlaceCategory,
             limit: Int = 5,
             radius: Double = 10000.0
@@ -83,23 +69,7 @@ interface PlaceSource {
     }
 
     interface ExplorePlaceLocal {
-        /**
-         * Get local explore attraction
-         * @return List<Pair<String, Long>> where first is place and second is creation timestamp
-         */
-        fun getExploreAttractionLocal(limit: Int = 5): List<Pair<Place, Long>>
-
-        /**
-         * Get local explore restaurant
-         * @return List<Pair<String, Long>> where first is place and second is creation timestamp
-         */
-        fun getExploreRestaurantLocal(limit: Int = 5): List<Pair<Place, Long>>
-
-        /**
-         * Get local explore hotel
-         * @return List<Pair<String, Long>> where first is place and second is creation timestamp
-         */
-        fun getExploreHotelLocal(limit: Int = 5): List<Pair<Place, Long>>
+        fun getExplorePlaceLocal(limit: Int = 5, category: PlaceCategory): List<Pair<Place, Long>>
 
         fun saveExploreAttractionLocal(idList: List<String>)
 

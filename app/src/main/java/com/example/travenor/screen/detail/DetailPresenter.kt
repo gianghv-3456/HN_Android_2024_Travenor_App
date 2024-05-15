@@ -63,7 +63,7 @@ class DetailPresenter internal constructor(private val placeRepositoryImpl: Plac
     }
 
     override fun markNotFavorite(placeId: String) {
-        placeRepositoryImpl.unmarkFavorite(
+        placeRepositoryImpl.markNotFavorite(
             placeId,
             object : ResultListener<Boolean> {
                 override fun onSuccess(data: Boolean?) {

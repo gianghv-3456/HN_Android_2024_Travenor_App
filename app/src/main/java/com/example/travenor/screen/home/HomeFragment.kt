@@ -1,11 +1,9 @@
 package com.example.travenor.screen.home
 
 import android.content.Intent
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.core.view.ViewCompat
 import com.example.travenor.R
 import com.example.travenor.constant.PlaceCategory
@@ -43,7 +41,6 @@ class HomeFragment :
         return FragmentHomeBinding.inflate(inflater)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun initData() {
         val sharedPresenterManager = SharedPreferencesManager.getInstance(context)
 
@@ -110,58 +107,47 @@ class HomeFragment :
     }
 
     override fun onGetExplorePlaceSuccess(locationList: List<Place>, placeCategory: PlaceCategory) {
-        // TODO remove runOnUiThread
-        activity?.runOnUiThread {
-            when (placeCategory) {
-                PlaceCategory.ATTRACTIONS -> {
-                    viewBinding.containerExploreAttractionTitle.visibility = View.VISIBLE
-                    mAttractionAdapter.setData(locationList)
-                }
+        when (placeCategory) {
+            PlaceCategory.ATTRACTIONS -> {
+                viewBinding.containerExploreAttractionTitle.visibility = View.VISIBLE
+                mAttractionAdapter.setData(locationList)
+            }
 
-                PlaceCategory.RESTAURANTS -> {
-                    viewBinding.containerExploreRestaurantTitle.visibility = View.VISIBLE
-                    mRestaurantAdapter.setData(locationList)
-                }
+            PlaceCategory.RESTAURANTS -> {
+                viewBinding.containerExploreRestaurantTitle.visibility = View.VISIBLE
+                mRestaurantAdapter.setData(locationList)
+            }
 
-                PlaceCategory.HOTELS -> {
-                    viewBinding.containerExploreHotelTitle.visibility = View.VISIBLE
-                    mHotelAdapter.setData(locationList)
-                }
+            PlaceCategory.HOTELS -> {
+                viewBinding.containerExploreHotelTitle.visibility = View.VISIBLE
+                mHotelAdapter.setData(locationList)
             }
         }
     }
 
     override fun onGetExplorePlaceFail(exception: Exception?, placeCategory: PlaceCategory) {
         exception?.printStackTrace()
-        // TODO remove runOnUiThread
-        activity?.runOnUiThread {
-            when (placeCategory) {
-                PlaceCategory.ATTRACTIONS ->
-                    viewBinding.containerExploreAttractionTitle.visibility =
-                        View.GONE
+        when (placeCategory) {
+            PlaceCategory.ATTRACTIONS ->
+                viewBinding.containerExploreAttractionTitle.visibility =
+                    View.GONE
 
-                PlaceCategory.RESTAURANTS ->
-                    viewBinding.containerExploreRestaurantTitle.visibility =
-                        View.GONE
+            PlaceCategory.RESTAURANTS ->
+                viewBinding.containerExploreRestaurantTitle.visibility =
+                    View.GONE
 
-                PlaceCategory.HOTELS ->
-                    viewBinding.containerExploreHotelTitle.visibility =
-                        View.GONE
-            }
+            PlaceCategory.HOTELS -> viewBinding.containerExploreHotelTitle.visibility = View.GONE
         }
     }
 
     override fun onGetPhotoSuccess(photos: PlacePhoto, placeCategory: PlaceCategory) {
-        // TODO remove runOnUiThread
-        activity?.runOnUiThread {
-            val locationId = photos.locationId
-            mAttractionAdapter.updateThumbnail(locationId, photos)
+        val locationId = photos.locationId
+        mAttractionAdapter.updateThumbnail(locationId, photos)
 
-            when (placeCategory) {
-                PlaceCategory.ATTRACTIONS -> mAttractionAdapter.updateThumbnail(locationId, photos)
-                PlaceCategory.RESTAURANTS -> mRestaurantAdapter.updateThumbnail(locationId, photos)
-                PlaceCategory.HOTELS -> mHotelAdapter.updateThumbnail(locationId, photos)
-            }
+        when (placeCategory) {
+            PlaceCategory.ATTRACTIONS -> mAttractionAdapter.updateThumbnail(locationId, photos)
+            PlaceCategory.RESTAURANTS -> mRestaurantAdapter.updateThumbnail(locationId, photos)
+            PlaceCategory.HOTELS -> mHotelAdapter.updateThumbnail(locationId, photos)
         }
     }
 

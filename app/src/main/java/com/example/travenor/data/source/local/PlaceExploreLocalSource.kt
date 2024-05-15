@@ -2,6 +2,7 @@ package com.example.travenor.data.source.local
 
 import android.content.Context
 import android.database.sqlite.SQLiteException
+import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.source.PlaceSource
 import com.example.travenor.data.source.local.database.dao.PlaceDAO
@@ -12,45 +13,25 @@ class PlaceExploreLocalSource(
     private val placeDao: PlaceDAO,
     private val placeExploreDAO: PlaceExploreDAO
 ) : PlaceSource.ExplorePlaceLocal {
-    override fun getExploreAttractionLocal(limit: Int): List<Pair<Place, Long>> {
+    override fun getExplorePlaceLocal(
+        limit: Int,
+        category: PlaceCategory
+    ): List<Pair<Place, Long>> {
         try {
-            val idList = placeExploreDAO.getAttractionExplore(limit)
-            val result = mutableListOf<Pair<Place, Long>>()
+            val idList = when (category) {
+                PlaceCategory.ATTRACTIONS -> {
+                    placeExploreDAO.getAttractionExplore(limit)
+                }
 
-            idList.forEach { pair ->
-                val locationId = pair.first
-                val place = placeDao.getPlaceData(locationId)
-                place.notNull { result.add(Pair(it, pair.second)) }
+                PlaceCategory.RESTAURANTS -> {
+                    placeExploreDAO.getRestaurantExplore(limit)
+                }
+
+                PlaceCategory.HOTELS -> {
+                    placeExploreDAO.getHotelExplore(limit)
+                }
             }
 
-            return result
-        } catch (e: SQLiteException) {
-            e.run { printStackTrace() }
-            return emptyList()
-        }
-    }
-
-    override fun getExploreRestaurantLocal(limit: Int): List<Pair<Place, Long>> {
-        try {
-            val idList = placeExploreDAO.getRestaurantExplore(limit)
-            val result = mutableListOf<Pair<Place, Long>>()
-
-            idList.forEach { pair ->
-                val locationId = pair.first
-                val place = placeDao.getPlaceData(locationId)
-                place.notNull { result.add(Pair(it, pair.second)) }
-            }
-
-            return result
-        } catch (e: SQLiteException) {
-            e.run { printStackTrace() }
-            return emptyList()
-        }
-    }
-
-    override fun getExploreHotelLocal(limit: Int): List<Pair<Place, Long>> {
-        try {
-            val idList = placeExploreDAO.getHotelExplore(limit)
             val result = mutableListOf<Pair<Place, Long>>()
 
             idList.forEach { pair ->

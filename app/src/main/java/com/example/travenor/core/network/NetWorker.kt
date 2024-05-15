@@ -1,10 +1,8 @@
 package com.example.travenor.core.network
 
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.annotation.RequiresApi
 import com.example.travenor.core.network.annotation.GET
 import com.example.travenor.core.network.annotation.POST
 import com.example.travenor.core.network.annotation.PUT
@@ -16,7 +14,6 @@ import org.json.JSONException
 import java.io.BufferedReader
 import java.io.IOException
 import java.lang.reflect.Method
-import java.lang.reflect.Parameter
 import java.lang.reflect.Proxy
 import java.lang.reflect.Type
 import java.net.HttpRetryException
@@ -37,7 +34,6 @@ class NetWorker private constructor(
     /**
      * We create an ApiService instance with Java Reflection!
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun <T> create(service: Class<T>): T {
         return Proxy.newProxyInstance(
             service.classLoader,
@@ -78,7 +74,6 @@ class NetWorker private constructor(
         } as T
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun <T> performGetRequest(
         annotation: GET,
         baseUrl: String,
@@ -89,13 +84,13 @@ class NetWorker private constructor(
         var url = "$baseUrl${annotation.value}"
 
         // get Path params
-        val params = method.parameters
+        val paramAnnotations = method.parameterAnnotations
 
         // Handle @Path param annotation
-        url = handlePathAnnotation(params, url, args)
+        url = handlePathAnnotation(paramAnnotations, url, args)
 
         // Handle @Query param annotation
-        url = handleQueryAnnotation(params, url, args)
+        url = handleQueryAnnotation(paramAnnotations, url, args)
 
         Log.d(LOG_TAG, "Finish endpoint Url METHOD: $url")
         val apiUrl = URL(url)
@@ -160,40 +155,41 @@ class NetWorker private constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun handlePathAnnotation(
-        params: Array<Parameter>,
+        paramAnnotations: Array<Array<Annotation>>,
         url: String,
         args: Array<Any?>?
     ): String {
         // Handle @Path param annotation
-        var url1 = url
-        params.forEachIndexed { i, v ->
+        var modifiedUrl = url
+        paramAnnotations.forEachIndexed { index, annotations ->
             if (args != null) {
-                if (v.isAnnotationPresent(Path::class.java)) {
-                    val name = v.getAnnotation(Path::class.java)?.value
-                    url1 = url1.replace("{$name}", args[i].toString())
+                annotations.forEach { annotation ->
+                    if (annotation is Path) {
+                        val name = annotation.value
+                        modifiedUrl = modifiedUrl.replace("{$name}", args[index].toString())
+                    }
                 }
             }
         }
-
-        return url1
+        return modifiedUrl
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun handleQueryAnnotation(
-        params: Array<Parameter>,
+        paramAnnotations: Array<Array<Annotation>>,
         urlIn: String,
         args: Array<Any?>?
     ): String {
         var url = urlIn
         val queryParams = mutableListOf<String>()
-        params.forEachIndexed { i, v ->
+        paramAnnotations.forEachIndexed { index, annotations ->
             if (args != null) {
-                if (v.isAnnotationPresent(Query::class.java)) {
-                    url = url.replace("{${v.getAnnotation(Path::class.java)}}", args[i].toString())
-                    val s = "${v.getAnnotation(Query::class.java)?.value}=${args[i]}"
-                    queryParams.add(s)
+                annotations.forEach { annotation ->
+                    if (annotation is Query) {
+                        val name = annotation.value
+                        val value = args[index]
+                        queryParams.add("$name=$value")
+                    }
                 }
             }
         }

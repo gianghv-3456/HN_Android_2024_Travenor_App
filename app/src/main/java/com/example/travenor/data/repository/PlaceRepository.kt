@@ -2,6 +2,7 @@ package com.example.travenor.data.repository
 
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.core.ResultListener
+import com.example.travenor.data.model.location.LatLng
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
 
@@ -10,8 +11,7 @@ interface PlaceRepository {
     fun searchExplorePlace(
         keyword: String,
         category: PlaceCategory,
-        lat: Double,
-        long: Double,
+        latLng: LatLng,
         listener: ResultListener<List<Place>>
     )
 
@@ -31,7 +31,7 @@ interface PlaceRepository {
 
     fun markFavorite(placeId: String, listener: ResultListener<Boolean>)
 
-    fun unmarkFavorite(placeId: String, listener: ResultListener<Boolean>)
+    fun markNotFavorite(placeId: String, listener: ResultListener<Boolean>)
 
     fun getFavoritePlace(listener: ResultListener<List<Place>>)
 }

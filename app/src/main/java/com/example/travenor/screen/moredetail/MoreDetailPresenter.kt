@@ -5,6 +5,7 @@ import android.os.Looper
 import com.example.travenor.constant.NEARBY_DISTANCE_IN_METERS
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.core.ResultListener
+import com.example.travenor.data.model.location.LatLng
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.repository.NearbyRepository
@@ -54,7 +55,7 @@ class MoreDetailPresenter internal constructor(
                 }
             )
         } else {
-            placeRepository.unmarkFavorite(
+            placeRepository.markNotFavorite(
                 placeId,
                 object : ResultListener<Boolean> {
                     override fun onSuccess(data: Boolean?) {
@@ -89,8 +90,7 @@ class MoreDetailPresenter internal constructor(
 
     override fun getNearbyRestaurant(lat: Double, long: Double) {
         nearbyRepository.getNearbyRestaurant(
-            lat,
-            long,
+            LatLng(lat, long),
             NEARBY_DISTANCE_IN_METERS,
             object : ResultListener<List<Place>> {
                 override fun onSuccess(data: List<Place>?) {
@@ -115,8 +115,7 @@ class MoreDetailPresenter internal constructor(
 
     override fun getNearbyHotel(lat: Double, long: Double) {
         nearbyRepository.getNearbyHotel(
-            lat,
-            long,
+            LatLng(lat, long),
             NEARBY_DISTANCE_IN_METERS,
             object : ResultListener<List<Place>> {
                 override fun onSuccess(data: List<Place>?) {

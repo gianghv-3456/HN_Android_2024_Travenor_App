@@ -6,6 +6,7 @@ import com.example.travenor.constant.Food
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.core.ResultListener
 import com.example.travenor.data.UserInterestData
+import com.example.travenor.data.model.location.LatLng
 import com.example.travenor.data.model.photo.PlacePhoto
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.repository.PlaceRepository
@@ -46,8 +47,7 @@ class ExplorePlacePresenter internal constructor(
         placeRepositoryImpl.searchExplorePlace(
             searchKeyword,
             PlaceCategory.ATTRACTIONS,
-            lat = randomLat,
-            long = randomLng,
+            LatLng(randomLat, randomLng),
             object : ResultListener<List<Place>> {
                 override fun onSuccess(data: List<Place>?) {
                     if (data.isNullOrEmpty()) {
@@ -104,8 +104,7 @@ class ExplorePlacePresenter internal constructor(
         placeRepositoryImpl.searchExplorePlace(
             searchKeyword,
             PlaceCategory.RESTAURANTS,
-            lat = randomLat,
-            long = randomLng,
+            LatLng(randomLat, randomLng),
             object : ResultListener<List<Place>> {
 
                 override fun onSuccess(data: List<Place>?) {
@@ -149,8 +148,7 @@ class ExplorePlacePresenter internal constructor(
         placeRepositoryImpl.searchExplorePlace(
             "hotel",
             PlaceCategory.HOTELS,
-            randomLat,
-            randomLng,
+            LatLng(randomLat, randomLng),
             object : ResultListener<List<Place>> {
                 override fun onSuccess(data: List<Place>?) {
                     if (data.isNullOrEmpty()) {
@@ -272,7 +270,7 @@ class ExplorePlacePresenter internal constructor(
     }
 
     override fun markNotFavorite(placeId: String) {
-        placeRepositoryImpl.unmarkFavorite(
+        placeRepositoryImpl.markNotFavorite(
             placeId,
             object : ResultListener<Boolean> {
                 override fun onSuccess(data: Boolean?) { /* no-op *//* view was updated before*/

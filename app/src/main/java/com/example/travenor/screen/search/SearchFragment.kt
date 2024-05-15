@@ -2,12 +2,10 @@ package com.example.travenor.screen.search
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.ViewCompat
 import com.example.travenor.data.model.photo.PlacePhoto
@@ -37,7 +35,6 @@ class SearchFragment :
         return FragmentSearchBinding.inflate(inflater)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun initData() {
         val remoteDataSource = PlaceRemoteDataSource.getInstance()
         val localDataSource = PlaceLocalDataSource.getInstance(requireContext())

@@ -2,6 +2,7 @@ package com.example.travenor.data.repository
 
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.core.ResultListener
+import com.example.travenor.data.model.location.LatLng
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.source.PlaceSource
 
@@ -10,15 +11,13 @@ class NearbyRepositoryImpl private constructor(
     private val local: PlaceSource.Local
 ) : NearbyRepository {
     override fun getNearbyRestaurant(
-        lat: Double,
-        long: Double,
+        latLng: LatLng,
         radiusInMeters: Double,
         listener: ResultListener<List<Place>>
     ) {
         // Try get from remote
         remote.getNearbyPlace(
-            lat,
-            long,
+            latLng,
             category = PlaceCategory.RESTAURANTS,
             radius = radiusInMeters,
             object : ResultListener<List<Place>> {
@@ -26,8 +25,7 @@ class NearbyRepositoryImpl private constructor(
                     if (data.isNullOrEmpty()) {
                         // Try get from local
                         val result = local.getNearbyPlaceLocal(
-                            lat,
-                            long,
+                            latLng,
                             PlaceCategory.RESTAURANTS,
                             radius = radiusInMeters
                         )
@@ -47,8 +45,7 @@ class NearbyRepositoryImpl private constructor(
                     exception?.printStackTrace()
                     // Try get from local
                     val result = local.getNearbyPlaceLocal(
-                        lat,
-                        long,
+                        latLng,
                         PlaceCategory.RESTAURANTS,
                         radius = radiusInMeters
                     )
@@ -63,25 +60,21 @@ class NearbyRepositoryImpl private constructor(
     }
 
     override fun getNearbyHotel(
-        lat: Double,
-        long: Double,
+        latLng: LatLng,
         radiusInMeters: Double,
         listener: ResultListener<List<Place>>
     ) {
         // Try get from remote
         remote.getNearbyPlace(
-            lat,
-            long,
+            latLng,
             category = PlaceCategory.HOTELS,
             radius = radiusInMeters,
             object : ResultListener<List<Place>> {
                 override fun onSuccess(data: List<Place>?) {
                     if (data.isNullOrEmpty()) {
                         // Try get from local
-                        // Try get from local
                         val result = local.getNearbyPlaceLocal(
-                            lat,
-                            long,
+                            latLng,
                             PlaceCategory.HOTELS,
                             radius = radiusInMeters
                         )
@@ -101,8 +94,7 @@ class NearbyRepositoryImpl private constructor(
                     exception?.printStackTrace()
                     // Try get from local
                     val result = local.getNearbyPlaceLocal(
-                        lat,
-                        long,
+                        latLng,
                         PlaceCategory.HOTELS,
                         radius = radiusInMeters
                     )
@@ -118,15 +110,13 @@ class NearbyRepositoryImpl private constructor(
     }
 
     override fun getNearbyAttraction(
-        lat: Double,
-        long: Double,
+        latLng: LatLng,
         radiusInMeters: Double,
         listener: ResultListener<List<Place>>
     ) {
         // Try get from remote
         remote.getNearbyPlace(
-            lat,
-            long,
+            latLng,
             category = PlaceCategory.ATTRACTIONS,
             radius = radiusInMeters,
             object : ResultListener<List<Place>> {
@@ -134,8 +124,7 @@ class NearbyRepositoryImpl private constructor(
                     if (data.isNullOrEmpty()) {
                         // Try get from local
                         val result = local.getNearbyPlaceLocal(
-                            lat,
-                            long,
+                            latLng,
                             PlaceCategory.ATTRACTIONS,
                             radius = radiusInMeters
                         )
@@ -155,8 +144,7 @@ class NearbyRepositoryImpl private constructor(
                     exception?.printStackTrace()
                     // Try get from local
                     val result = local.getNearbyPlaceLocal(
-                        lat,
-                        long,
+                        latLng,
                         PlaceCategory.ATTRACTIONS,
                         radius = radiusInMeters
                     )

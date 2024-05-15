@@ -1,10 +1,8 @@
 package com.example.travenor.screen.moredetail
 
 import android.content.Intent
-import android.os.Build
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.ViewCompat
 import com.example.travenor.R
@@ -47,7 +45,6 @@ class MoreDetailActivity :
         return mBinding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun initData() {
         placeId = intent?.getStringExtra(EXTRA_PLACE_ID).toString()
 
@@ -177,67 +174,50 @@ class MoreDetailActivity :
     }
 
     override fun onGetNearbyRestaurantSuccess(place: List<Place>) {
-        // TODO remove runOnUiThread
-        runOnUiThread {
-            if (mActivityOpenMode == MODE_DISPLAY_NEARBY_PLACE) {
-                mBinding.recyclerNearbyRestaurant.visibility = View.VISIBLE
-                mBinding.textLabelNearbyRestaurant.visibility = View.VISIBLE
-            }
-            mNearbyRestaurantAdapter.setPlaces(place)
+        if (mActivityOpenMode == MODE_DISPLAY_NEARBY_PLACE) {
+            mBinding.recyclerNearbyRestaurant.visibility = View.VISIBLE
+            mBinding.textLabelNearbyRestaurant.visibility = View.VISIBLE
         }
+        mNearbyRestaurantAdapter.setPlaces(place)
     }
 
     override fun onGetNearbyHotelSuccess(places: List<Place>) {
-        // TODO remove runOnUiThread
-        runOnUiThread {
-            if (mActivityOpenMode == MODE_DISPLAY_NEARBY_PLACE) {
-                mBinding.recyclerNearbyHotel.visibility = View.VISIBLE
-                mBinding.textLabelNearbyHotel.visibility = View.VISIBLE
-            }
-            mNearbyHotelAdapter.setPlaces(places)
+        if (mActivityOpenMode == MODE_DISPLAY_NEARBY_PLACE) {
+            mBinding.recyclerNearbyHotel.visibility = View.VISIBLE
+            mBinding.textLabelNearbyHotel.visibility = View.VISIBLE
         }
+        mNearbyHotelAdapter.setPlaces(places)
     }
 
     override fun onGetNearbyPlacePhotoSuccess(photos: List<PlacePhoto>, category: PlaceCategory) {
-        // TODO remove runOnUiThread
-        runOnUiThread {
-            when (category) {
-                PlaceCategory.RESTAURANTS -> {
-                    mNearbyRestaurantAdapter.loadImage(photos)
-                }
+        when (category) {
+            PlaceCategory.RESTAURANTS -> {
+                mNearbyRestaurantAdapter.loadImage(photos)
+            }
 
-                PlaceCategory.HOTELS -> {
-                    mNearbyHotelAdapter.loadImage(photos)
-                }
+            PlaceCategory.HOTELS -> {
+                mNearbyHotelAdapter.loadImage(photos)
+            }
 
-                else -> {
-                    // do nothing
-                }
+            else -> {
+                // do nothing
             }
         }
     }
 
     override fun onMarkFavoriteSuccess() {
-        // TODO remove runOnUiThread
-        runOnUiThread {
-            val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_unmark_favorite)
-            mBinding.buttonMarkFavorite.setImageDrawable(drawable)
-        }
+        val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_unmark_favorite)
+        mBinding.buttonMarkFavorite.setImageDrawable(drawable)
     }
 
     override fun onMarkNotFavoriteSuccess() {
-        // TODO remove runOnUiThread
-        runOnUiThread {
-            val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_mark_favorite)
-            mBinding.buttonMarkFavorite.setImageDrawable(drawable)
-        }
+        val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_mark_favorite)
+        mBinding.buttonMarkFavorite.setImageDrawable(drawable)
     }
 
     override fun onGetPhotoSuccess(photos: List<PlacePhoto>) {
         this.photos = photos
-        runOnUiThread {
-            initGalleryPreview(photos)
-        }
+        initGalleryPreview(photos)
     }
 
     private fun initGalleryPreview(photos: List<PlacePhoto>) {
