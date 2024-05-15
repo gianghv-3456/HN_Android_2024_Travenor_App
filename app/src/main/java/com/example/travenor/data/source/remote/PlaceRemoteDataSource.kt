@@ -1,8 +1,6 @@
 package com.example.travenor.data.source.remote
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import com.example.travenor.BuildConfig.TRIP_ADVISOR_KEY
 import com.example.travenor.constant.PlaceCategory
 import com.example.travenor.constant.TRIP_ADVISOR_API_KEY
@@ -240,7 +238,6 @@ class PlaceRemoteDataSource private constructor(
         private const val READ_TIME_OUT = 5000
         const val LOG_TAG = "PLACE_RSOURCE"
 
-        @RequiresApi(Build.VERSION_CODES.O)
         fun getInstance() = synchronized(this) {
             val placeApi = NetWorker.getInstance(
                 TRIP_ADVISOR_URL,

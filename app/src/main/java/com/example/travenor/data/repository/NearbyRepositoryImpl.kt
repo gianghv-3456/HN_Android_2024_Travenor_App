@@ -5,7 +5,7 @@ import com.example.travenor.core.ResultListener
 import com.example.travenor.data.model.place.Place
 import com.example.travenor.data.source.PlaceSource
 
-class NearbyRepositoryImpl(
+class NearbyRepositoryImpl private constructor(
     private val remote: PlaceSource.Remote,
     private val local: PlaceSource.Local
 ) : NearbyRepository {
@@ -82,7 +82,7 @@ class NearbyRepositoryImpl(
                         val result = local.getNearbyPlaceLocal(
                             lat,
                             long,
-                            PlaceCategory.RESTAURANTS,
+                            PlaceCategory.HOTELS,
                             radius = radiusInMeters
                         )
 
@@ -103,7 +103,7 @@ class NearbyRepositoryImpl(
                     val result = local.getNearbyPlaceLocal(
                         lat,
                         long,
-                        PlaceCategory.RESTAURANTS,
+                        PlaceCategory.HOTELS,
                         radius = radiusInMeters
                     )
 
@@ -136,7 +136,7 @@ class NearbyRepositoryImpl(
                         val result = local.getNearbyPlaceLocal(
                             lat,
                             long,
-                            PlaceCategory.RESTAURANTS,
+                            PlaceCategory.ATTRACTIONS,
                             radius = radiusInMeters
                         )
 
@@ -157,7 +157,7 @@ class NearbyRepositoryImpl(
                     val result = local.getNearbyPlaceLocal(
                         lat,
                         long,
-                        PlaceCategory.RESTAURANTS,
+                        PlaceCategory.ATTRACTIONS,
                         radius = radiusInMeters
                     )
 

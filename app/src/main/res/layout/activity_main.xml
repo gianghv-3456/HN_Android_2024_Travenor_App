@@ -29,15 +29,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_navigation_menu">
 
-        <ImageButton
-            android:id="@+id/button_search_menu"
-            android:layout_width="@dimen/dp_48"
-            android:layout_height="@dimen/dp_48"
-            android:layout_gravity="center"
-            android:background="@drawable/bottom_nav_center_bg"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_menu_search" />
-
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

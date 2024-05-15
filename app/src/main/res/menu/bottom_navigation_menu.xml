@@ -19,19 +19,13 @@
     <item
         android:id="@+id/menu_bottom_search"
         android:enabled="true"
-        tools:ignore="MenuTitle" />
+        android:icon="@drawable/ic_menu_search"
+        android:title="@string/menu_search"/>
 
     <item
         android:id="@+id/menu_bottom_favorite"
         android:enabled="true"
         android:icon="@drawable/ic_mark_favorite"
         android:title="@string/menu_favorite_title"
-        />
-
-    <item
-        android:id="@+id/menu_bottom_setting"
-        android:enabled="true"
-        android:icon="@drawable/ic_menu_setting"
-        android:title="@string/menu_setting_title"
         />
 </menu>

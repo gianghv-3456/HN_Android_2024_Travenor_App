@@ -83,19 +83,19 @@ class HomeFragment :
         // Greeting header text
         val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
         when {
-            hour < MORNING_TIME_POINT -> {
+            hour in NIGHT_TIME_POINT until MORNING_TIME_POINT -> {
                 viewBinding.textGreeting.text = getString(R.string.greeting_morning_text)
                 viewBinding.imageDaylightIndicator.setImageDrawable(resources.getDrawable(R.drawable.sun))
             }
 
-            hour < AFTERNOON_TIME_POINT -> {
+            hour in MORNING_TIME_POINT until AFTERNOON_TIME_POINT -> {
                 viewBinding.textGreeting.text = getString(R.string.greeting_afternoon_text)
                 viewBinding.imageDaylightIndicator.setImageDrawable(resources.getDrawable(R.drawable.sun))
             }
 
             else -> {
                 viewBinding.textGreeting.text = getString(R.string.greeting_evening_text)
-                viewBinding.imageDaylightIndicator.setImageDrawable(resources.getDrawable(R.drawable.sun))
+                viewBinding.imageDaylightIndicator.setImageDrawable(resources.getDrawable(R.drawable.moon))
             }
         }
     }
@@ -205,5 +205,6 @@ class HomeFragment :
 
         const val MORNING_TIME_POINT = 12
         const val AFTERNOON_TIME_POINT = 18
+        const val NIGHT_TIME_POINT = 5
     }
 }
