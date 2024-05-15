@@ -64,7 +64,6 @@ class ExplorePlacePresenter internal constructor(
                             locationIdList.add(it.locationId)
                         }
 
-                        prefetchPlaceDetail(data.map { it.locationId }.toMutableList())
                         mView?.onGetExplorePlaceSuccess(data, PlaceCategory.ATTRACTIONS)
 
                         // Get thumbnail for each place with locationId
@@ -119,7 +118,7 @@ class ExplorePlacePresenter internal constructor(
                         data.forEach {
                             locationIdList.add(it.locationId)
                         }
-                        prefetchPlaceDetail(data.map { it.locationId }.toMutableList())
+
                         data.let { mView?.onGetExplorePlaceSuccess(it, PlaceCategory.RESTAURANTS) }
 
                         // Get thumbnail for each place with locationId
@@ -163,7 +162,6 @@ class ExplorePlacePresenter internal constructor(
                             locationIdList.add(it.locationId)
                         }
 
-                        prefetchPlaceDetail(data.map { it.locationId }.toMutableList())
                         mView?.onGetExplorePlaceSuccess(data, PlaceCategory.HOTELS)
 
                         // Get thumbnail for each place with locationId
@@ -176,25 +174,6 @@ class ExplorePlacePresenter internal constructor(
                 }
             }
         )
-    }
-
-    private fun prefetchPlaceDetail(placeIdList: MutableList<String>) {
-        placeIdList.forEach {
-            placeRepositoryImpl.getPlaceDetail(
-                it,
-                object : ResultListener<Place> {
-                    override fun onSuccess(data: Place?) {
-                        /* no-op */
-                        /* prefetch & save data to local only, no event handling */
-                    }
-
-                    override fun onError(exception: Exception?) {
-                        /* no-op */
-                        /* prefetch & save data to local only, no event handling */
-                    }
-                }
-            )
-        }
     }
 
     private fun getThumbnail(placeIdList: MutableList<String>, category: PlaceCategory) {
@@ -229,17 +208,17 @@ class ExplorePlacePresenter internal constructor(
 
         // Get user interest place saved on sharedPrefs
         userRepository.getUserInterestedPlace(object :
-                ResultListener<List<com.example.travenor.constant.Place>> {
-                override fun onSuccess(data: List<com.example.travenor.constant.Place>?) {
-                    data?.let { UserInterestData.interestedPlaceList.addAll(it) }
-                    mView?.onGetUserInterestPlaceDone()
-                }
+            ResultListener<List<com.example.travenor.constant.Place>> {
+            override fun onSuccess(data: List<com.example.travenor.constant.Place>?) {
+                data?.let { UserInterestData.interestedPlaceList.addAll(it) }
+                mView?.onGetUserInterestPlaceDone()
+            }
 
-                override fun onError(exception: Exception?) {
-                    // Done with no data, then we'll generate random value for interest
-                    mView?.onGetUserInterestPlaceDone()
-                }
-            })
+            override fun onError(exception: Exception?) {
+                // Done with no data, then we'll generate random value for interest
+                mView?.onGetUserInterestPlaceDone()
+            }
+        })
 
         // Get user interest food saved on sharedPrefs
         userRepository.getUserInterestedFood(object : ResultListener<List<Food>> {
@@ -281,12 +260,6 @@ class ExplorePlacePresenter internal constructor(
                 }
             }
         )
-    }
-
-    override fun onStart() { /* no-op */
-    }
-
-    override fun onStop() { /* no-op */
     }
 
     override fun setView(view: ExplorePlaceContract.View?) {

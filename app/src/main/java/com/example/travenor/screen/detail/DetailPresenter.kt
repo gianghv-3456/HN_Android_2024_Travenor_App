@@ -78,12 +78,6 @@ class DetailPresenter internal constructor(private val placeRepositoryImpl: Plac
         )
     }
 
-    override fun onStart() { /* no-op */
-    }
-
-    override fun onStop() { /* no-op */
-    }
-
     override fun setView(view: DetailContract.View?) {
         this.mView = view
     }

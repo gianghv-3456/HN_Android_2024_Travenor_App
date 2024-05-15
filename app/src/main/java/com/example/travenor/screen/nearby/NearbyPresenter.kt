@@ -20,12 +20,6 @@ class NearbyPresenter internal constructor(
 ) : NearbyContract.Presenter {
     private var mView: NearbyContract.View? = null
 
-    override fun onStart() { /* no-op */
-    }
-
-    override fun onStop() { /* no-op */
-    }
-
     override fun setView(view: NearbyContract.View?) {
         mView = view
     }
@@ -42,7 +36,7 @@ class NearbyPresenter internal constructor(
 
                     // Get all place detail & photo before return to view
                     val placeIds = data.map { it.locationId }
-                    fetchPlaceDetail(placeIds, PlaceCategory.RESTAURANTS)
+                    fetchPlaceDetail(data, PlaceCategory.RESTAURANTS)
                 }
 
                 override fun onError(exception: Exception?) {
@@ -64,7 +58,7 @@ class NearbyPresenter internal constructor(
 
                     // Get all place detail & photo before return to view
                     val placeIds = data.map { it.locationId }
-                    fetchPlaceDetail(placeIds, PlaceCategory.HOTELS)
+                    fetchPlaceDetail(data, PlaceCategory.HOTELS)
                 }
 
                 override fun onError(exception: Exception?) {
@@ -86,7 +80,7 @@ class NearbyPresenter internal constructor(
 
                     // Get all place detail & photo before return to view
                     val placeIds = data.map { it.locationId }
-                    fetchPlaceDetail(placeIds, PlaceCategory.ATTRACTIONS)
+                    fetchPlaceDetail(data, PlaceCategory.ATTRACTIONS)
                 }
 
                 override fun onError(exception: Exception?) {
@@ -99,24 +93,18 @@ class NearbyPresenter internal constructor(
     /**
      * Fetch all place detail and photo and return to main ui thread
      */
-    private fun fetchPlaceDetail(placeIds: List<String>, category: PlaceCategory) {
+    private fun fetchPlaceDetail(places: List<Place>, category: PlaceCategory) {
+        val placeIds = places.map { it.locationId }
+
         val executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE)
-        val getDetailTaskList: List<Callable<Place>> = placeDetailGettingTaskList(placeIds)
         val getPhotoTaskList: List<Callable<List<PlacePhoto>>> = placePhotoGettingTaskList(placeIds)
 
         // Invoke all task in parallel
         executorService.execute {
-            val placeDetailsFuture = executorService.invokeAll(getDetailTaskList)
             val placePhotosFuture = executorService.invokeAll(getPhotoTaskList)
 
             // Get result from future
-            val placeDetails = mutableListOf<Place>()
             val placePhotos = mutableListOf<PlacePhoto>()
-
-            placeDetailsFuture.forEach {
-                it.get()?.let { place -> placeDetails.add(place) }
-            }
-
             placePhotosFuture.forEach {
                 it.get()?.let { photos -> placePhotos.addAll(photos) }
             }
@@ -125,47 +113,21 @@ class NearbyPresenter internal constructor(
             Handler(Looper.getMainLooper()).post {
                 when (category) {
                     PlaceCategory.RESTAURANTS -> {
-                        mView?.onGetNearbyRestaurantSuccess(placePhotos, placeDetails)
+                        mView?.onGetNearbyRestaurantSuccess(placePhotos, places)
                     }
 
                     PlaceCategory.HOTELS -> {
-                        mView?.onGetNearbyHotelSuccess(placePhotos, placeDetails)
+                        mView?.onGetNearbyHotelSuccess(placePhotos, places)
                     }
 
                     PlaceCategory.ATTRACTIONS -> {
-                        mView?.onGetNearbyAttractionSuccess(placePhotos, placeDetails)
+                        mView?.onGetNearbyAttractionSuccess(placePhotos, places)
                     }
                 }
             }
 
             executorService.shutdown()
         }
-    }
-
-    private fun placeDetailGettingTaskList(placeIds: List<String>): List<Callable<Place>> {
-        val getDetailTaskList = mutableListOf<Callable<Place>>()
-        placeIds.forEach {
-            // Create callable task for each place id
-            val getDetailTask = Callable {
-                val completeFuture = CompletableFuture<Place>()
-                placeRepository.getPlaceDetail(
-                    it,
-                    object : ResultListener<Place> {
-                        override fun onSuccess(data: Place?) {
-                            completeFuture.complete(data)
-                        }
-
-                        override fun onError(exception: Exception?) {
-                            completeFuture.complete(null)
-                        }
-                    }
-                )
-                return@Callable completeFuture.get()
-            }
-
-            getDetailTaskList.add(getDetailTask)
-        }
-        return getDetailTaskList
     }
 
     private fun placePhotoGettingTaskList(placeIds: List<String>): List<Callable<List<PlacePhoto>>> {

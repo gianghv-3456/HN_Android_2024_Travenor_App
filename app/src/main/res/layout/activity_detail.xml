@@ -10,8 +10,7 @@
     <!-- User constrain to put header image in 60% of parent height   -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/image_place_header"
@@ -27,8 +26,8 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/layout_app_bar"
         android:layout_width="match_parent"
-        android:background="@color/transparent"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/transparent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -48,19 +47,18 @@
 
             <TextView
                 android:id="@+id/text_title"
-                android:fontFamily="@font/roboto_bold"
-                android:textSize="@dimen/sp_22"
-                android:textColor="@color/white"
-                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/button_back"
-                android:layout_toStartOf="@id/button_mark_favorite"
                 android:layout_marginTop="@dimen/dp_8"
-                android:text="@string/detail_title"
+                android:layout_toStartOf="@id/button_mark_favorite"
+                android:layout_toEndOf="@id/button_back"
+                android:fontFamily="@font/roboto_bold"
                 android:gravity="center"
                 android:lines="1"
-                />
+                android:text="@string/detail_title"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_22"
+                android:textStyle="bold" />
 
             <ImageButton
                 android:id="@+id/button_mark_favorite"
@@ -79,110 +77,100 @@
         android:id="@+id/container_bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/card_top_corner_only"
+        android:background="@color/transparent"
         app:behavior_hideable="false"
-        android:layout_marginBottom="@dimen/dp_minus60"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        >
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/card_top_corner_only"
-            >
+            android:background="@drawable/card_top_corner_only">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/dp_16"
-                android:layout_marginEnd="@dimen/dp_16"
                 android:layout_marginTop="@dimen/dp_32"
-                android:layout_marginBottom="@dimen/dp_16"
-                >
+                android:layout_marginEnd="@dimen/dp_16"
+                android:layout_marginBottom="@dimen/dp_16">
 
                 <TextView
                     android:id="@+id/text_place_name"
-                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/card_place_title"
-                    android:textSize="@dimen/sp_22"
                     android:layout_alignParentTop="true"
-                    />
+                    android:text="@string/card_place_title"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
+                    android:textSize="@dimen/sp_22" />
 
                 <TextView
                     android:id="@+id/text_place_address"
-                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/text_place_name"
-                    android:text="@string/card_place_address"
-                    android:layout_marginEnd="@dimen/dp_16"
                     android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginEnd="@dimen/dp_16"
                     android:layout_toStartOf="@id/text_place_rating"
-                    android:textSize="@dimen/sp_16"
-                    />
+                    android:text="@string/card_place_address"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
+                    android:textSize="@dimen/sp_16" />
 
                 <TextView
                     android:id="@+id/text_place_rating"
-                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/card_place_rating"
                     android:layout_alignBaseline="@id/text_place_address"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="@dimen/dp_16"
                     android:drawableStart="@drawable/ic_star"
                     android:drawablePadding="@dimen/dp_8"
-                    />
+                    android:text="@string/card_place_rating"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Medium" />
 
                 <TextView
                     android:id="@+id/text_place_desc_label"
-                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
-                    android:textSize="@dimen/sp_22"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/detail_about_destination"
                     android:layout_below="@id/text_place_address"
                     android:layout_marginTop="@dimen/dp_16"
-                    />
+                    android:text="@string/detail_about_destination"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.BoldBody"
+                    android:textSize="@dimen/sp_22" />
 
                 <TextView
                     android:id="@+id/text_place_desc"
-                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/text_place_desc_label"
-                    tools:text="@string/default_place_desc"
                     android:layout_marginTop="@dimen/dp_8"
+                    android:textAppearance="@style/Theme.Androidtemplate.TextAppearance.Body"
                     android:textSize="@dimen/sp_16"
-                    />
+                    tools:text="@string/default_place_desc" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button_more_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/text_place_desc"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_below="@id/text_place_desc"
-                    android:maxWidth="@dimen/dp_300"
+                    android:layout_gravity="bottom"
                     android:layout_margin="@dimen/dp_32"
-                    android:elevation="@dimen/dp_4"
                     android:background="@drawable/big_primary_btn_bg"
+                    android:elevation="@dimen/dp_4"
                     android:fontFamily="@font/baloobhaina2_bold"
+                    android:maxWidth="@dimen/dp_300"
                     android:text="@string/detail_button_more_detail"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/sp_20"
-                    />
+                    android:textSize="@dimen/sp_20" />
 
                 <View
                     android:id="@+id/view_bottom_spacing"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp_0"
-                    android:layout_alignParentBottom="true"
                     android:layout_below="@id/button_more_detail"
-                    />
+                    android:layout_alignParentBottom="true" />
 
             </RelativeLayout>
 

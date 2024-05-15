@@ -102,7 +102,6 @@ class MoreDetailPresenter internal constructor(
                             // Get detail for each place
                             idList.add(place.locationId)
                         }
-                        getNearbyPlaceDetail(idList, PlaceCategory.RESTAURANTS)
                     }
                 }
 
@@ -127,7 +126,6 @@ class MoreDetailPresenter internal constructor(
                             // Get detail for each place
                             idList.add(place.locationId)
                         }
-                        getNearbyPlaceDetail(idList, PlaceCategory.HOTELS)
                     }
                 }
 
@@ -136,62 +134,6 @@ class MoreDetailPresenter internal constructor(
                 }
             }
         )
-    }
-
-    /**
-     * get nearby func only return placeId so need to call getPlaceDetail and getPlacePhoto
-     * for all placeId then return to view
-     * To handle it, using Callable and FutureTask list
-     */
-    private fun getNearbyPlaceDetail(ids: List<String>, category: PlaceCategory) {
-        val executor = Executors.newFixedThreadPool(MAX_THREAD_POOL_SIZE)
-        val listFuture = mutableListOf<Callable<Place>>()
-
-        for (id in ids) {
-            val callable = Callable {
-                val future = CompletableFuture<Place>()
-
-                placeRepository.getPlaceDetail(
-                    id,
-                    object : ResultListener<Place> {
-                        override fun onSuccess(data: Place?) {
-                            if (data != null) {
-                                future.complete(data)
-                            } else {
-                                future.complete(null)
-                            }
-                        }
-
-                        override fun onError(exception: Exception?) { /* no-op */
-                            future.complete(null)
-                        }
-                    }
-                )
-                return@Callable future.get()
-            }
-            listFuture.add(callable)
-        }
-
-        executor.execute {
-            val futureList = executor.invokeAll(listFuture)
-            val result = mutableListOf<Place>()
-            futureList.forEach {
-                it.get()?.let { it1 -> result.add(it1) }
-            }
-
-            // Post result to main ui thread
-            Handler(Looper.getMainLooper()).post {
-                if (result.isNotEmpty()) {
-                    when (category) {
-                        PlaceCategory.RESTAURANTS -> mView?.onGetNearbyRestaurantSuccess(result)
-                        PlaceCategory.HOTELS -> mView?.onGetNearbyHotelSuccess(result)
-                        else -> { /* no-op */
-                        }
-                    }
-                }
-            }
-            executor.shutdown()
-        }
     }
 
     override fun getNearbyPlacePhoto(locationId: String, category: PlaceCategory) {
@@ -209,12 +151,6 @@ class MoreDetailPresenter internal constructor(
                 }
             }
         )
-    }
-
-    override fun onStart() { /* no-op */
-    }
-
-    override fun onStop() { /* no-op */
     }
 
     override fun setView(view: MoreDetailContract.View?) {

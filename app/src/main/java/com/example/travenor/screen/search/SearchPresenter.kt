@@ -117,12 +117,6 @@ class SearchPresenter internal constructor(
         }
     }
 
-    override fun onStart() { /* no-op */
-    }
-
-    override fun onStop() { /* no-op */
-    }
-
     override fun setView(view: SearchContract.View?) {
         mView = view
     }
