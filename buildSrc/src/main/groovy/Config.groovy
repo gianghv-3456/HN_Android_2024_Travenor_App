@@ -19,7 +19,8 @@ class Versions {
     static final String glide = "4.16.0"
 
     //Play service map
-    static final String playServiceMap = "21.2.0"
+    static final String playServiceLocation = "21.2.0"
+    static final String playServiceMap = "18.2.0"
 }
 
 class ClassPath {
@@ -51,7 +52,8 @@ class Deps {
     static final String glide = "com.github.bumptech.glide:glide:${Versions.glide}"
 
     //Play service map
-    static final String playServiceMap = "com.google.android.gms:play-services-location:$Versions.playServiceMap"
+    static final String playServiceLocation = "com.google.android.gms:play-services-location:$Versions.playServiceLocation"
+    static final String playServiceMap = "com.google.android.gms:play-services-maps:$Versions.playServiceMap"
 }
 
 class AppConfigs {

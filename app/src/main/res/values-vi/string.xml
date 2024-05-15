@@ -64,4 +64,8 @@
     <string name="search_no_result">Không tìm thấy</string>
     <string name="search_hint">Nhập địa điểm</string>
 
+    <string name="nearby_screen_title">Gần bạn</string>
+    <string name="search_button_search_around">Tìm khu vực này</string>
+    <string name="menu_search">Tìm kiếm</string>
+
 </resources>

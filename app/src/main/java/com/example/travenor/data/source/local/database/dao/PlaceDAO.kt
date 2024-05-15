@@ -132,7 +132,7 @@ class PlaceDAO private constructor(context: Context) {
 
         val columnIndex = 0
         if (cursor != null && cursor.moveToFirst()) {
-            val placeCategory = cursor.getString(columnIndex)
+            val placeCategory = cursor.getString(columnIndex).orEmpty()
             cursor.close()
 
             return placeCategory

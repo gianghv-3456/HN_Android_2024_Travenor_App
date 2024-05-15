@@ -3,6 +3,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id "org.jlleitschuh.gradle.ktlint" version "11.5.1"
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -68,5 +69,6 @@ dependencies {
     implementation Deps.viewPager2
     implementation Deps.gson
     implementation Deps.glide
+    implementation Deps.playServiceLocation
     implementation Deps.playServiceMap
 }
