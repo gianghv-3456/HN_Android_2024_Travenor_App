@@ -60,14 +60,6 @@ class UserInterestSurveyPresenter internal constructor(private val userRepositor
         }
     }
 
-    override fun onStart() {
-        // Not op
-    }
-
-    override fun onStop() {
-        // Not op
-    }
-
     override fun setView(view: UserInterestSurveyContract.View?) {
         this.mView = view
     }

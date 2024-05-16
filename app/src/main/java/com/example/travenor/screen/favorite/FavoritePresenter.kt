@@ -61,12 +61,6 @@ class FavoritePresenter(
         )
     }
 
-    override fun onStart() { /* no-op */
-    }
-
-    override fun onStop() { /* no-op */
-    }
-
     override fun setView(view: FavoriteContract.View?) {
         this.view = view
     }
